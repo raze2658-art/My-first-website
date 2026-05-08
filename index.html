@@ -39,7 +39,7 @@
     <button onclick="processLogin()">Login & View Grades</button>
     <p id="errorMessage" class="error"></p>
 
-    <!-- This section is hidden until successful login -->
+   
     <div id="gradeSlip">
         <h3 style="text-align:center; margin-top:0;">===== GRADE SLIP =====</h3>
         <div class="result-row"><span>Name:</span> <span id="resName"></span></div>
@@ -55,11 +55,11 @@
 </div>
 
 <script>
-    // Data from your Java Program
+    
     const studentNames = ["Allyssa", "Noela", "Chloe", "Merk", "Yohei"];
     const studentIDs = ["001", "002", "003", "004", "005"];
     const usernames = ["ally", "noe", "chlo", "merk", "yohei"];
-    const passwords = ["123", "123", "123", "123", "123"];
+    const passwords = ["Melendres123", "Talavera123", "Tolentino123", "Magdali123", "Komori123"];
 
     const BSMGtGrades = [85.5, 60.0, 92.0, 99.0, 99.0];
     const GecSTSGrades = [90.0, 70.5, 88.0, 99.0, 95.0];
@@ -74,18 +74,18 @@
         const slip = document.getElementById('gradeSlip');
 
         let loginSuccess = false;
-        errorMsg.innerText = ""; // Clear previous errors
-        slip.style.display = "none"; // Hide slip initially
+        errorMsg.innerText = ""; 
+        slip.style.display = "none"; 
 
         for (let i = 0; i < usernames.length; i++) {
             if (usernames[i] === inputU && passwords[i] === inputP) {
                 loginSuccess = true;
 
-                // Logic from your Java code
+                
                 const average = (BSMGtGrades[i] + GecSTSGrades[i] + ITInfraGrades[i]) / 3.0;
                 const status = (average >= passingGrade) ? "PASS" : "FAIL";
 
-                // Update the Website HTML
+                
                 document.getElementById('resName').innerText = studentNames[i];
                 document.getElementById('resID').innerText = studentIDs[i];
                 document.getElementById('resBSMGT').innerText = BSMGtGrades[i].toFixed(2);
@@ -97,7 +97,7 @@
                 statusEl.innerText = status;
                 statusEl.className = (status === "PASS") ? "pass" : "fail";
 
-                slip.style.display = "block"; // Show the results
+                slip.style.display = "block"; 
                 break;
             }
         }
