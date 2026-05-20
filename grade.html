@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Grading System - Report Card</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; background-color: #eef2f3; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+    h2 { text-align: center; color: #333; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+    #gradeSlip { margin-top: 20px; padding: 15px; border: 1px dashed #3498db; background: #f9f9f9; }
+    .result-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-family: monospace; }
+    .pass { color: green; font-weight: bold; }
+    .fail { color: red; font-weight: bold; }
+    .btn-link { display: block; text-align: center; box-sizing: border-box; width: 100%; padding: 12px; border-radius: 5px; font-size: 16px; font-weight: bold; margin-top: 15px; text-decoration: none; }
+    .download-btn { background-color: #3498db; color: white; margin-top: 25px; }
+    .download-btn:hover { background-color: #2980b9; }
+    .logout-btn { background-color: #e74c3c; color: white; }
+    .logout-btn:hover { background-color: #c0392b; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>STUDENT PORTAL</h2>
+  <div id="gradeSlip">
+    <h3 style="text-align:center; margin-top:0;">===== GRADE SLIP =====</h3>
+    <div class="result-row"><span>Name:</span> <span id="resName"></span></div>
+    <div class="result-row"><span>ID:</span> <span id="resID"></span></div>
+    <hr>
+    <div class="result-row"><span>BSMGT:</span> <span id="resBSMGT"></span></div>
+    <div class="result-row"><span>GECSTS:</span> <span id="resGEC"></span></div>
+    <div class="result-row"><span>ITInfra:</span> <span id="resIT"></span></div>
+    <hr>
+    <div class="result-row"><strong>Average:</strong> <strong id="resAvg"></strong></div>
+    <div class="result-row"><strong>Status:</strong> <span id="resStatus"></span></div>
+    
+    <a id="downloadLink" href="#" class="btn-link download-btn">Download Grade Slip (.txt)</a>
+    
+    <a href="index.html" class="btn-link logout-btn" onclick="sessionStorage.clear()">Logout</a>
+  </div>
+</div>
+
+<script>
+let studentNames = ["Allyssa", "Noela", "Chloe", "Merk", "Yohei"];
+let studentIDs = ["001", "002", "003", "004", "005"];
+let BSMGtGrades = [85.5, 60.0, 92.0, 99.0, 99.0];
+let GecSTSGrades = [90.0, 70.5, 88.0, 99.0, 95.0];
+let ITInfraGrades = [78.5, 65.0, 95.0, 99.0, 95.0];
+const passingGrade = 75.0;
+
+if (localStorage.getItem("gradingSystemData")) {
+  const localData = JSON.parse(localStorage.getItem("gradingSystemData"));
+  studentNames = localData.studentNames;
+  studentIDs = localData.studentIDs;
+  BSMGtGrades = localData.BSMGtGrades;
+  GecSTSGrades = localData.GecSTSGrades;
+  ITInfraGrades = localData.ITInfraGrades;
+}
+
+const i = sessionStorage.getItem('loggedInIndex');
+
+if (i !== null) {
+  const name = studentNames[i];
+  const id = studentIDs[i];
+  const bsmgt = BSMGtGrades[i];
+  const gecsts = GecSTSGrades[i];
+  const itinfra = ITInfraGrades[i];
+  const avg = (bsmgt + gecsts + itinfra) / 3;
+  
+  let statusText = avg >= passingGrade ? "PASSED" : "FAILED";
+  let statusClass = avg >= passingGrade ? "pass" : "fail";
+
+  document.getElementById('resName').innerText = name;
+  document.getElementById('resID').innerText = id;
+  document.getElementById('resBSMGT').innerText = bsmgt.toFixed(1);
+  document.getElementById('resGEC').innerText = gecsts.toFixed(1);
+  document.getElementById('resIT').innerText = itinfra.toFixed(1);
+  document.getElementById('resAvg').innerText = avg.toFixed(1);
+  
+  let statusEl = document.getElementById('resStatus');
+  statusEl.innerText = statusText;
+  statusEl.className = statusClass;
+
+  
+  const rawText = `===== OFFICIAL GRADE SLIP =====\nStudent Name : ${name}\nStudent ID   : ${id}\n\n--- SUBJECT GRADES ---\nBSMGT    : ${bsmgt.toFixed(2)}\nGECSTS   : ${gecsts.toFixed(2)}\nITInfra  : ${itinfra.toFixed(2)}\n\n--- RESULT ---\nAverage  : ${avg.toFixed(2)}\nStatus   : ${statusText}\n`;
+  
+  const dlElement = document.getElementById('downloadLink');
+  dlElement.href = "data:text/plain;charset=utf-8," + encodeURIComponent(rawText);
+  dlElement.setAttribute("download", `Grade_Slip_${id}.txt`);
+} else {
+  window.location.href = "index.html";
+}
+</script>
+</body>
+</html>
