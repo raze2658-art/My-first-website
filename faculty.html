@@ -69,6 +69,7 @@
             margin-top: 25px;
             display: flex;
             justify-content: flex-end;
+            gap: 10px;
         }
         .btn {
             padding: 12px 25px;
@@ -84,35 +85,48 @@
         .btn:hover {
             background-color: #27ae60;
         }
+        /* Style for the index login portal redirection button */
+        .btn-logout {
+            padding: 12px 25px;
+            background-color: #e74c3c;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: inline-block;
+            box-sizing: border-box;
+        }
+        .btn-logout:hover {
+            background-color: #c0392b;
+        }
     </style>
 </head>
 <body>
-
-    <div class="card">
-        <h2>FACULTY GRADE EDITOR</h2>
-        
-        <div id="successBox" class="msg">Grades updated and posted successfully!</div>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>Student ID</th>
-                    <th>Student Name</th>
-                    <th>BSMGt Grade</th>
-                    <th>GecSTS Grade</th>
-                    <th>ITInfra Grade</th>
-                </tr>
-            </thead>
-            <tbody id="gradesTableBody">
-                <!-- Data dynamically inserted here -->
-            </tbody>
-        </table>
-
-        <div class="btn-container">
-            <button class="btn" onclick="postAndSaveGrades()">Post & Save Grades</button>
-        </div>
+<div class="card">
+    <h2>FACULTY GRADE EDITOR</h2>
+    <div id="successBox" class="msg">Grades updated and posted successfully!</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>BSMGt Grade</th>
+                <th>GecSTS Grade</th>
+                <th>ITInfra Grade</th>
+            </tr>
+        </thead>
+        <tbody id="gradesTableBody">
+            <!-- Data dynamically inserted here -->
+        </tbody>
+    </table>
+    <div class="btn-container">
+        <!-- Main Redirection Link pointing to index.html -->
+        <a href="index.html" class="btn-logout">Back to Login Portal</a>
+        <button class="btn" onclick="postAndSaveGrades()">Post & Save Grades</button>
     </div>
-
+</div>
 <script>
     // Fetch system data from localStorage
     let systemData = JSON.parse(localStorage.getItem("gradingSystemData"));
@@ -132,7 +146,6 @@
     function renderTable() {
         const tbody = document.getElementById('gradesTableBody');
         tbody.innerHTML = "";
-
         for (let i = 0; i < systemData.studentIDs.length; i++) {
             let row = `<tr>
                 <td><strong>${systemData.studentIDs[i]}</strong></td>
@@ -150,30 +163,24 @@
         const bsInputs = document.querySelectorAll('.bs-input');
         const gecInputs = document.querySelectorAll('.gec-input');
         const itInputs = document.querySelectorAll('.it-input');
-
         bsInputs.forEach(input => {
             let idx = input.getAttribute('data-index');
             systemData.BSMGtGrades[idx] = parseFloat(input.value) || 0;
         });
-
         gecInputs.forEach(input => {
             let idx = input.getAttribute('data-index');
             systemData.GecSTSGrades[idx] = parseFloat(input.value) || 0;
         });
-
         itInputs.forEach(input => {
             let idx = input.getAttribute('data-index');
             systemData.ITInfraGrades[idx] = parseFloat(input.value) || 0;
         });
-
         // Save updated data structure to the common browser storage block
         localStorage.setItem("gradingSystemData", JSON.stringify(systemData));
-        
         // Show confirmation pop-up window notification
         const box = document.getElementById('successBox');
         box.style.display = "block";
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        
         setTimeout(() => {
             box.style.display = "none";
         }, 3000);
