@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grading System - Login Portal</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; background-color: #eef2f3; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+    h2 { text-align: center; color: #333; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top: 0; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+    input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 14px; }
+    .btn { display: block; width: 100%; padding: 12px; background-color: #3498db; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .btn:hover { background-color: #2980b9; }
+    .msg { padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 14px; font-weight: bold; text-align: center; display: none; }
+    .error-msg { background-color: #fce4e4; color: #cc0000; border: 1px solid #fccdcd; }
+    .nav-tabs { display: flex; margin-bottom: 20px; border-bottom: 1px solid #ddd; }
+    .tab { flex: 1; text-align: center; padding: 10px; cursor: pointer; color: #777; font-weight: bold; }
+    .active-tab { color: #3498db; border-bottom: 2px solid #3498db; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h2>GRADING SYSTEM</h2>
+  
+  <div class="nav-tabs">
+    <div id="tab1" class="tab active-tab" onclick="switchTab(1)">Student Login</div>
+    <div id="tab2" class="tab" onclick="switchTab(2)">Faculty Login</div>
+  </div>
+
+  <div id="errorBox" class="msg error-msg"></div>
+
+  <div id="studentForm">
+    <div class="form-group">
+      <label>Username:</label>
+      <input type="text" id="stuUser" placeholder="e.g., ally">
+    </div>
+    <div class="form-group">
+      <label>Password:</label>
+      <input type="password" id="stuPass" placeholder="e.g., 123">
+    </div>
+    <button class="btn" id="stuBtn" onclick="handleStudentLogin()">Login as Student</button>
+  </div>
+
+  <div id="facultyForm" style="display: none;">
+    <div class="form-group">
+      <label>Faculty Username:</label>
+      <input type="text" id="facUser" placeholder="e.g., admin">
+    </div>
+    <div class="form-group">
+      <label>Faculty Password:</label>
+      <input type="password" id="facPass" placeholder="e.g., faculty123">
+    </div>
+    <button class="btn" id="facBtn" onclick="handleFacultyLogin()">Login as Faculty</button>
+  </div>
+</div>
+
+<script>
+
+let systemData = {
+  usernames: ["ally", "noe", "chlo", "merk", "yohei"],
+  passwords: ["123", "123", "123", "123", "123"]
+};
+
+const facultyCredentials = { user: "admin", pass: "faculty123" };
+const MAX_ATTEMPTS = 3;
+
+let studentAttempts = 0;
+let facultyAttempts = 0;
+let currentTab = 1;
+
+window.onload = function() {
+  if (!localStorage.getItem("gradingSystemData")) {
+    
+    const baseline = {
+      studentNames: ["Allyssa", "Noela", "Chloe", "Merk", "Yohei"],
+      studentIDs: ["001", "002", "003", "004", "005"],
+      BSMGtGrades: [85.5, 60.0, 92.0, 99.0, 99.0],
+      GecSTSGrades: [90.0, 70.5, 88.0, 99.0, 95.0],
+      ITInfraGrades: [78.5, 65.0, 95.0, 99.0, 95.0]
+    };
+    localStorage.setItem("gradingSystemData", JSON.stringify(baseline));
+  }
+};
+
+function switchTab(tabNum) {
+  currentTab = tabNum;
+  document.getElementById('errorBox').style.display = 'none';
+  if(tabNum === 1) {
+    document.getElementById('tab1').className = "tab active-tab";
+    document.getElementById('tab2').className = "tab";
+    document.getElementById('studentForm').style.display = "block";
+    document.getElementById('facultyForm').style.display = "none";
+  } else {
+    document.getElementById('tab1').className = "tab";
+    document.getElementById('tab2').className = "tab active-tab";
+    document.getElementById('studentForm').style.display = "none";
+    document.getElementById('facultyForm').style.display = "block";
+  }
+}
+
+function handleStudentLogin() {
+  const userIn = document.getElementById('stuUser').value.trim();
+  const passIn = document.getElementById('stuPass').value.trim();
+  const errorBox = document.getElementById('errorBox');
+
+  if (studentAttempts >= MAX_ATTEMPTS) return;
+
+  let matchIndex = -1;
+  for (let i = 0; i < systemData.usernames.length; i++) {
+    if (systemData.usernames[i] === userIn && systemData.passwords[i] === passIn) {
+      matchIndex = i;
+      break;
+    }
+  }
+
+  if (matchIndex !== -1) {
+    sessionStorage.setItem('loggedInIndex', matchIndex);
+    window.location.href = "grade.html";
+  } else {
+    studentAttempts++;
+    let remaining = MAX_ATTEMPTS - studentAttempts;
+    errorBox.style.display = "block";
+    if (remaining <= 0) {
+      errorBox.innerText = "[ERROR] Too many failed login attempts. Access denied.";
+      document.getElementById('stuBtn').disabled = true;
+    } else {
+      errorBox.innerText = `Invalid Student Username or Password!\nAttempts remaining: ${remaining}`;
+    }
+  }
+}
+
+function handleFacultyLogin() {
+  const userIn = document.getElementById('facUser').value.trim();
+  const passIn = document.getElementById('facPass').value.trim();
+  const errorBox = document.getElementById('errorBox');
+
+  if (facultyAttempts >= MAX_ATTEMPTS) return;
+
+  if (userIn === facultyCredentials.user && passIn === facultyCredentials.pass) {
+    sessionStorage.setItem('facultySessionActive', 'true');
+    window.location.href = "faculty.html";
+  } else {
+    facultyAttempts++;
+    let remaining = MAX_ATTEMPTS - facultyAttempts;
+    errorBox.style.display = "block";
+    if (remaining <= 0) {
+      errorBox.innerText = "[ERROR] Too many failed login attempts. Access denied.";
+      document.getElementById('facBtn').disabled = true;
+    } else {
+      errorBox.innerText = `Invalid Faculty Username or Password!\nAttempts remaining: ${remaining}`;
+    }
+  }
+}
+</script>
+</body>
+</html>
