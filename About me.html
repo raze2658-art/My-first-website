@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yohei B. Komori | Portfolio</title>
+    <style>
+        /* --- RESET & VARIABLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --accent-color: #a855f7; /* Vibrant purple accent */
+            --text-main: #f0f6fc;
+            --text-muted: #8b949e;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--accent-color);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-color);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 2rem;
+            background: radial-gradient(circle at top right, rgba(168, 85, 247, 0.15), transparent 45%);
+        }
+
+        .hero-content {
+            max-width: 750px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: var(--accent-color);
+            padding: 0.4rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--accent-color);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+        }
+
+        /* --- HOBBIES SECTION --- */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(168, 85, 247, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-top {
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.2rem;
+            display: inline-block;
+        }
+
+        .card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* --- LINK LIST STYLE --- */
+        .card-links {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 1.2rem;
+        }
+
+        .card-links p {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .link-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .link-item {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .link-item::before {
+            content: "→";
+            margin-right: 0.5rem;
+            color: var(--accent-color);
+            transition: transform 0.2s ease;
+        }
+
+        .link-item:hover {
+            color: var(--accent-color);
+            transform: translateX(3px);
+        }
+
+        /* Highlight style specifically for the main tracker lists */
+        .list-highlight {
+            font-weight: 600;
+            color: #c084fc; /* Slightly lighter purple to pop out */
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* --- ANIMATIONS & RESPONSIVENESS --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <header>
+        <nav class="nav-container">
+            <a href="#" class="logo">Yohei<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#hobbies">My Hobbies</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="badge">20 Years Old • Filipino-Japanese</div>
+            <h1>Hey, I'm <br><span>Yohei B. Komori.</span></h1>
+            <p>Welcome to my space. I'm a strategist at heart, whether I'm calculating the perfect line on a chessboard, immersing myself in epic anime storylines, or appreciating the artistry of a musical production.</p>
+            <a href="#hobbies" class="btn">Explore My Hobbies</a>
+        </div>
+    </section>
+
+    <!-- HOBBIES SECTION -->
+    <section id="hobbies" class="section">
+        <div class="section-header">
+            <h2>What I'm Into</h2>
+            <p style="color: var(--text-muted);">A closer look at the interests that keep me inspired.</p>
+        </div>
+        
+        <div class="grid">
+            <!-- CHESS CARD -->
+            <div class="card">
+                <div class="card-top">
+                    <div class="card-icon">👑</div>
+                    <h3>Playing Chess</h3>
+                    <p>I enjoy the tactical depth and long-term calculation that comes with chess. It's a game of absolute focus, sharp pattern recognition, and outmaneuvering the competition.</p>
+                </div>
+                <div class="card-links">
+                    <p>Preferred Playstyle</p>
+                    <span style="color: var(--text-muted); font-size: 0.95rem;">Tactical / Solid Openings</span>
+                </div>
+            </div>
+
+            <!-- ANIME CARD WITH MY ANIME LIST LINK -->
+            <div class="card">
+                <div class="card-top">
+                    <div class="card-icon">🍿</div>
+                    <h3>Watching Anime</h3>
+                    <p>Anime offers an unparalleled level of world-building and creative narrative depth. I appreciate series with complex psychological arcs, rich artwork, and high-stakes action.</p>
+                </div>
+                <div class="card-links">
+                    <p>Top Recommendations</p>
+                    <ul class="link-list">
+                        <li><a href="#" class="link-item">Attack on Titan</a></li>
+                        <li><a href="#" class="link-item">Hunter x Hunter</a></li>
+                        <li><a href="#" class="link-item">Monster</a></li>
+                        <li><a href="#" class="link-item list-highlight" target="_blank">My Anime List</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- MUSICALS CARD WITH MUSICAL LIST LINK -->
+            <div class="card">
+                <div class="card-top">
+                    <div class="card-icon">🎭</div>
+                    <h3>Musicals & Theater</h3>
+                    <p>There is nothing quite like the raw energy of live performance combined with an outstanding score. The power of a dramatic musical track and stellar lyricism never fails to impress.</p>
+                </div>
+                <div class="card-links">
+                    <p>Favorite Soundtracks</p>
+                    <ul class="link-list">
+                        <li><a href="#" class="link-item">Hamilton</a></li>
+                        <li><a href="#" class="link-item">Les Misérables</a></li>
+                        <li><a href="#" class="link-item">The Phantom of the Opera</a></li>
+                        <li><a href="#" class="link-item list-highlight" target="_blank">Musical List</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Yohei B. Komori. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
