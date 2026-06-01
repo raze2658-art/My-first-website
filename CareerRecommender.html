@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PathFinder | Dynamic Career Matcher</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --text: #334155;
+            --success: #16a34a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 1.5rem 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .instructions {
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.2s;
+            background-color: #fff;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Results Box */
+        .result-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--success);
+            background-color: #f0fdf4;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box h3 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+
+        .result-box p {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .career-link {
+            display: inline-block;
+            color: white;
+            background-color: var(--success);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: opacity 0.2s;
+        }
+
+        .career-link:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎯 Career Matchmaker</h1>
+    </header>
+
+    <div class="container">
+        <p class="instructions">Select your highest or current level of educational background below, and we will find the ideal matching industry for your skillset.</p>
+        
+        <!-- Input Form -->
+        <div class="form-group">
+            <label for="education">What is your educational background?</label>
+            <select id="education">
+                <option value="" disabled selected>-- Choose your background --</option>
+                <option value="it_cs">Information Technology / Computer Science</option>
+                <option value="business_finance">Business Administration / Finance</option>
+                <option value="health_science">Nursing / Health Sciences</option>
+                <option value="arts_design">Fine Arts / Multimedia Design</option>
+                <option value="engineering">Mechanical / Electrical Engineering</option>
+            </select>
+        </div>
+
+        <button onclick="recommendCareer()">Find My Compatible Match</button>
+
+        <!-- Dynamic Output Display -->
+        <div id="result" class="result-box">
+            <h3 id="match-title">Your Match Found!</h3>
+            <p id="match-description"></p>
+            <a id="match-link" href="#" target="_blank" class="career-link">View Job Profiles & Details →</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 PathFinder Matcher. Empowering career choices.
+    </footer>
+
+    <!-- Logic Engine -->
+    <script>
+        function recommendCareer() {
+            const educationSelect = document.getElementById('education');
+            const selectedValue = educationSelect.value;
+            
+            const resultBox = document.getElementById('result');
+            const matchTitle = document.getElementById('match-title');
+            const matchDescription = document.getElementById('match-description');
+            const matchLink = document.getElementById('match-link');
+
+            // If user clicks button without choosing an option
+            if (!selectedValue) {
+                alert("Please select an educational background first!");
+                return;
+            }
+
+            // Career mapping database object
+            const careerDatabase = {
+                "it_cs": {
+                    title: "Network Engineer or Software Developer",
+                    desc: "Your tech background makes you ideal for managing network architectures, maintaining system servers, or writing clean software applications.",
+                    link: "https://www.bls.gov/ooh/computer-and-information-technology/home.htm"
+                },
+                "business_finance": {
+                    title: "Financial Analyst or Operations Manager",
+                    desc: "You have the strategic mindset needed to parse company data, optimize internal workflows, manage corporate assets, and scale business pipelines.",
+                    link: "https://www.bls.gov/ooh/business-and-financial/home.htm"
+                },
+                "health_science": {
+                    title: "Clinical Care Specialist or Health Informatics",
+                    desc: "Your knowledge of the human body and care practices paths a secure route toward active nursing, physical rehabilitation, or medical database operations.",
+                    link: "https://www.bls.gov/ooh/healthcare/home.htm"
+                },
+                "arts_design": {
+                    title: "UI/UX Designer or Creative Art Director",
+                    desc: "Your creative instincts fit perfectly into designing digital layout interfaces, mobile applications, brand identities, or corporate multimedia assets.",
+                    link: "https://www.bls.gov/ooh/arts-and-design/home.htm"
+                },
+                "engineering": {
+                    title: "Systems Engineer or Automation Specialist",
+                    desc: "Your strong foundations in math and hardware design position you optimally for building modern automation pipelines or physical network systems.",
+                    link: "https://www.bls.gov/ooh/architecture-and-engineering/home.htm"
+                }
+            };
+
+            // Grab the specific match data based on what the user picked
+            const matchedData = careerDatabase[selectedValue];
+
+            // Update the UI fields and inject the proper href link dynamically
+            matchTitle.innerText = `🎯 Top Match: ${matchedData.title}`;
+            matchDescription.innerText = matchedData.desc;
+            matchLink.href = matchedData.link; // <--- The dynamic href update
+
+            // Smoothly reveal the hidden result container
+            resultBox.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
