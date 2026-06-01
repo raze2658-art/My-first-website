@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PathFinder | Dynamic Career Matcher</title>
+    <title>PathFinder | Free-Text Career Matcher</title>
     <style>
         :root {
             --primary: #2563eb;
@@ -30,7 +30,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         header {
             background-color: #ffffff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -43,7 +42,6 @@
             font-size: 1.8rem;
         }
 
-        /* Main Container */
         .container {
             max-width: 600px;
             margin: 3rem auto;
@@ -61,7 +59,6 @@
             color: #64748b;
         }
 
-        /* Form Controls */
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -73,7 +70,8 @@
             color: var(--dark);
         }
 
-        select {
+        /* Upgraded to a clean text input */
+        input[type="text"] {
             width: 100%;
             padding: 0.75rem 1rem;
             border: 2px solid #e2e8f0;
@@ -82,10 +80,9 @@
             color: var(--text);
             outline: none;
             transition: border-color 0.2s;
-            background-color: #fff;
         }
 
-        select:focus {
+        input[type="text"]:focus {
             border-color: var(--primary);
         }
 
@@ -107,14 +104,13 @@
             background-color: var(--primary-hover);
         }
 
-        /* Results Box */
         .result-box {
             margin-top: 2rem;
             padding: 1.5rem;
             border-radius: 8px;
             border-left: 5px solid var(--success);
             background-color: #f0fdf4;
-            display: none; /* Hidden by default */
+            display: none; 
             animation: fadeIn 0.4s ease-out;
         }
 
@@ -165,28 +161,21 @@
     </header>
 
     <div class="container">
-        <p class="instructions">Select your highest or current level of educational background below, and we will find the ideal matching industry for your skillset.</p>
+        <p class="instructions">Type your educational background, skills, or degree below (e.g., "High school grad", "IT student", "Fine arts") to find compatible job sectors.</p>
         
-        <!-- Input Form -->
+        <!-- Free text field -->
         <div class="form-group">
-            <label for="education">What is your educational background?</label>
-            <select id="education">
-                <option value="" disabled selected>-- Choose your background --</option>
-                <option value="it_cs">Information Technology / Computer Science</option>
-                <option value="business_finance">Business Administration / Finance</option>
-                <option value="health_science">Nursing / Health Sciences</option>
-                <option value="arts_design">Fine Arts / Multimedia Design</option>
-                <option value="engineering">Mechanical / Electrical Engineering</option>
-            </select>
+            <label for="bgInput">Your Educational Background:</label>
+            <input type="text" id="bgInput" placeholder="e.g., High school graduate" autocomplete="off">
         </div>
 
-        <button onclick="recommendCareer()">Find My Compatible Match</button>
+        <button onclick="processSearch()">Find My Compatible Match</button>
 
-        <!-- Dynamic Output Display -->
+        <!-- Dynamic Output -->
         <div id="result" class="result-box">
             <h3 id="match-title">Your Match Found!</h3>
             <p id="match-description"></p>
-            <a id="match-link" href="#" target="_blank" class="career-link">View Job Profiles & Details →</a>
+            <a id="match-link" href="#" target="_blank" class="career-link">View Job Profiles & Openings →</a>
         </div>
     </div>
 
@@ -194,61 +183,71 @@
         &copy; 2026 PathFinder Matcher. Empowering career choices.
     </footer>
 
-    <!-- Logic Engine -->
     <script>
-        function recommendCareer() {
-            const educationSelect = document.getElementById('education');
-            const selectedValue = educationSelect.value;
+        // Listen for the "Enter" key inside the input box for better user experience
+        document.getElementById('bgInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processSearch();
+            }
+        });
+
+        function processSearch() {
+            // Get text value and force lowercase to prevent issues with capital letters
+            const userInput = document.getElementById('bgInput').value.trim().toLowerCase();
             
             const resultBox = document.getElementById('result');
             const matchTitle = document.getElementById('match-title');
             const matchDescription = document.getElementById('match-description');
             const matchLink = document.getElementById('match-link');
 
-            // If user clicks button without choosing an option
-            if (!selectedValue) {
-                alert("Please select an educational background first!");
+            if (!userInput) {
+                alert("Please type something about your background first!");
                 return;
             }
 
-            // Career mapping database object
-            const careerDatabase = {
-                "it_cs": {
-                    title: "Network Engineer or Software Developer",
-                    desc: "Your tech background makes you ideal for managing network architectures, maintaining system servers, or writing clean software applications.",
-                    link: "https://www.bls.gov/ooh/computer-and-information-technology/home.htm"
-                },
-                "business_finance": {
-                    title: "Financial Analyst or Operations Manager",
-                    desc: "You have the strategic mindset needed to parse company data, optimize internal workflows, manage corporate assets, and scale business pipelines.",
-                    link: "https://www.bls.gov/ooh/business-and-financial/home.htm"
-                },
-                "health_science": {
-                    title: "Clinical Care Specialist or Health Informatics",
-                    desc: "Your knowledge of the human body and care practices paths a secure route toward active nursing, physical rehabilitation, or medical database operations.",
-                    link: "https://www.bls.gov/ooh/healthcare/home.htm"
-                },
-                "arts_design": {
-                    title: "UI/UX Designer or Creative Art Director",
-                    desc: "Your creative instincts fit perfectly into designing digital layout interfaces, mobile applications, brand identities, or corporate multimedia assets.",
-                    link: "https://www.bls.gov/ooh/arts-and-design/home.htm"
-                },
-                "engineering": {
-                    title: "Systems Engineer or Automation Specialist",
-                    desc: "Your strong foundations in math and hardware design position you optimally for building modern automation pipelines or physical network systems.",
-                    link: "https://www.bls.gov/ooh/architecture-and-engineering/home.htm"
-                }
+            // Default fallback response if their typing doesn't match a specific keyword
+            let match = {
+                title: "General Business Operations & Services",
+                desc: "We couldn't pinpoint a hyper-specific match, but your background prepares you beautifully for general operational, retail management, or administrative service positions.",
+                link: "https://www.bls.gov/ooh/business-and-financial/home.htm"
             };
 
-            // Grab the specific match data based on what the user picked
-            const matchedData = careerDatabase[selectedValue];
+            // Smart keyword checking
+            if (userInput.includes("high school") || userInput.includes("highschool") || userInput.includes("hs")) {
+                match = {
+                    title: "Tech Support Specialist or Sales Representative",
+                    desc: "Great news! Many high-paying technical support, customer success, and corporate sales tracks prioritize communication skills and technical intuition over a four-year degree.",
+                    link: "https://www.bls.gov/ooh/computer-and-information-technology/computer-support-specialists.htm"
+                };
+            } 
+            else if (userInput.includes("it") || userInput.includes("computer") || userInput.includes("network") || userInput.includes("programming")) {
+                match = {
+                    title: "Network Technician or Systems Specialist",
+                    desc: "Your technology profile lines up perfectly with modern IT infrastructure management, device configuration routing, and system architecture planning.",
+                    link: "https://www.bls.gov/ooh/computer-and-information-technology/home.htm"
+                };
+            } 
+            else if (userInput.includes("art") || userInput.includes("design") || userInput.includes("multimedia")) {
+                match = {
+                    title: "UI/UX Designer or Digital Content Lead",
+                    desc: "Your creative eye fits excellently within software interface design layouts, frontend web prototyping, and digital brand asset production.",
+                    link: "https://www.bls.gov/ooh/arts-and-design/home.htm"
+                };
+            }
+            else if (userInput.includes("business") || userInput.includes("finance") || userInput.includes("management")) {
+                match = {
+                    title: "Operations Planner or Marketing Analyst",
+                    desc: "Your management-oriented focus positions you well to coordinate logistics workflows, review organizational data, or drive corporate marketing plans.",
+                    link: "https://www.bls.gov/ooh/business-and-financial/home.htm"
+                };
+            }
 
-            // Update the UI fields and inject the proper href link dynamically
-            matchTitle.innerText = `🎯 Top Match: ${matchedData.title}`;
-            matchDescription.innerText = matchedData.desc;
-            matchLink.href = matchedData.link; // <--- The dynamic href update
+            // Inject the matching data and href dynamically
+            matchTitle.innerText = `🎯 Recommended: ${match.title}`;
+            matchDescription.innerText = match.desc;
+            matchLink.href = match.link;
 
-            // Smoothly reveal the hidden result container
+            // Display the results wrapper element
             resultBox.style.display = 'block';
         }
     </script>
