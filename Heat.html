@@ -152,7 +152,6 @@
             border-radius: 8px;
         }
 
-        /* Weather Panel - Shades of Blue Design */
         .weather-card {
             margin: 5px 15px 10px 15px;
             padding: 18px;
@@ -217,12 +216,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
         }
 
         .pet-avatar {
             font-size: 5rem;
             z-index: 2;
             display: inline-block;
+            user-select: none;
         }
 
         .lively-bounce { animation: livelyDance 0.6s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955); }
@@ -242,7 +243,6 @@
             100% { transform: scale(1.05) scaleY(0.92); }
         }
 
-        /* Realistic Animated CSS Champorado Asset */
         .applied-item-overlay {
             position: absolute;
             top: -15px;
@@ -256,7 +256,7 @@
             height: 50px;
             background: #5d4037; 
             border-radius: 10px 10px 35px 35px;
-            border: 3px solid #90caf9; /* Blue accent rim */
+            border: 3px solid #90caf9;
             position: relative;
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             animation: floatingEffect 2.5s infinite ease-in-out;
@@ -327,6 +327,7 @@
         .simple-emoji-asset {
             font-size: 3rem;
             animation: floatingEffect 2s infinite ease-in-out;
+            display: inline-block;
         }
 
         .pet-bubble {
@@ -413,7 +414,7 @@
 
         <div class="pet-container">
             <div id="petNameTag" class="pet-name-tag">Bantay</div>
-            <div class="pet-stage">
+            <div class="pet-stage" onclick="playPetSound()">
                 <div id="petAvatar" class="pet-avatar lively-bounce">🐶</div>
                 <div id="itemOverlay" class="applied-item-overlay"></div>
             </div>
@@ -432,7 +433,6 @@
     </div>
 
     <script>
-        // Massive Comprehensive Database containing every officially chartered city in the Philippines
         const philippineCities = [
             { name: "Silay City", lat: 10.8000, lon: 122.9667 },
             { name: "Talisay City (Negros Occidental)", lat: 10.7333, lon: 122.9667 },
@@ -512,7 +512,7 @@
             { name: "Sorsogon City", lat: 12.9644, lon: 124.0083 },
             { name: "Surigao City", lat: 9.7894, lon: 125.4964 },
             { name: "Tacloban", lat: 11.2444, lon: 124.9983 },
-            { name: "Tagig / Taguig", lat: 14.5176, lon: 121.0509 },
+            { name: "Taguig", lat: 14.5176, lon: 121.0509 },
             { name: "Tagum", lat: 7.4472, lon: 125.8078 },
             { name: "Tarlac City", lat: 15.4853, lon: 120.5908 },
             { name: "Toledo", lat: 10.3800, lon: 123.6400 },
@@ -533,6 +533,49 @@
         const searchInput = document.getElementById('citySearch');
         const dropdownList = document.getElementById('dropdownList');
 
+        // Synthesized audio engine using Web Audio API (No outside assets required)
+        function playPetSound() {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                const currentPet = document.getElementById('petAvatar').innerText;
+                
+                if (currentPet === "🐶") {
+                    // Dog Bark: Dual tone quick drop off
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.12);
+                    
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+                    
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.12);
+                } else {
+                    // Cat Meow: Frequency sweep sliding upward
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(450, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(750, ctx.currentTime + 0.2);
+                    
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+                    
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.25);
+                }
+            } catch (e) {
+                console.log("Audio failed to initialize:", e);
+            }
+        }
+
         function savePetName() {
             const inputVal = document.getElementById('petNameInput').value.trim();
             if(inputVal) {
@@ -544,41 +587,46 @@
 
         function updatePHClock() {
             const options = { timeZone: "Asia/Manila", weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            document.getElementById('dateDisplay').innerText = PHT •  + new Date().toLocaleString("en-US", options);
+            document.getElementById('dateDisplay').innerText = "PHT • " + new Date().toLocaleString("en-US", options);
         }
         setInterval(updatePHClock, 1000);
 
-        // Core Live JSON Fetch API Stream Routine
         async function fetchLiveWeather(city) {
             document.getElementById('conditionDisplay').innerText = "FETCHING DATA...";
             try {
-                const response = await fetch(https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true);
+                const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true`);
                 const data = await response.json();
                 
                 if(data && data.current_weather) {
                     currentTemp = Math.round(data.current_weather.temperature);
                     const code = data.current_weather.weathercode;
                     
-                    document.getElementById('tempDisplay').innerText = ${currentTemp}°C;
+                    document.getElementById('tempDisplay').innerText = `${currentTemp}°C`;
                     isItemApplied = false; 
                     
-                    // Categorize based on meteorological parameters
-                    if (code >= 61) {
+                    // Aligned with PAGASA Weather Terms and Warnings
+                    if (code >= 61 || code === 45 || code === 48) { 
                         weatherProfile = "rain";
-                        document.getElementById('conditionDisplay').innerText = "🌧️ Heavy Rain / Habagat";
-                        document.getElementById('weatherCard').style.background = "linear-gradient(135deg, #4682b4, #1d4e89)";
+                        // Simulating a PAGASA Heavy Rainfall color warning tier
+                        document.getElementById('conditionDisplay').innerText = "🌧️ PAGASA: Yellow Rainfall Warning Alert";
+                        document.getElementById('weatherCard').style.background = "linear-gradient(135deg, #fbc02d, #f57f17)";
+                        document.getElementById('conditionDisplay').style.color = "#000";
                     } else if (currentTemp >= 33) {
                         weatherProfile = "hot";
-                        document.getElementById('conditionDisplay').innerText = "☀️ Intense Heatwave";
-                        document.getElementById('weatherCard').style.background = "linear-gradient(135deg, #1e88e5, #0056b3)";
+                        // Matches PAGASA Heat Index classification system ("Extreme Caution" status threshold)
+                        document.getElementById('conditionDisplay').innerText = "☀️ PAGASA: High Heat Index Caution";
+                        document.getElementById('weatherCard').style.background = "linear-gradient(135deg, #d32f2f, #b71c1c)";
+                        document.getElementById('conditionDisplay').style.color = "#fff";
                     } else if (currentTemp <= 24) {
                         weatherProfile = "cold";
-                        document.getElementById('conditionDisplay').innerText = "🍃 Cool Amihan Breeze";
-                        document.getElementById('weatherCard').style.background = "linear-gradient(135deg, #a0c4ff, #4682b4)";
+                        document.getElementById('conditionDisplay').innerText = "🍃 Amihan Monsoon Weather";
+                        document.getElementById('weatherCard').style.background = "linear-gradient(135deg, #0288d1, #01579b)";
+                        document.getElementById('conditionDisplay').style.color = "#fff";
                     } else {
                         weatherProfile = "normal";
-                        document.getElementById('conditionDisplay').innerText = "🌤️ Fair Weather";
-                        document.getElementById('weatherCard').style.background = "linear-gradient(135deg, #3a86c8, #0d47a1)";
+                        document.getElementById('conditionDisplay').innerText = "🌤️ PAGASA: Fair Weather Conditions";
+                        document.getElementById('weatherCard').style.background = "linear-gradient(135deg, #1e88e5, #0d47a1)";
+                        document.getElementById('conditionDisplay').style.color = "#fff";
                     }
                     
                     evaluatePetDialogue();
@@ -600,19 +648,19 @@
             if (weatherProfile === "hot") {
                 avatar.innerText = "🐶";
                 avatar.className = "pet-avatar lively-pant";
-                bubble.innerText = ${petName}: Inggit ako sa mga nasa beach! Ang init-init dito sa labas, feeling ko literal akong matutunaw. Can I have some cold water please? 🥣;
+                bubble.innerText = `${petName}: Grabe naman ang PAGASA Heat Index ngayon! Ang init-init dito sa labas, baka ma-heatstroke ako nito. Can I have some cold water please? 🥣`;
             } else if (weatherProfile === "rain") {
                 avatar.innerText = "🐱";
                 avatar.className = "pet-avatar lively-shiver";
-                bubble.innerText = ${petName}: Oh no, look outside! Ang lakas ng rain shower, baka bumaha. Mas masarap humigop ng mainit na champorado ngayon... 🍲;
+                bubble.innerText = `${petName}: Hala look, may rainfall advisory ang PAGASA! Ang lakas ng ulan, baka bumaha rito. Mas masarap humigop ng mainit na champorado ngayon... 🍲`;
             } else if (weatherProfile === "cold") {
                 avatar.innerText = "🐱";
                 avatar.className = "pet-avatar lively-shiver";
-                bubble.innerText = ${petName}: Hala, parang nasa Baguio bigla! Ang lamig ng simoy ng Amihan. Can you share your thick jacket with me? 🧥;
+                bubble.innerText = `${petName}: Hala, ramdam ko rito yung simoy ng Amihan! Parang nasa Baguio bigla ang lamig. Can you share your thick jacket with me? 🧥`;
             } else {
                 avatar.innerText = "🐶";
                 avatar.className = "pet-avatar lively-bounce";
-                bubble.innerText = ${petName}: Sobrang chill lang ng weather today! Tamang-tama ang simoy ng hangin para maglaro sa labas. Let's go out!;
+                bubble.innerText = `${petName}: Sabi ng PAGASA maganda raw ang panahon ngayon! Tamang-tama ang simoy ng hangin para maglaro sa labas. Let's go out!`;
             }
         }
 
@@ -629,29 +677,30 @@
                     </div>`;
             } else {
                 const itemEmojiMap = { water: "🥣", jacket: "🧥", umbrella: "🍃" };
-                overlay.innerHTML = <span class="simple-emoji-asset">${itemEmojiMap[itemType]}</span>;
+                overlay.innerHTML = `<span class="simple-emoji-asset">${itemEmojiMap[itemType]}</span>`;
             }
             overlay.style.display = "block";
 
-            // Logic handling matching items with the current weather situation
             if (itemType === 'water' && weatherProfile === 'hot') {
                 isItemApplied = true;
-                document.getElementById('petBubble').innerText = ${petName}: Ang refreshing! Thank you for the cold water, now ready na uli ako humataw!;
+                document.getElementById('petBubble').innerText = `${petName}: Ang refreshing! Salamat sa malamig na tubig, hindi na ako hihingalin sa init!`;
                 document.getElementById('petAvatar').className = "pet-avatar lively-bounce";
+                playPetSound();
             } else if (itemType === 'food' && weatherProfile === 'rain') {
                 isItemApplied = true;
-                document.getElementById('petBubble').innerText = ${petName}: Solid! This realistic champorado swirl is so good. Nawala bigla yung gloomy vibes ng bagyo!;
+                document.getElementById('petBubble').innerText = `${petName}: Wow, champorado swirl! Bagay na bagay habang may rainfall advisory sa labas.`;
                 document.getElementById('petAvatar').className = "pet-avatar lively-bounce";
+                playPetSound();
             } else if (itemType === 'jacket' && weatherProfile === 'cold') {
                 isItemApplied = true;
-                document.getElementById('petBubble').innerText = ${petName}: Wow, ang lambot naman nito! Very aesthetic blue jacket, super fit sa katawan ko.;
+                document.getElementById('petBubble').innerText = `${petName}: Ang init naman nitong blue jacket! Saktong sakto panlaban sa Amihan monsoon!`;
                 document.getElementById('petAvatar').className = "pet-avatar lively-bounce";
+                playPetSound();
             } else {
-                document.getElementById('petBubble').innerText = ${petName}: Thank you, pero hindi ko kailangan nyan sa ngayon! Tingnan mo uli yung current status ko.;
+                document.getElementById('petBubble').innerText = `${petName}: Uhm, thank you... pero hindi ko kailangan 'yan sa ganitong ulat ng panahon!`;
             }
         }
 
-        // Live Dynamic Dropdown Auto-filtration UI Search Routine
         searchInput.addEventListener('input', () => {
             const query = searchInput.value.toLowerCase().trim();
             dropdownList.innerHTML = '';
@@ -667,7 +716,7 @@
                 filtered.forEach(city => {
                     const item = document.createElement('div');
                     item.className = 'dropdown-item';
-                    item.innerHTML = <span>${city.name}</span> <span class="badge-major">PH</span>;
+                    item.innerHTML = `<span>${city.name}</span> <span class="badge-major">PH</span>`;
                     item.addEventListener('click', () => {
                         currentCity = city;
                         document.getElementById('activeCityDisplay').innerText = city.name;
@@ -685,7 +734,6 @@
             if (!searchInput.contains(e.target) && !dropdownList.contains(e.target)) dropdownList.style.display = 'none';
         });
 
-        // Initialize Routine on load
         updatePHClock();
         fetchLiveWeather(currentCity);
     </script>
