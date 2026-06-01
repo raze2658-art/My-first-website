@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PathFinder | Career Recommendations</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --text: #334155;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .cta-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* Career Grid Section */
+        .main-content {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .career-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .career-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .career-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .career-card h3 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .career-card p {
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="nav-container">
+            <a href="#" class="logo">🚀 PathFinder</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#explore">Explore Careers</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="mailto:support@pathfinder.com">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>Discover Your Perfect Career Path</h1>
+        <p>Take control of your future. Explore tailored recommendations based on your unique skills, interests, and goals.</p>
+        <a href="#explore" class="cta-btn">Start Exploring</a>
+    </section>
+
+    <main class="main-content" id="explore">
+        <h2 class="section-title">Recommended Career Fields</h2>
+        
+        <div class="career-grid">
+            
+            <div class="career-card">
+                <h3>Technology & IT</h3>
+                <p>Build the future through code, data analysis, or cybersecurity. Perfect for analytical thinkers and problem solvers.</p>
+                <a href="https://www.example.com/careers/technology" target="_blank" class="card-link">Explore Tech Careers →</a>
+            </div>
+
+            <div class="career-card">
+                <h3>Healthcare & Medicine</h3>
+                <p>Make a difference in people's lives through nursing, medicine, medical research, or physical therapy.</p>
+                <a href="https://www.example.com/careers/healthcare" target="_blank" class="card-link">Explore Healthcare →</a>
+            </div>
+
+            <div class="career-card">
+                <h3>Creative Arts & Design</h3>
+                <p>Express your vision through UI/UX design, graphic design, animation, or digital content creation.</p>
+                <a href="https://www.example.com/careers/design" target="_blank" class="card-link">Explore Creative Fields →</a>
+            </div>
+
+            <div class="career-card">
+                <h3>Business & Finance</h3>
+                <p>Drive organizational growth through financial analysis, marketing strategies, or project management.</p>
+                <a href="https://www.example.com/careers/business" target="_blank" class="card-link">Explore Business →</a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PathFinder Career Services. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
