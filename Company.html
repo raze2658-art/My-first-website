@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Digital | Innovative IT Solutions</title>
+    <style>
+        /* --- Modernized Variables & Reset --- */
+        :root {
+            --primary: #0066ff;
+            --primary-glow: rgba(0, 102, 255, 0.15);
+            --dark: #0f172a;
+            --dark-card: #1e293b;
+            --light-bg: #f8fafc;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --border-color: #e2e8f0;
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding-top: 80px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* --- Upgraded Buttons --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, #0044cc 100%);
+            color: var(--white);
+            border: none;
+            box-shadow: 0 4px 14px rgba(0, 82, 204, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 82, 204, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--dark);
+            border: 2px solid var(--border-color);
+            margin-left: 14px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--light-bg);
+            border-color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        /* --- Dynamic Navigation Bar --- */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid transparent;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .navbar.scrolled {
+            height: 70px;
+            background-color: rgba(255, 255, 255, 0.98);
+            border-color: var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin-left: 32px;
+            font-weight: 500;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        .nav-links li a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links .btn-nav {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 6px;
+        }
+
+        .nav-links .btn-nav:hover {
+            background-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            padding: 100px 0;
+            background: radial-gradient(100% 100% at 100% 0%, rgba(0, 102, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%), var(--light-bg);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: rgba(0, 102, 255, 0.08);
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 48px;
+            color: var(--dark);
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 24px;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: var(--text-muted);
+            margin-bottom: 36px;
+        }
+
+        .tech-dashboard {
+            background: var(--dark);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dash-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 12px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .dot.red { background: #ef4444; }
+        .dot.yellow { background: #f59e0b; }
+        .dot.green { background: #10b981; }
+
+        .dash-title {
+            color: var(--text-muted);
+            font-family: monospace;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .glow-text {
+            color: #10b981;
+            font-family: monospace;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .pulse-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-left: 8px;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 12px;
+            height: 100px;
+            margin: 24px 0;
+            padding-left: 10px;
+        }
+
+        .bar {
+            width: 100%;
+            max-width: 30px;
+            background: linear-gradient(to top, var(--primary), #60a5fa);
+            border-radius: 4px 4px 0 0;
+            opacity: 0.85;
+        }
+
+        .code-line {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+        .code-line.short { width: 50%; }
+        .code-line.medium { width: 75%; }
+
+        /* --- Services --- */
+        .services { padding: 100px 0; }
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 50px auto; }
+        .section-header h2 { font-size: 36px; color: var(--dark); margin-bottom: 16px; }
+        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+        
+        .service-card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            padding: 40px 32px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            border-color: transparent;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.06);
+        }
+
+        .icon-wrapper {
+            width: 56px;
+            height: 56px;
+            background: var(--light-bg);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 24px;
+            transition: var(--transition);
+        }
+
+        .service-card:hover .icon-wrapper { background: var(--primary); color: white; }
+
+        /* --- About --- */
+        .about { padding: 100px 0; background-color: var(--light-bg); }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .about-text blockquote { border-left: 4px solid var(--primary); padding-left: 24px; font-style: italic; font-size: 18px; margin-top: 30px; color: var(--dark); }
+        .about-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        
+        .stat-item {
+            background: var(--white);
+            padding: 32px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-item h4 { font-size: 40px; color: var(--primary); font-weight: 800; }
+
+        /* --- Form --- */
+        .contact { padding: 100px 0; }
+        .contact-box { max-width: 650px; margin: 0 auto; background: var(--white); border: 1px solid var(--border-color); padding: 48px; border-radius: var(--radius); }
+        .contact-form .form-group { margin-bottom: 20px; }
+        .contact-form label { display: block; font-weight: 600; margin-bottom: 8px; color: var(--dark); }
+        .contact-form input, .contact-form textarea { width: 100%; padding: 14px; border: 1px solid var(--border-color); background-color: var(--light-bg); border-radius: 8px; }
+        .contact-form input:focus, .contact-form textarea:focus { outline: none; background-color: var(--white); border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-glow); }
+
+        /* --- Footer --- */
+        .footer { background-color: var(--dark); color: #94a3b8; padding: 40px 0; text-align: center; font-size: 14px; }
+
+        /* --- Responsive Viewports --- */
+        @media (max-width: 968px) {
+            .hero-grid, .about-grid, .services-grid { grid-template-columns: 1fr; gap: 40px; }
+            .hero-content { text-align: center; }
+            .hero-actions { justify-content: center; }
+            .btn-secondary { margin: 10px 0 0 0; }
+            .hero-visual { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="logo">Apex<span>Digital</span></a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="https://raze2658-art.github.io/My-first-website/Career.html" target="_blank" rel="noopener noreferrer">Career</a></li>
+                    <li><a href="#contact" class="btn-nav">Get Started</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <span class="badge">Next-Gen Architecture</span>
+                <h1>Scaling Tech Operations with Precision</h1>
+                <p>We build resilient IT infrastructure, modern software architectures, and automated workflows designed to accelerate business growth.</p>
+                <div class="hero-actions">
+                    <a href="#services" class="btn btn-primary">Our Services</a>
+                    <a href="https://raze2658-art.github.io/My-first-website/Career.html" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Join Our Team</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="tech-dashboard">
+                    <div class="dash-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="dash-title">system_status.sh</span>
+                    </div>
+                    <div class="dash-body">
+                        <div class="code-line metrics">
+                            <span class="glow-text">SYS_STATUS: ACTIVE</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="bar-chart">
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 85%"></div>
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 95%"></div>
+                        </div>
+                        <div class="code-line short"></div>
+                        <div class="code-line medium"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>What We Offer</h2>
+                <p>Tailored digital engineering strategies to keep your company ahead of the curve.</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="icon-wrapper">💻</div>
+                    <h3>Custom Software</h3>
+                    <p>Clean, maintainable backend applications and automated workflows tailored to your specific logic.</p>
+                </div>
+                <div class="service-card">
+                    <div class="icon-wrapper">🌐</div>
+                    <h3>Network Design</h3>
+                    <p>Robust enterprise network topologies, optimization, and system monitoring architectures.</p>
+                </div>
+                <div class="service-card">
+                    <div class="icon-wrapper">🛡️</div>
+                    <h3>Data Governance</h3>
+                    <p>Ensuring data integrity, secure lifecycle management, and strict technical compliance.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container about-grid">
+            <div class="about-text">
+                <h2>Engineering the Future of Enterprise</h2>
+                <p>Founded by a team of systems architects and software engineers, Apex Digital specializes in removing technical friction. We bridge the gap between complex network backbones and smooth end-user applications.</p>
+                <blockquote>
+                    "Efficiency isn't just about speed; it's about building systems that sustain performance under heavy load."
+                </blockquote>
+            </div>
+            <div class="about-stats">
+                <div class="stat-item">
+                    <h4>99.9%</h4>
+                    <p>Uptime Architecture</p>
+                </div>
+                <div class="stat-item">
+                    <h4>30+</h4>
+                    <p>Workstations Connected</p>
+                </div>
+                <div class="stat-item">
+                    <h4>24/7</h4>
+                    <p>System Monitoring</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-box">
+                <h2>Let's Discuss Your Project</h2>
+                <p>Drop your details below, and our engineering lead will reach out within 24 hours.</p>
+                
+                <form class="contact-form" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Corporate Email</label>
+                        <input type="email" id="email" name="email" placeholder="john@company.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Project Scope</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Tell us about your technical goals..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Send Inquiry</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Apex Digital. All rights reserved. Built with pure semantic HTML & CSS.</p>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
