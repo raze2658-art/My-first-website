@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <header class="navbar">
+    <header class="navbar" id="navbar">
         <div class="container">
             <a href="#" class="logo">Apex<span>Digital</span></a>
             <nav>
@@ -26,6 +26,7 @@
     <section id="home" class="hero">
         <div class="container hero-grid">
             <div class="hero-content">
+                <span class="badge">Next-Gen Architecture</span>
                 <h1>Scaling Tech Operations with Precision</h1>
                 <p>We build resilient IT infrastructure, modern software architectures, and automated workflows designed to accelerate business growth.</p>
                 <div class="hero-actions">
@@ -34,10 +35,27 @@
                 </div>
             </div>
             <div class="hero-visual">
-                <div class="tech-card-graphic">
-                    <div class="code-line"></div>
-                    <div class="code-line short"></div>
-                    <div class="node-circle"></div>
+                <div class="tech-dashboard">
+                    <div class="dash-header">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                        <span class="dash-title">system_status.sh</span>
+                    </div>
+                    <div class="dash-body">
+                        <div class="code-line metrics">
+                            <span class="glow-text">SYS_STATUS: ACTIVE</span>
+                            <span class="pulse-indicator"></span>
+                        </div>
+                        <div class="bar-chart">
+                            <div class="bar" style="height: 60%"></div>
+                            <div class="bar" style="height: 85%"></div>
+                            <div class="bar" style="height: 40%"></div>
+                            <div class="bar" style="height: 95%"></div>
+                        </div>
+                        <div class="code-line short"></div>
+                        <div class="code-line medium"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -51,17 +69,17 @@
             </div>
             <div class="services-grid">
                 <div class="service-card">
-                    <div class="icon">💻</div>
+                    <div class="icon-wrapper">💻</div>
                     <h3>Custom Software</h3>
                     <p>Clean, maintainable backend applications and automated workflows tailored to your specific logic.</p>
                 </div>
                 <div class="service-card">
-                    <div class="icon">🌐</div>
+                    <div class="icon-wrapper">🌐</div>
                     <h3>Network Design</h3>
                     <p>Robust enterprise network topologies, optimization, and system monitoring architectures.</p>
                 </div>
                 <div class="service-card">
-                    <div class="icon">🛡️</div>
+                    <div class="icon-wrapper">🛡️</div>
                     <h3>Data Governance</h3>
                     <p>Ensuring data integrity, secure lifecycle management, and strict technical compliance.</p>
                 </div>
@@ -122,4 +140,4 @@
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Apex Digital. All rights reserved. Built with pure semantic HTML & CSS.</p>
+            <p>&copy; 2026 Apex Digital. All rights reserved. Built with pure semantic HTML
