@@ -160,7 +160,7 @@
 
         .hero-grid {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
+            grid-template-columns: 1.1fr 0.9fr;
             gap: 60px;
             align-items: center;
         }
@@ -190,81 +190,26 @@
             margin-bottom: 36px;
         }
 
-        .tech-dashboard {
-            background: var(--dark);
+        /* Video Showcase Wrapper Container */
+        .video-container {
+            position: relative;
+            width: 100%;
             border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .dash-header {
+            overflow: hidden;
+            background: var(--dark);
+            box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.25);
+            border: 1px solid var(--border-color);
+            aspect-ratio: 16 / 9; /* Maintains standard widescreen video aspect ratio */
             display: flex;
             align-items: center;
-            margin-bottom: 24px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 12px;
+            justify-content: center;
         }
 
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-right: 6px;
-        }
-        .dot.red { background: #ef4444; }
-        .dot.yellow { background: #f59e0b; }
-        .dot.green { background: #10b981; }
-
-        .dash-title {
-            color: var(--text-muted);
-            font-family: monospace;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-
-        .glow-text {
-            color: #10b981;
-            font-family: monospace;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .pulse-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
-            margin-left: 8px;
-            box-shadow: 0 0 8px #10b981;
-        }
-
-        .bar-chart {
-            display: flex;
-            align-items: flex-end;
-            gap: 12px;
-            height: 100px;
-            margin: 24px 0;
-            padding-left: 10px;
-        }
-
-        .bar {
+        .hero-video {
             width: 100%;
-            max-width: 30px;
-            background: linear-gradient(to top, var(--primary), #60a5fa);
-            border-radius: 4px 4px 0 0;
-            opacity: 0.85;
+            height: 100%;
+            object-fit: cover; /* Ensures video spans gracefully across the entire container box */
         }
-
-        .code-line {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            margin-bottom: 10px;
-        }
-        .code-line.short { width: 50%; }
-        .code-line.medium { width: 75%; }
 
         /* --- Services --- */
         .services { padding: 100px 0; }
@@ -304,7 +249,30 @@
         /* --- About & Portfolios --- */
         .about { padding: 100px 0; background-color: var(--light-bg); }
         .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: top; }
-        .about-text blockquote { border-left: 4px solid var(--primary); padding-left: 24px; font-style: italic; font-size: 18px; margin: 30px 0; color: var(--dark); }
+        .about-text blockquote { border-left: 4px solid var(--primary); padding-left: 24px; font-style: italic; font-size: 18px; margin: 25px 0; color: var(--dark); }
+        
+        .mission-vision-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 25px 0 35px 0;
+        }
+        
+        .mv-item h3 {
+            font-size: 16px;
+            color: var(--dark);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mv-item p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
         .about-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 40px; }
         
         .stat-item {
@@ -393,7 +361,8 @@
             .hero-content { text-align: center; }
             .hero-actions { justify-content: center; }
             .btn-secondary { margin: 10px 0 0 0; }
-            .hero-visual { display: none; }
+            .video-container { max-width: 550px; margin: 0 auto; }
+            .mission-vision-container { grid-template-columns: 1fr; gap: 20px; }
         }
     </style>
 </head>
@@ -425,29 +394,14 @@
                     <a href="https://raze2658-art.github.io/My-first-website/Career.html" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Join Our Team</a>
                 </div>
             </div>
-            <div class="hero-visual">
-                <div class="tech-dashboard">
-                    <div class="dash-header">
-                        <span class="dot red"></span>
-                        <span class="dot yellow"></span>
-                        <span class="dot green"></span>
-                        <span class="dash-title">system_status.sh</span>
-                    </div>
-                    <div class="dash-body">
-                        <div class="code-line metrics">
-                            <span class="glow-text">SYS_STATUS: ACTIVE</span>
-                            <span class="pulse-indicator"></span>
-                        </div>
-                        <div class="bar-chart">
-                            <div class="bar" style="height: 60%"></div>
-                            <div class="bar" style="height: 85%"></div>
-                            <div class="bar" style="height: 40%"></div>
-                            <div class="bar" style="height: 95%"></div>
-                        </div>
-                        <div class="code-line short"></div>
-                        <div class="code-line medium"></div>
-                    </div>
-                </div>
+            
+            <!-- Video Container replacing structural script visual box -->
+            <div class="video-container">
+                <video class="hero-video" autoplay loop muted playsinline>
+                    <!-- Make sure to download the file from your Drive link and save it as "background-vid.mp4" inside your website project folder! -->
+                    <source src="background-vid.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
             </div>
         </div>
     </section>
@@ -483,10 +437,24 @@
             <div class="about-text">
                 <h2>Engineering the Future of Enterprise</h2>
                 <p>Founded by a team of systems architects and software engineers, Apex Digital specializes in removing technical friction. We bridge the gap between complex network backbones and smooth end-user applications.</p>
+                
                 <blockquote>
                     "Efficiency isn't just about speed; it's about building systems that sustain performance under heavy load."
                 </blockquote>
+
+                <!-- Mission & Vision Block -->
+                <div class="mission-vision-container">
+                    <div class="mv-item">
+                        <h3>🚀 Our Mission</h3>
+                        <p>To eliminate technical friction for growing enterprises by building reliable, scalable software architectures and highly resilient network infrastructures.</p>
+                    </div>
+                    <div class="mv-item">
+                        <h3>👁️ Our Vision</h3>
+                        <p>To become a premier global architecture hub, setting standard metrics for system uptime, seamless automation, and modern corporate data security.</p>
+                    </div>
+                </div>
                 
+                <!-- About Us Stats Row -->
                 <div class="about-stats">
                     <div class="stat-item">
                         <h4>99.9%</h4>
@@ -499,6 +467,7 @@
                 </div>
             </div>
 
+            <!-- Integrated Portfolio Hrefs Panel -->
             <div class="portfolio-panel">
                 <h3>Our Core Project Engineers</h3>
                 <p>Explore the diverse engineering portfolios of our founding design and development team.</p>
