@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Weather Lang.ph - Company Profile</title>
+    <!-- Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased">
 
+    <!-- Navigation Bar -->
     <nav class="bg-sky-600 text-white sticky top-0 z-50 shadow-md">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
             <a href="#" class="text-xl font-bold tracking-wide flex items-center gap-2">
@@ -25,6 +28,7 @@
         </div>
     </nav>
 
+    <!-- Hero / Home Section -->
     <header id="home" class="bg-gradient-to-b from-sky-500 to-sky-600 text-white py-20 px-4 text-center">
         <div class="max-w-4xl mx-auto">
             <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Your Interactive Weather Companion</h1>
@@ -52,6 +56,7 @@
         </div>
     </header>
 
+    <!-- About the Company Section -->
     <section id="about" class="py-16 px-4 max-w-5xl mx-auto">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-slate-900 mb-2">About The Company</h2>
@@ -73,6 +78,7 @@
         </div>
     </section>
 
+    <!-- The Team Section -->
     <section id="team" class="bg-slate-100 py-16 px-4">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
@@ -80,10 +86,11 @@
                 <div class="w-16 h-1 bg-sky-600 mx-auto rounded"></div>
             </div>
             
+            <!-- Leader / CEO Card -->
             <div class="flex justify-center mb-12">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center max-w-sm w-full transition transform hover:-translate-y-1 hover:shadow-md">
-                    <div class="w-32 h-32 bg-slate-200 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center text-slate-400 text-4xl">
-                        <i class="fa-solid fa-user-tie"></i>
+                    <div class="w-36 h-36 rounded-full mx-auto mb-4 overflow-hidden border-2 border-sky-500 bg-slate-200 flex items-center justify-center">
+                        <img src="Screenshot 2026-06-04 232432.png" alt="Riezel Lyn E. Panisales" class="w-full h-full object-cover" onerror="this.onerror=null; this.className='hidden'; this.parentNode.innerHTML='<i class=\"fa-solid fa-user-tie text-4xl text-slate-400\"></i>';">
                     </div>
                     <h3 class="text-xl font-bold text-slate-900">RIEZEL LYN E. PANISALES</h3>
                     <p class="text-sky-600 font-semibold text-sm mb-1">LEADER</p>
@@ -94,10 +101,12 @@
                 </div>
             </div>
 
+            <!-- Core Team Grid -->
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Member 1 -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 text-center transition transform hover:-translate-y-1 hover:shadow-md">
-                    <div class="w-24 h-24 bg-slate-200 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center text-slate-400 text-3xl">
-                        <i class="fa-solid fa-code"></i>
+                    <div class="w-28 h-28 rounded-full mx-auto mb-4 overflow-hidden border border-slate-200 bg-slate-200 flex items-center justify-center">
+                        <img src="Screenshot 2026-06-04 232452.png" alt="Ana Grace D. Sumagaysay" class="w-full h-full object-cover" onerror="this.onerror=null; this.className='hidden'; this.parentNode.innerHTML='<i class=\"fa-solid fa-code text-3xl text-slate-400\"></i>';">
                     </div>
                     <h4 class="text-lg font-bold text-slate-900 line-clamp-1">ANA GRACE D. SUMAGAYSAY</h4>
                     <p class="text-slate-500 text-xs mb-4 mt-1">Backend Developer</p>
@@ -106,20 +115,22 @@
                     </a>
                 </div>
 
+                <!-- Member 2 -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 text-center transition transform hover:-translate-y-1 hover:shadow-md">
-                    <div class="w-24 h-24 bg-slate-200 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center text-slate-400 text-3xl">
-                        <i class="fa-solid fa-file-invoice"></i>
+                    <div class="w-28 h-28 rounded-full mx-auto mb-4 overflow-hidden border border-slate-200 bg-slate-200 flex items-center justify-center">
+                        <img src="Screenshot 2026-06-04 232502.png" alt="Ma. Katrina Silva" class="w-full h-full object-cover" onerror="this.onerror=null; this.className='hidden'; this.parentNode.innerHTML='<i class=\"fa-solid fa-file-invoice text-3xl text-slate-400\"></i>';">
                     </div>
-                    <h4 class="text-lg font-bold text-slate-900 line-clamp-1">MA. Katrina SILVA</h4>
+                    <h4 class="text-lg font-bold text-slate-900 line-clamp-1">MA. KATRINA SILVA</h4>
                     <p class="text-slate-500 text-xs mb-4 mt-1">Research & Documentation Specialist</p>
                     <a href="#" class="inline-flex items-center text-xs text-sky-600 font-medium hover:underline">
                         Portfolio <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
                     </a>
                 </div>
 
+                <!-- Member 3 -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 text-center transition transform hover:-translate-y-1 hover:shadow-md">
-                    <div class="w-24 h-24 bg-slate-200 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center text-slate-400 text-3xl">
-                        <i class="fa-solid fa-vial-circle-check"></i>
+                    <div class="w-28 h-28 rounded-full mx-auto mb-4 overflow-hidden border border-slate-200 bg-slate-200 flex items-center justify-center">
+                        <img src="Screenshot 2026-06-04 232512.png" alt="Chloe Tolentino" class="w-full h-full object-cover" onerror="this.onerror=null; this.className='hidden'; this.parentNode.innerHTML='<i class=\"fa-solid fa-vial-circle-check text-3xl text-slate-400\"></i>';">
                     </div>
                     <h4 class="text-lg font-bold text-slate-900 line-clamp-1">CHLOE TOLENTINO</h4>
                     <p class="text-slate-500 text-xs mb-4 mt-1">QA Tester / Marketing Specialist</p>
@@ -128,9 +139,10 @@
                     </a>
                 </div>
 
+                <!-- Member 4 -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 text-center transition transform hover:-translate-y-1 hover:shadow-md">
-                    <div class="w-24 h-24 bg-slate-200 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center text-slate-400 text-3xl">
-                        <i class="fa-solid fa-vial-circle-check"></i>
+                    <div class="w-28 h-28 rounded-full mx-auto mb-4 overflow-hidden border border-slate-200 bg-slate-200 flex items-center justify-center">
+                        <img src="Screenshot 2026-06-04 232521.png" alt="Noela May Talavera" class="w-full h-full object-cover" onerror="this.onerror=null; this.className='hidden'; this.parentNode.innerHTML='<i class=\"fa-solid fa-vial-circle-check text-3xl text-slate-400\"></i>';">
                     </div>
                     <h4 class="text-lg font-bold text-slate-900 line-clamp-1">NOELA MAY TALAVERA</h4>
                     <p class="text-slate-500 text-xs mb-4 mt-1">QA Tester / Marketing Specialist</p>
@@ -140,10 +152,11 @@
                 </div>
             </div>
 
+            <!-- Additional Team Member -->
             <div class="flex justify-center mt-6">
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 text-center max-w-[270px] w-full transition transform hover:-translate-y-1 hover:shadow-md">
-                    <div class="w-24 h-24 bg-slate-200 rounded-full mx-auto mb-4 overflow-hidden flex items-center justify-center text-slate-400 text-3xl">
-                        <i class="fa-solid fa-vial-circle-check"></i>
+                    <div class="w-28 h-28 rounded-full mx-auto mb-4 overflow-hidden border border-slate-200 bg-slate-200 flex items-center justify-center">
+                        <img src="Screenshot 2026-06-04 232531.png" alt="Mertel R. Belo" class="w-full h-full object-cover" onerror="this.onerror=null; this.className='hidden'; this.parentNode.innerHTML='<i class=\"fa-solid fa-vial-circle-check text-3xl text-slate-400\"></i>';">
                     </div>
                     <h4 class="text-lg font-bold text-slate-900 line-clamp-1">MERTEL R. BELO</h4>
                     <p class="text-slate-500 text-xs mb-4 mt-1">QA Tester / Marketing Specialist</p>
@@ -155,6 +168,7 @@
         </div>
     </section>
 
+    <!-- System Architecture & Products Section -->
     <section id="infrastructure" class="py-16 px-4 max-w-6xl mx-auto">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-slate-900 mb-2">System Profile & Architecture</h2>
@@ -165,33 +179,26 @@
             <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                 <div class="text-sky-600 text-2xl mb-3"><i class="fa-solid fa-users"></i></div>
                 <h3 class="font-bold text-lg mb-2">People We Serve</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Students, workers, commuters, travelers, families, and anyone who wants reliable weather information.
-                </p>
+                <p class="text-slate-600 text-sm leading-relaxed">Students, workers, commuters, travelers, families, and anyone who wants reliable weather information.</p>
             </div>
             <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                 <div class="text-sky-600 text-2xl mb-3"><i class="fa-solid fa-laptop-mobile"></i></div>
                 <h3 class="font-bold text-lg mb-2">Hardware</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Accessed seamlessly via smartphones, tablets, laptops, and desktop computers powered by backend cloud servers.
-                </p>
+                <p class="text-slate-600 text-sm leading-relaxed">Accessed seamlessly via smartphones, tablets, laptops, and desktop computers powered by backend cloud servers.</p>
             </div>
             <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                 <div class="text-sky-600 text-2xl mb-3"><i class="fa-solid fa-layer-group"></i></div>
                 <h3 class="font-bold text-lg mb-2">Software Stack</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Built using modern web tech: React, Next.js, Tailwind CSS, advanced weather APIs, and responsive cloud databases.
-                </p>
+                <p class="text-slate-600 text-sm leading-relaxed">Built using modern web tech: React, Next.js, Tailwind CSS, advanced weather APIs, and responsive cloud databases.</p>
             </div>
             <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
                 <div class="text-sky-600 text-2xl mb-3"><i class="fa-solid fa-database"></i></div>
                 <h3 class="font-bold text-lg mb-2">Data Engine</h3>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    Processes forecasts, temperatures, humidity levels, rainfall probabilities, and user settings for personalized experiences.
-                </p>
+                <p class="text-slate-600 text-sm leading-relaxed">Processes forecasts, temperatures, humidity levels, rainfall probabilities, and user settings for personalized experiences.</p>
             </div>
         </div>
 
+        <!-- How It Works Roadmap -->
         <div class="bg-sky-50 rounded-2xl p-8 border border-sky-100">
             <h3 class="text-xl font-bold mb-6 text-center text-slate-800 flex items-center justify-center gap-2">
                 <i class="fa-solid fa-route text-sky-600"></i> How It Works (The User Journey)
@@ -231,6 +238,7 @@
         </div>
     </section>
 
+    <!-- Gallery Section -->
     <section id="gallery" class="bg-slate-100 py-16 px-4">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
@@ -239,52 +247,59 @@
             </div>
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                <!-- Dashboard -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
                     <div class="h-40 bg-sky-200 flex items-center justify-center text-sky-600 text-4xl"><i class="fa-solid fa-chart-simple"></i></div>
-                    <div class="p-4">
+                    <div class="p-4 flex-1">
                         <h4 class="font-bold text-slate-800 mb-1">Real-Time Weather Dashboard</h4>
-                        <p class="text-slate-600 text-sm">Displays current temperature, humidity, and atmospheric weather conditions.</p>
+                        <p class="text-slate-600 text-sm">Displays current temperature, humidity, and weather conditions.</p>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                <!-- Pet -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
                     <div class="h-40 bg-amber-100 flex items-center justify-center text-amber-500 text-4xl"><i class="fa-solid fa-dog"></i></div>
-                    <div class="p-4">
+                    <div class="p-4 flex-1">
                         <h4 class="font-bold text-slate-800 mb-1">Virtual Weather Pet</h4>
-                        <p class="text-slate-600 text-sm">Interactive graphic companion that reacts dynamically to changing weather patterns.</p>
+                        <p class="text-slate-600 text-sm">Interactive companion that reacts to changing weather conditions.</p>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                <!-- Alerts -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
                     <div class="h-40 bg-rose-100 flex items-center justify-center text-rose-500 text-4xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                    <div class="p-4">
+                    <div class="p-4 flex-1">
                         <h4 class="font-bold text-slate-800 mb-1">Weather Alerts</h4>
-                        <p class="text-slate-600 text-sm">Provides immediate, highly important weather warnings and critical safety notifications.</p>
+                        <p class="text-slate-600 text-sm">Provides important weather warnings and notifications.</p>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                <!-- Outfit -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
                     <div class="h-40 bg-emerald-100 flex items-center justify-center text-emerald-600 text-4xl"><i class="fa-solid fa-shirt"></i></div>
-                    <div class="p-4">
+                    <div class="p-4 flex-1">
                         <h4 class="font-bold text-slate-800 mb-1">Outfit Suggestions</h4>
-                        <p class="text-slate-600 text-sm">Recommends smart, contextually suitable daily clothing options based on ambient metrics.</p>
+                        <p class="text-slate-600 text-sm">Recommends suitable clothing based on current weather.</p>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                <!-- Responsive View -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
                     <div class="h-40 bg-purple-100 flex items-center justify-center text-purple-600 text-4xl"><i class="fa-solid fa-mobile-screen-button"></i></div>
-                    <div class="p-4">
+                    <div class="p-4 flex-1">
                         <h4 class="font-bold text-slate-800 mb-1">Mobile Application View</h4>
-                        <p class="text-slate-600 text-sm">Fluid, completely responsive design layouts heavily optimized for smaller displays.</p>
+                        <p class="text-slate-600 text-sm">Responsive design optimized for smartphones and tablets.</p>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                <!-- Forecasts -->
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-200 flex flex-col">
                     <div class="h-40 bg-indigo-100 flex items-center justify-center text-indigo-600 text-4xl"><i class="fa-solid fa-calendar-days"></i></div>
-                    <div class="p-4">
+                    <div class="p-4 flex-1">
                         <h4 class="font-bold text-slate-800 mb-1">Weather Forecast Interface</h4>
-                        <p class="text-slate-600 text-sm">Clean tabular data grid displaying upcoming weather trajectories and trend forecasts.</p>
+                        <p class="text-slate-600 text-sm">Displays upcoming weather conditions and forecasts.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Contact Section -->
     <section id="contact" class="py-16 px-4 max-w-6xl mx-auto">
         <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-slate-900 mb-2">Contact Us</h2>
@@ -294,7 +309,6 @@
         <div class="grid md:grid-cols-5 gap-8 items-start">
             <div class="md:col-span-2 bg-slate-900 text-white p-8 rounded-2xl shadow-sm space-y-6">
                 <h3 class="text-xl font-bold tracking-tight mb-4 text-sky-400">Business Details</h3>
-                
                 <div class="flex items-start gap-4">
                     <div class="text-sky-400 mt-1"><i class="fa-solid fa-envelope"></i></div>
                     <div>
@@ -302,7 +316,6 @@
                         <a href="mailto:g5website@weatherweatherlang.ph" class="text-sm hover:underline">g5website@weatherweatherlang.ph</a>
                     </div>
                 </div>
-
                 <div class="flex items-start gap-4">
                     <div class="text-sky-400 mt-1"><i class="fa-solid fa-phone"></i></div>
                     <div>
@@ -310,7 +323,6 @@
                         <a href="tel:+639949976508" class="text-sm hover:underline">+63 994 997 6508</a>
                     </div>
                 </div>
-
                 <div class="flex items-start gap-4">
                     <div class="text-sky-400 mt-1"><i class="fa-solid fa-location-dot"></i></div>
                     <div>
@@ -320,9 +332,10 @@
                 </div>
             </div>
 
+            <!-- Form -->
             <div class="md:col-span-3 bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
                 <h3 class="text-xl font-bold mb-6 text-slate-800">Inquiry Form</h3>
-                <form action="#" method="POST" class="space-y-4" onsubmit="event.preventDefault(); alert('Message sent simulated!');">
+                <form action="#" method="POST" class="space-y-4" onsubmit="event.preventDefault(); alert('Message successfully sent!');">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 uppercase mb-1">Full Name</label>
                         <input type="text" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
@@ -347,6 +360,7 @@
         </div>
     </section>
 
+    <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 text-center py-6 border-t border-slate-800 text-xs">
         <p>&copy; 2026 Weather Weather Lang.ph. All rights reserved.</p>
     </footer>
