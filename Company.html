@@ -162,7 +162,7 @@
             display: grid;
             grid-template-columns: 1.1fr 0.9fr;
             gap: 60px;
-            align-items: center;
+            align-items: start; /* Changed from center to allow sticky behavior to track correctly */
         }
 
         .badge {
@@ -190,9 +190,10 @@
             margin-bottom: 36px;
         }
 
-        /* Video Showcase Wrapper Container */
+        /* Sticky Video Showcase Wrapper Container */
         .video-container {
-            position: relative;
+            position: sticky;
+            top: 110px; /* Positions it nicely below your scrolled navigation bar */
             width: 100%;
             border-radius: var(--radius);
             overflow: hidden;
@@ -203,6 +204,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 10;
         }
 
         .hero-video {
@@ -361,7 +363,7 @@
             .hero-content { text-align: center; }
             .hero-actions { justify-content: center; }
             .btn-secondary { margin: 10px 0 0 0; }
-            .video-container { max-width: 550px; margin: 0 auto; }
+            .video-container { max-width: 550px; margin: 0 auto; position: relative; top: 0; } /* Resets sticky properties on mobile layout */
             .mission-vision-container { grid-template-columns: 1fr; gap: 20px; }
         }
     </style>
@@ -395,14 +397,14 @@
                 </div>
             </div>
             
-            <!-- Vimeo Video Showcase Section -->
+            <!-- Vimeo Video Player Section with Active Controls & Sticky Tracking -->
             <div class="video-container">
                 <iframe 
-                    src="https://player.vimeo.com/video/1198438850?autoplay=1&muted=1&loop=1&background=1&badge=0&autopause=0&player_id=0&app_id=58479" 
+                    src="https://player.vimeo.com/video/1198438850?autoplay=1&muted=1&controls=1" 
                     class="hero-video" 
                     allow="autoplay; fullscreen; picture-in-picture" 
                     allowfullscreen
-                    title="Hero Background Video">
+                    title="Hero Video Showcase">
                 </iframe>
             </div>
         </div>
