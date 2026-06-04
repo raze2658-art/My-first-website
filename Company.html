@@ -199,7 +199,7 @@
             background: var(--dark);
             box-shadow: 0 30px 60px -15px rgba(15, 23, 42, 0.25);
             border: 1px solid var(--border-color);
-            aspect-ratio: 16 / 9; /* Maintains standard widescreen video aspect ratio */
+            aspect-ratio: 16 / 9;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -208,7 +208,7 @@
         .hero-video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures video spans gracefully across the entire container box */
+            border: none;
         }
 
         /* --- Services --- */
@@ -395,13 +395,14 @@
                 </div>
             </div>
             
-            <!-- Video Container replacing structural script visual box -->
+            <!-- Google Drive Video Stream Player Section -->
             <div class="video-container">
-                <video class="hero-video" autoplay loop muted playsinline>
-                    <!-- Make sure to download the file from your Drive link and save it as "background-vid.mp4" inside your website project folder! -->
-                    <source src="background-vid.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+                <iframe 
+                    src="https://drive.google.com/file/d/1R57uy7z3OVZdfUYZmgZ16DWr_qpNc6Sb/preview?autoplay=1&mute=1" 
+                    class="hero-video" 
+                    allow="autoplay" 
+                    allowfullscreen>
+                </iframe>
             </div>
         </div>
     </section>
