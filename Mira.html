@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZIX - Study Together, Grow Together</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #C9A227;
+      --dark: #111111;
+      --light-bg: #F9F6F0;
+      --text-muted: #666;
+      --card-bg: #F5F2EC;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      color: var(--dark);
+      background: #fff;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 60px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      border-bottom: 1px solid #eee;
+      transition: all 0.3s ease;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .logo span { color: var(--gold); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 32px;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav ul li a:hover { color: var(--gold); }
+
+    .btn-nav {
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-nav:hover { background: #333; }
+
+    /* ── HERO ── */
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 80px 60px;
+      min-height: 90vh;
+      background: linear-gradient(135deg, #1c1c1c 0%, #0f0f0f 100%);
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 40px;
+      border: 2px solid rgba(201, 162, 39, 0.2);
+      top: 50%;
+      left: 38%;
+      transform: translate(-50%, -50%) rotate(15deg);
+    }
+
+    .hero-left { max-width: 560px; z-index: 2; }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      color: var(--gold);
+      margin-bottom: 28px;
+      backdrop-filter: blur(4px);
+    }
+
+    .hero h1 {
+      font-size: 3.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .hero h1 span { color: var(--gold); }
+
+    .hero p {
+      margin: 24px 0 40px;
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+    }
+
+    .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--dark);
+      border: none;
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.7);
+      padding: 14px 30px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+    .hero-right { z-index: 2; flex-shrink: 0; }
+
+    .hero-right .fallback-box {
+      width: 480px;
+      height: 320px;
+      background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 3rem;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+      border: 1px solid #333;
+    }
+
+    /* ── SECTIONS GENERAL ── */
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    /* ── MISSION & VISION ── */
+    .mission-vision {
+        padding: 100px 60px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        background: #fff;
+    }
+
+    .mv-card { padding: 50px; border-radius: 24px; }
+    .mv-card.light { background: #f7f5f1; }
+    .mv-card.dark { background: #0d0d0d; color: #fff; }
+    .mv-label { color: var(--gold); font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+    .mv-card h2 { font-size: 2.4rem; line-height: 1.15; margin-bottom: 25px; }
+    .mv-card p { color: #666; line-height: 1.8; }
+    .mv-card.dark p { color: #ccc; }
+
+    /* ── WHY ZIX EXISTS ── */
+    .why-zix {
+        padding: 100px 60px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        background: #fff;
+    }
+
+    .why-zix h2 { font-size: 3.2rem; line-height: 1.05; margin-bottom: 30px; }
+    .why-zix p { color: #666; line-height: 1.9; margin-bottom: 20px; }
+    .why-zix .img-placeholder { width: 100%; height: 350px; background: #eee; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: #aaa; }
+
+    /* ── FIVE PILLARS ── */
+    .pillars { padding: 100px 60px; background: #fff; text-align: center; }
+    .pillars h2 { font-size: 3rem; margin-bottom: 15px; }
+    .pillars-sub { color: #666; margin-bottom: 40px; }
+    .pillar-tabs { display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-bottom: 40px; }
+    .pillar-tab { background: #f3f3f3; padding: 12px 24px; border-radius: 50px; border: none; cursor: pointer; font-size: .9rem; font-weight: 600; transition: all 0.2s; }
+    .pillar-tab.active { background: #111; color: white; }
+    .pillar-content { max-width: 1100px; margin: auto; background: #f8f6f2; border-radius: 24px; padding: 50px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; text-align: left; }
+    .pillar-content h3 { font-size: 2rem; margin-bottom: 20px; }
+    .pillar-content p { color: #666; line-height: 1.8; }
+    .pillar-content ul { list-style: none; padding: 0; }
+    .pillar-content li { margin-bottom: 15px; font-weight: 500; }
+
+    /* ── VALUES ── */
+    .values { padding: 100px 60px; background: #070707; color: #fff; text-align: center; }
+    .values h2 { max-width: 900px; margin: auto; font-size: 3rem; line-height: 1.2; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 60px; }
+    .value-card { background: #111; border: 1px solid #222; border-radius: 20px; padding: 35px; text-align: left; }
+    .value-card h3 { color: var(--gold); margin-bottom: 20px; }
+    .value-card p { color: #bbb; line-height: 1.8; }
+
+    /* ── ABOUT STORY SECTIONS ── */
+    .about-section { padding: 100px 60px; background: #f8f9fb; }
+    .about-section h2 { text-align: center; font-size: 2.8rem; margin-bottom: 30px; font-weight: 800; }
+    .about-content { max-width: 1000px; margin: 0 auto; text-align: center; }
+    .about-content p { line-height: 1.8; color: #666; margin-bottom: 20px; font-size: 1.05rem; }
+    .about-content h3 { margin: 40px 0 20px; font-size: 1.8rem; color: #111; }
+    
+    .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 50px; }
+    .team-card { background: #fff; border-radius: 20px; padding: 30px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,.04); border: 1px solid #eee; }
+    .team-card .avatar-placeholder { width: 130px; height: 130px; border-radius: 50%; background: #f0edf5; display: inline-flex; align-items: center; justify-content: center; font-size: 2.5rem; border: 3px solid var(--gold); margin-bottom: 20px; }
+    .team-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
+    .team-card span { display: block; color: var(--gold); font-weight: 600; margin-bottom: 15px; font-size: 0.9rem; }
+    .team-card p { color: #666; font-size: .9rem; line-height: 1.6; margin-bottom: 20px; }
+    .team-card a { color: #C9A227; text-decoration: none; font-weight: 700; border-bottom: 1px dashed var(--gold); padding-bottom: 2px; }
+    .leader { grid-column: 1/-1; max-width: 500px; margin: 0 auto 30px; }
+
+    /* ── GALLERY ── */
+    .features { padding: 100px 60px; background: #fff; text-align: center; }
+    .features h2 { font-size: 2.8rem; font-weight: 800; margin-bottom: 16px; }
+    .features > p { color: var(--text-muted); font-size: 1.05rem; max-width: 560px; margin: 0 auto 64px; line-height: 1.7; }
+    .video-container { max-width: 900px; margin: 40px auto; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+    
+    .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+    .card { background: var(--card-bg); border-radius: 20px; padding: 40px 32px; text-align: left; transition: transform 0.2s, box-shadow 0.2s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+    .card-icon { width: 52px; height: 52px; background: rgba(201,162,39,0.12); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; font-size: 1.4rem; }
+    .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+    .card p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.65; }
+
+    /* ── AI ASSISTANTS PAGE SECTION ── */
+    .ai-hero {
+        min-height: 60vh;
+        background: linear-gradient(rgba(17, 17, 17, 0.85), rgba(17, 17, 17, 0.95)), radial-gradient(circle, #3a3320 0%, #111111 100%);
+        display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 40px;
+    }
+    .badge { color: var(--gold); border: 1px solid var(--gold); padding: 10px 20px; border-radius: 40px; margin-bottom: 30px; letter-spacing: 2px; font-size: .8rem; font-weight: 700; }
+    .ai-hero h1 { font-size: 4rem; max-width: 900px; line-height: 1.1; }
+    .ai-hero p { margin: 24px 0; max-width: 850px; font-size: 1.2rem; color: #eee; }
+    .assistant-nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 20px; }
+    .assistant-nav a { text-decoration: none; color: white; background: rgba(255,255,255,.1); padding: 10px 18px; border-radius: 20px; font-weight: 500; font-size: 0.9rem; transition: all 0.2s; }
+    .assistant-nav a:hover { background: var(--gold); color: black; }
+
+    .assistant-profile { padding: 100px 60px; display: grid; grid-template-columns: 350px 1fr; gap: 60px; align-items: center; border-bottom: 1px solid #eee; background: #fff; }
+    .assistant-profile:nth-of-type(even) { background: #fafafa; }
+    .assistant-image .img-box { width: 100%; height: 350px; background: #f3ece0; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 4rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .small-title { color: var(--gold); font-size: .8rem; letter-spacing: 2px; font-weight: 700; }
+    .assistant-content h2 { font-size: 2.6rem; margin: 15px 0; }
+    .assistant-content p { color: #555; line-height: 1.8; }
+    blockquote { margin: 20px 0; border-left: 4px solid var(--gold); padding-left: 20px; color: #777; font-style: italic; font-size: 1.1rem; }
+    .assistant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 30px; }
+    .assistant-grid h3 { margin-bottom: 12px; font-size: 1.1rem; letter-spacing: 0.5px; }
+    .assistant-grid ul { padding-left: 20px; line-height: 2; color: #444; }
+    .unlock-btn { margin-top: 30px; background: var(--dark); border: none; padding: 14px 32px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .unlock-btn a { color: #fff; text-decoration: none; }
+    .unlock-btn:hover { background: #333; }
+
+    /* ── PRICING ── */
+    .pricing { padding: 100px 60px; background: var(--light-bg); }
+    .pricing-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 64px; }
+    .pricing-header h2 { font-size: 2.8rem; font-weight: 800; }
+    .pricing-header p { max-width: 340px; color: var(--text-muted); font-size: 1rem; line-height: 1.7; margin-top: 8px; }
+    .pricing-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .pricing-card { background: #fff; border-radius: 20px; padding: 36px 28px; position: relative; border: 1px solid #e1ded7; }
+    .pricing-card.featured { background: var(--dark); color: #fff; border: none; box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+    .popular-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--gold); color: var(--dark); font-size: 0.78rem; font-weight: 700; padding: 6px 18px; border-radius: 50px; }
+    .pricing-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+    .price { font-size: 2.8rem; font-weight: 800; color: var(--gold); line-height: 1; }
+    .price span { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+    .pricing-card.featured .price span { color: #aaa; }
+    .pricing-divider { height: 1px; background: #eee; margin: 24px 0; }
+    .pricing-card.featured .pricing-divider { background: #333; }
+    .pricing-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; text-align: left; }
+    .pricing-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.88rem; color: #444; line-height: 1.4; }
+    .pricing-card.featured .pricing-features li { color: #ccc; }
+    .pricing-features li::before { content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+    .btn-pricing { width: 100%; padding: 14px; border-radius: 50px; font-size: 0.9rem; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-pricing:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-pricing.dark { background: var(--dark); color: #fff; }
+    .btn-pricing.gold { background: var(--gold); color: var(--dark); }
+
+    /* ── CONTACT US SECTION ── */
+    .contact-hero {
+        min-height: 45vh;
+        background: linear-gradient(rgba(0,0,0,.75), rgba(0,0,0,.75)), radial-gradient(circle at center, #3a3320, #111);
+        display: flex; align-items: center; justify-content: center; text-align: center; color: white; padding: 60px 20px;
+    }
+    .contact-badge { display: inline-block; border: 1px solid rgba(255,255,255,.25); color: var(--gold); padding: 8px 18px; border-radius: 50px; margin-bottom: 25px; font-weight: 600; font-size: 0.85rem; }
+    .contact-hero h1 { font-size: 3.8rem; line-height: 1.1; margin-bottom: 20px; }
+    .contact-hero span { color: var(--gold); }
+    .contact-hero p { max-width: 700px; margin: auto; color: #ddd; line-height: 1.8; }
+    
+    .contact-info { padding: 80px 60px; }
+    .contact-header { text-align: center; margin-bottom: 60px; }
+    .contact-header h2 { font-size: 2.8rem; margin-bottom: 15px; }
+    .contact-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; max-width: 1200px; margin: auto; }
+    .contact-card { background: #f8f6f2; padding: 35px; border-radius: 20px; text-align: left; border: 1px solid #eae6df; }
+    .contact-icon { width: 50px; height: 50px; background: #f1ead4; color: var(--gold); display: flex; align-items: center; justify-content: center; border-radius: 12px; margin-bottom: 20px; font-size: 1.2rem; }
+    .contact-card h3 { margin-bottom: 15px; font-size: 1.15rem; }
+    .contact-card p { color: #666; line-height: 1.8; font-size: .95rem; }
+
+    .contact-form-section { background: #f8f6f2; padding: 100px 20px; }
+    .form-header { text-align: center; margin-bottom: 50px; }
+    .form-header h2 { font-size: 2.8rem; margin-bottom: 15px; }
+    .contact-form { max-width: 1000px; margin: auto; background: #fff; padding: 40px; border-radius: 20px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; border: none; background: #f8f6f2; padding: 15px; border-radius: 10px; outline: none; font-family: inherit; font-size: 0.95rem; }
+    .form-group textarea { min-height: 180px; resize: none; }
+    .contact-btn { width: 100%; background: #111; color: white; border: none; padding: 18px; border-radius: 50px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: background 0.2s; }
+    .contact-btn:hover { background: #333; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--dark); color: #fff; padding: 64px 60px 32px; }
+    .footer-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.4fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid #333; }
+    .footer-brand .logo { color: #fff; margin-bottom: 16px; display: block; }
+    .footer-brand .logo span { color: var(--gold); }
+    .footer-brand p { color: #888; font-size: 0.9rem; line-height: 1.7; }
+    .footer-col h4 { font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #aaa; margin-bottom: 20px; }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col ul li a { color: #ccc; text-decoration: none; font-size: 0.92rem; transition: color 0.2s; }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-newsletter h4 { font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #aaa; margin-bottom: 16px; }
+    .footer-newsletter p { color: #888; font-size: 0.88rem; line-height: 1.6; margin-bottom: 20px; }
+    .newsletter-form { display: flex; align-items: center; border-bottom: 1.5px solid var(--gold); padding-bottom: 10px; gap: 10px; }
+    .newsletter-form input { background: transparent; border: none; outline: none; color: #fff; font-size: 0.9rem; flex: 1; }
+    .newsletter-form input::placeholder { color: #666; }
+    .newsletter-form button { background: none; border: none; color: var(--gold); font-size: 1.2rem; cursor: pointer; }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; padding-top: 32px; }
+    .footer-bottom p { color: #666; font-size: 0.82rem; }
+    .social-links { display: flex; gap: 20px; }
+    .social-links a { color: #888; text-decoration: none; font-size: 1rem; transition: color 0.2s; }
+    .social-links a:hover { color: var(--gold); }
+    .footer-watermark { text-align: center; padding-top: 24px; font-size: 5rem; font-weight: 900; color: rgba(255,255,255,0.02); letter-spacing: 8px; user-select: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      nav { padding: 16px 32px; }
+      .hero { padding: 60px 32px; flex-direction: column; gap: 48px; text-align: center; min-height: auto; }
+      .hero h1 { font-size: 2.8rem; }
+      .hero-right .fallback-box { width: 100%; max-width: 480px; }
+      .hero-buttons { justify-content: center; }
+      .features, .pricing, .mission-vision, .why-zix, .pillars, .values, .about-section, .assistant-profile, .contact-info { padding: 72px 32px; }
+      .cards-grid, .pricing-cards, .values-grid, .mission-vision, .why-zix, .pillar-content, .assistant-profile, .contact-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      nav ul { display: none; }
+      .hero h1 { font-size: 2.2rem; }
+      .cards-grid, .pricing-cards, .values-grid, .mission-vision, .why-zix, .pillar-content, .assistant-profile, .contact-grid, .form-row { grid-template-columns: 1fr; }
+      .assistant-profile { grid-template-columns: 1fr !important; text-align: center; }
+      .pricing-header { flex-direction: column; gap: 16px; }
+      .footer-top { grid-template-columns: 1fr; }
+      .why-zix h2, .pillars h2, .values h2, .contact-hero h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <div class="logo">Z<span>I</span>X</div>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#ai-assistants">AI Assistants</a></li>
+    <li><a href="#team">Team Zix</a></li>
+    <li><a href="#subscription">Subscription</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="btn-nav" onclick="window.location.href='#subscription'">Get Started</button>
+</nav>
+
+<!-- ── MAIN HOME SECTION ── -->
+<div id="home">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-badge">AI-Powered Educational Platform</div>
+      <h1>Study Together.<br><span>Grow Together.</span></h1>
+      <p>ZIX combines study groups, classroom management, assignment tracking, and AI learning assistance into one intelligent platform — designed for students and educators to achieve academic excellence.</p>
+      <div class="hero-buttons">
+        <button class="btn-primary" onclick="window.location.href='#subscription'">Get Started Free</button>
+        <button class="btn-outline" onclick="window.location.href='#ai-assistants'">Meet the AI Assistants</button>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="fallback-box">✨ ZIX</div>
+    </div>
+  </section>
+
+  <!-- MISSION & VISION -->
+  <section class="mission-vision">
+      <div class="mv-card light">
+          <div class="mv-label">OUR MISSION</div>
+          <h2>To provide students and educators with an intelligent learning platform that promotes collaboration, communication, and academic excellence through modern technology and artificial intelligence.</h2>
+          <p>ZIX was born from a simple observation: traditional social media platforms were not built for learning. They are distracting, disorganized, and often unsafe for students. We set out to create a dedicated space where education comes first.</p>
+      </div>
+      <div class="mv-card dark">
+          <div class="mv-label">OUR VISION</div>
+          <h2>To become one of the leading educational technology platforms in the Philippines and beyond by transforming the way students learn, collaborate, and interact.</h2>
+          <p>We envision a future where every student has access to quality educational support powered by artificial intelligence and innovative learning tools.</p>
+      </div>
+  </section>
+
+  <!-- WHY ZIX EXISTS -->
+  <section class="why-zix">
+      <div>
+          <div class="section-label" style="text-align: left;">WHY ZIX EXISTS</div>
+          <h2>Built for learners,<br>not for likes.</h2>
+          <p>ZIX was founded on a single belief: education deserves its own platform.</p>
+          <p>Students are forced to juggle multiple apps — messaging for group chats, cloud storage for files, separate tools for assignments — creating a fragmented and inefficient experience.</p>
+          <p>We built ZIX to solve this by combining study groups, classroom management, assignment tracking, collaboration tools, and AI learning assistance into one platform.</p>
+      </div>
+      <div>
+          <div class="img-placeholder">🎓 Educational Ecosystem Placeholder</div>
+      </div>
+  </section>
+
+  <!-- FIVE PILLARS -->
+  <section class="pillars">
+    <div class="section-label">INFORMATION SYSTEM COMPONENTS</div>
+    <h2>The five pillars that power the ZIX platform</h2>
+    <p class="pillars-sub">Understanding how ZIX works — from the people who use it to the data that powers it.</p>
+    <div class="pillar-tabs">
+      <button class="pillar-tab active" onclick="showPillar('people',this)">👥 People</button>
+      <button class="pillar-tab" onclick="showPillar('hardware',this)">📱 Hardware</button>
+      <button class="pillar-tab" onclick="showPillar('software',this)">💻 Software</button>
+      <button class="pillar-tab" onclick="showPillar('process',this)">⚙️ Process</button>
+      <button class="pillar-tab" onclick="showPillar('data',this)">🗄️ Data</button>
+    </div>
+    <div class="pillar-content" id="pillar-content">
+      <div>
+        <h3>People</h3>
+        <p>Students, teachers, administrators, tutors, and support staff form the heart of ZIX. Every feature is designed around real educational needs.</p>
+      </div>
+      <div>
+        <h4>KEY ELEMENTS</h4>
+        <ul>
+          <li>✓ Students (13 years old and above)</li>
+          <li>✓ Teachers and Professors</li>
+          <li>✓ School Administrators</li>
+          <li>✓ Tutors and Mentors</li>
+          <li>✓ Academic Support Staff</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZIX VALUES -->
+  <section class="values">
+      <div class="section-label">THE ZIX VALUES</div>
+      <h2>Zealous, Intelligence, eXcellence — these are not just words. They are how we build.</h2>
+      <div class="values-grid">
+          <div class="value-card">
+              <h3>Z — ZEALOUS</h3>
+              <p>We are passionate and relentless in our pursuit of creating the best educational platform. Every interaction and every feature is built with purpose.</p>
+          </div>
+          <div class="value-card">
+              <h3>I — INTELLIGENCE</h3>
+              <p>We embed smart technology into every aspect of the platform. AI is not an add-on — intelligence is at the core of ZIX.</p>
+          </div>
+          <div class="value-card">
+              <h3>X — EXCELLENCE</h3>
+              <p>We hold ourselves to the highest standards in design, safety, performance, and user experience.</p>
+          </div>
+      </div>
+  </section>
+</div>
+
+<!-- ── ABOUT & TEAM SECTION ── -->
+<section id="about" class="about-section">
+  <div class="section-label">ABOUT THE COMPANY</div>
+  <h2>Our Story</h2>
+  <div class="about-content">
+    <p>ZIX was created from a simple observation: students and teachers often use multiple platforms to communicate, collaborate, submit assignments, access learning materials, and participate in academic discussions. This fragmentation creates confusion, inefficiency, distractions, and difficulty in managing educational activities.</p>
+    <p>The founders of ZIX envisioned a single platform that combines the connectivity of social media, the productivity of collaboration tools, and the intelligence of Artificial Intelligence into one educational ecosystem. The result is ZIX—a smart, safe, and student-centered platform where users can learn, collaborate, communicate, and grow together.</p>
+    <h3>Unique Problem We Are Solving</h3>
+    <p>Many students and educators struggle with using multiple applications for learning, communication, assignments, collaboration, and academic support. Switching between different platforms wastes time, reduces productivity, and makes learning less organized.</p>
+    <p>ZIX solves this problem by bringing everything into one platform. Through AI-powered learning assistance, study groups, assignment management, collaboration workspaces, and educational social networking, ZIX provides a centralized environment where learning becomes more efficient, engaging, and accessible.</p>
+  </div>
+
+  <div id="team" class="section-label" style="margin-top:80px;">MEET THE TEAM</div>
+  <div class="team-grid">
+    <div class="team-card leader">
+      <div class="avatar-placeholder">👩‍💼</div>
+      <h3>Mira Fe A. Pelinghe</h3>
+      <span>Founder & Chief Executive Officer (CEO)</span>
+      <p>Leads the company's vision, strategic planning, business development, and overall management of ZIX.</p>
+      <a href="https://sites.google.com/view/mirafepelinghe/home" target="_blank">View Portfolio</a>
+    </div>
+    <div class="team-card">
+      <div class="avatar-placeholder">👨‍💻</div>
+      <h3>Billy Joe Loteyro</h3>
+      <span>Chief Technology Officer (CTO)</span>
+      <p>Oversees system architecture, software development, and AI integration.</p>
+      <a href="https://loteyrobillyjoe.my.canva.site/billsweb" target="_blank">View Portfolio</a>
+    </div>
+    <div class="team-card">
+      <div class="avatar-placeholder">👩‍💼</div>
+      <h3>Allyssa Melendres</h3>
+      <span>Marketing & Community Manager</span>
+      <p>Manages user engagement, marketing campaigns, and partnerships.</p>
+      <a href="https://allyssa-portfolio.my.canva.site/" target="_blank">View Portfolio</a>
+    </div>
+    <div class="team-card">
+      <div class="avatar-placeholder">👨‍💻</div>
+      <h3>Adrian R. Buñi</h3>
+      <span>Back-End Developer</span>
+      <p>Responsible for databases, APIs, security, and backend infrastructure.</p>
+      <a href="https://adrianrbuniportfolio.my.canva.site/black-white-and-brown-modern-portfolio-presentation" target="_blank">View Portfolio</a>
+    </div>
+    <div class="team-card">
+      <div class="avatar-placeholder">👩‍💻</div>
+      <h3>Angela Tonet Buencochillo</h3>
+      <span>Assistant Quality Assurance Manager</span>
+      <p>Assists in testing, quality assurance, and user feedback evaluation.</p>
+      <a href="https://angeljamitomyspace.my.canva.site/angelatonetwebportfolio" target="_blank">View Portfolio</a>
+    </div>
+    <div class="team-card">
+      <div class="avatar-placeholder">👨‍🔬</div>
+      <h3>Jared Javelona</h3>
+      <span>Machine Learning Engineer</span>
+      <p>Develops AI models, recommendation systems, and learning algorithms.</p>
+      <a href="https://www.canva.com/design/DAHKkbss-Dc/PyNJugk04kXbF2dXg_iqfA/view" target="_blank">View Portfolio</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── GALLERY & PLATFORM FEATURES ── -->
+<div id="gallery">
+  <section class="features">
+    <div class="section-label">GALLERY</div>
+    <h2>Platform Gallery</h2>
+    <p>Product concepts and interfaces of the ZIX learning environment.</p>
+    <div class="video-container">
+      <div style="padding:56.25% 0 0 0;position:relative; background:#111; color:var(--gold); display:flex; align-items:center; justify-content:center;">
+        <span style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:1.2rem; font-weight:600;">📺 Interactive Demo Video Placement</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" style="background: #fafafa;">
+    <div class="section-label">WHY ZIX</div>
+    <h2>Everything You Need to Excel</h2>
+    <p>A complete ecosystem of tools designed to transform how you learn, collaborate, and achieve academic success.</p>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">👥</div>
+        <h3>Study Groups</h3>
+        <p>Create or join study groups for any subject. Collaborate with classmates, share resources, and learn together in a focused environment.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <h3>AI Assistants</h3>
+        <p>Seven specialized AI assistants ready to help — from quick answers to deep academic mentoring, motivation, and productivity coaching.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">✅</div>
+        <h3>Assignment Management</h3>
+        <p>Upload, submit, and track assignments digitally. Never miss a deadline with smart reminders and progress tracking.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🗂️</div>
+        <h3>Collaboration Workspace</h3>
+        <p>Work together on documents, presentations, and research in real-time. Seamless collaboration that feels natural.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🛡️</div>
+        <h3>Safe Environment</h3>
+        <p>AI-powered content moderation keeps the platform safe. Harassment prevention and academic integrity monitoring built in.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Progress Tracking</h3>
+        <p>Monitor your academic growth with detailed analytics. Track completed assignments, study hours, and improvement over time.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ── AI ASSISTANTS SECTION ── -->
+<div id="ai-assistants">
+  <section class="ai-hero">
+      <div class="badge">SEVEN UNIQUE PERSONALITIES</div>
+      <h1>Meet Your AI Learning Team</h1>
+      <p>From instant answers to deep academic mentoring, gamified learning to productivity coaching — there is an AI assistant for every learning style.</p>
+      <div class="assistant-nav">
+          <a href="#mia">Mia</a>
+          <a href="#mira-ai">Mira</a>
+          <a href="#billy">Billy</a>
+          <a href="#adrian">Adrian</a>
+          <a href="#jared">Jared</a>
+          <a href="#allyssa">Allyssa</a>
+          <a href="#angela">Angela</a>
+      </div>
+  </section>
+
+  <!-- MIA -->
+  <section id="mia" class="assistant-profile">
+      <div class="assistant-image">
+          <div class="img-box">⚡</div>
+      </div>
+      <div class="assistant-content">
+          <span class="small-title">YOUR GO-TO FOR INSTANT ACADEMIC ANSWERS</span>
+          <h2>Mia: Quick & Direct Answers</h2>
+          <p>Mia provides fast, accurate, and straightforward responses to academic questions.</p>
+          <blockquote>"Efficient, precise, and to-the-point."</blockquote>
+          <div class="assistant-grid">
+              <div>
+                  <h3>KEY CAPABILITIES</h3>
+                  <ul>
+                      <li>Instant academic answers</li>
+                      <li>Quick explanations</li>
+                      <li>Formula recall</li>
+                      <li>Historical facts</li>
+                      <li>Concept summaries</li>
+                  </ul>
+              </div>
+              <div>
+                  <h3>BEST FOR</h3>
+                  <p>Fast reviews, homework questions, and last-minute study sessions.</p>
+                  <br>
+                  <h3>INTERACTION STYLE</h3>
+                  <p>Direct, concise, and highly efficient.</p>
+              </div>
+          </div>
+          <button class="unlock-btn"><a href="#subscription">Unlock Mia →</a></button>
+      </div>
+  </section>
+
+  <!-- MIRA -->
+  <section id="mira-ai" class="assistant-profile">
+      <div class="assistant-image">
+          <div class="img-box">🧠</div>
+      </div>
+      <div class="assistant-content">
+          <span class="small-title">YOUR ADVANCED ACADEMIC MENTOR</span>
+          <h2>Mira: Advanced Academic Mentor</h2>
+          <p>Mira helps students master difficult subjects through detailed explanations, critical thinking guidance, and in-depth academic support.</p>
+          <blockquote>"Learn deeply, think critically, succeed confidently."</blockquote>
+          <div class="assistant-grid">
+              <div>
+                  <h3>KEY CAPABILITIES</h3>
+                  <ul>
+                      <li>Advanced subject explanations</li>
+                      <li>Research assistance</li>
+                      <li>Essay guidance</li>
+                      <li>Critical thinking development</li>
+                      <li>Academic skill improvement</li>
+                  </ul>
+              </div>
+              <div>
+                  <h3>BEST FOR</h3>
+                  <p>Deep learning, research projects, and understanding complex topics.</p>
+                  <br>
+                  <h3>INTERACTION STYLE</h3>
+                  <p>Detailed, supportive, and educational.</p>
+              </div>
+          </div>
+          <button class="unlock-btn"><a href="#subscription">Unlock Mira →</a></button>
+      </div>
+  </section>
+
+  <!-- BILLY -->
+  <section id="billy" class="assistant-profile">
+      <div class="assistant-image">
+          <div class="img-box">🎯</div>
+      </div>
+      <div class="assistant-content">
+          <span class="small-title">YOUR INTERACTIVE LEARNING COMPANION</span>
+          <h2>Billy: Interactive Learning Companion</h2>
+          <p>Billy transforms learning into an engaging experience through quizzes, activities, and interactive learning sessions.</p>
+          <blockquote>"Learning is more effective when it's interactive."</blockquote>
+          <div class="assistant-grid">
+              <div>
+                  <h3>KEY CAPABILITIES</h3>
+                  <ul>
+                      <li>Interactive tutoring</li>
+                      <li>Practice quizzes</li>
+                      <li>Learning games</li>
+                      <li>Study challenges</li>
+                      <li>Knowledge reinforcement</li>
+                  </ul>
+              </div>
+              <div>
+                  <h3>BEST FOR</h3>
+                  <p>Students who enjoy active and engaging learning.</p>
+                  <br>
+                  <h3>INTERACTION STYLE</h3>
+                  <p>Energetic, interactive, and engaging.</p>
+              </div>
+          </div>
+          <button class="unlock-btn"><a href="#subscription">Unlock Billy →</a></button>
+      </div>
+  </section>
+
+  <!-- ADRIAN -->
+  <section id="adrian" class="assistant-profile">
+      <div class="assistant-image">
+          <div class="img-box">💻</div>
+      </div>
+      <div class="assistant-content">
+          <span class="small-title">YOUR TECHNOLOGY & CODING EXPERT</span>
+          <h2>Adrian: Technology & Coding Expert</h2>
+          <p>Adrian specializes in programming, software development, networking, and information technology concepts.</p>
+          <blockquote>"Code smarter. Build better."</blockquote>
+          <div class="assistant-grid">
+              <div>
+                  <h3>KEY CAPABILITIES</h3>
+                  <ul>
+                      <li>Programming assistance</li>
+                      <li>Debugging support</li>
+                      <li>Networking concepts</li>
+                      <li>System design guidance</li>
+                      <li>Technology explanations</li>
+                  </ul>
+              </div>
+              <div>
+                  <h3>BEST FOR</h3>
+                  <p>Coding projects, IT subjects, and software development.</p>
+                  <br>
+                  <h3>INTERACTION STYLE</h3>
+                  <p>Logical, technical, and practical.</p>
+              </div>
+          </div>
+          <button class="unlock-btn"><a href="#subscription">Unlock Adrian →</a></button>
+      </div>
+  </section>
+
+  <!-- JARED -->
+  <section id="jared" class="assistant-profile">
+      <div class="assistant-image">
+          <div class="img-box">🤖</div>
+      </div>
+      <div class="assistant-content">
+          <span class="small-title">YOUR AI RESEARCH SPECIALIST</span>
+          <h2>Jared: AI Research Specialist</h2>
+          <p>Jared focuses on Artificial Intelligence, Machine Learning, and emerging technologies.</p>
+          <blockquote>"Exploring the future through intelligent technology."</blockquote>
+          <div class="assistant-grid">
+              <div>
+                  <h3>KEY CAPABILITIES</h3>
+                  <ul>
+                      <li>AI concepts</li>
+                      <li>Machine Learning guidance</li>
+                      <li>Research assistance</li>
+                      <li>Data analysis support</li>
+                      <li>Innovation insights</li>
+                  </ul>
+              </div>
+              <div>
+                  <h3>BEST FOR</h3>
+                  <p>AI projects, research papers, and technology exploration.</p>
+                  <br>
+                  <h3>INTERACTION STYLE</h3>
+                  <p>Analytical, innovative, and future-focused.</p>
+              </div>
+          </div>
+          <button class="unlock-btn"><a href="#subscription">Unlock Jared →</a></button>
+      </div>
+  </section>
+
+  <!-- ALLYSSA -->
+  <section id="allyssa" class="assistant-profile">
+      <div class="assistant-image">
+          <div class="img-box">✨</div>
+      </div>
+      <div class="assistant-content">
+          <span class="small-title">YOUR MOTIVATION & COMMUNITY COACH</span>
+          <h2>Allyssa: Motivation & Community Coach</h2>
+          <p>Allyssa keeps students motivated, productive, and connected with their learning community.</p>
+          <blockquote>"Stay motivated. Stay connected. Keep growing."</blockquote>
+          <div class="assistant-grid">
+              <div>
+                  <h3>KEY CAPABILITIES</h3>
+                  <ul>
+                      <li>Study motivation</li>
+                      <li>Productivity coaching</li>
+                      <li>Goal setting</li>
+                      <li>Team collaboration guidance</li>
+                      <li>Personal development support</li>
+                  </ul>
+              </div>
+              <div>
+                  <h3>BEST FOR</h3>
+                  <p>Building better habits and staying motivated.</p>
+                  <br>
+                  <h3>INTERACTION STYLE</h3>
+                  <p>Encouraging, positive, and supportive.</p>
+              </div>
+          </div>
+          <button class="unlock-btn"><a href="#subscription">Unlock Allyssa →</a></button>
+      </div>
+  </section>
+
+  <!-- ANGELA -->
+  <section id="angela" class="assistant-profile">
+      <div class="assistant-image">
+          <div class="img-box">📊</div>
+      </div>
+      <div class="assistant-content">
+          <span class="small-title">YOUR QUALITY & PRODUCTIVITY ASSISTANT</span>
+          <h2>Angela: Quality & Productivity Assistant</h2>
+          <p>Angela helps students stay organized, manage tasks, and improve work quality.</p>
+          <blockquote>"Organization is the foundation of success."</blockquote>
+          <div class="assistant-grid">
+              <div>
+                  <h3>KEY CAPABILITIES</h3>
+                  <ul>
+                      <li>Task management</li>
+                      <li>Assignment planning</li>
+                      <li>Quality checking</li>
+                      <li>Study scheduling</li>
+                      <li>Deadline tracking</li>
+                  </ul>
+              </div>
+              <div>
+                  <h3>BEST FOR</h3>
+                  <p>Organizing coursework and meeting deadlines.</p>
+                  <br>
+                  <h3>INTERACTION STYLE</h3>
+                  <p>Structured, organized, and detail-oriented.</p>
+              </div>
+          </div>
+          <button class="unlock-btn"><a href="#subscription">Unlock Angela →</a></button>
+      </div>
+  </section>
+</div>
+
+<!-- ── SUBSCRIPTION / PRICING ── -->
+<section id="subscription" class="pricing">
+  <div class="pricing-header">
+    <div>
+      <div class="section-label" style="text-align: left;">PRICING</div>
+      <h2>Choose Your Plan</h2>
+    </div>
+    <p>From free access to premium features — find the plan that fits your learning journey.</p>
+  </div>
+  <div class="pricing-cards">
+    <div class="pricing-card">
+      <h3>Free</h3>
+      <div class="price">₱0 <span>forever</span></div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>Study groups</li>
+        <li>Group chats</li>
+        <li>Basic assignments</li>
+        <li>Mia AI Assistant</li>
+        <li>Limited AI usage</li>
+      </ul>
+      <button class="btn-pricing dark">Get Started</button>
+    </div>
+    <div class="pricing-card featured">
+      <div class="popular-badge">Most Popular</div>
+      <h3>Student Plus</h3>
+      <div class="price">₱20 <span>/month</span></div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>Additional AI assistants</li>
+        <li>Unlimited study groups</li>
+        <li>Personalized recommendations</li>
+        <li>Progress tracking</li>
+        <li>AI-generated reviewers</li>
+      </ul>
+      <button class="btn-pricing gold">Subscribe Now</button>
+    </div>
+    <div class="pricing-card">
+      <h3>Premium</h3>
+      <div class="price">₱50 <span>/month</span></div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>Access to all AI assistants</li>
+        <li>Advanced tutoring</li>
+        <li>Practice examinations</li>
+        <li>Smart study schedules</li>
+        <li>Unlimited AI interactions</li>
+        <li>Priority support</li>
+      </ul>
+      <button class="btn-pricing dark">Go Premium</button>
+    </div>
+    <div class="pricing-card">
+      <h3>School Plan</h3>
+      <div class="price" style="font-size:2rem;">Custom</div>
+      <div class="pricing-divider"></div>
+      <ul class="pricing-features">
+        <li>Classroom management</li>
+        <li>Institution analytics</li>
+        <li>Administrative dashboard</li>
+        <li>Performance monitoring</li>
+        <li>Technical support</li>
+      </ul>
+      <button class="btn-pricing dark" onclick="window.location.href='#contact'">Contact Us</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT US SECTION ── -->
+<div id="contact">
+  <section class="contact-hero">
+      <div>
+          <div class="contact-badge">Contact Us</div>
+          <h1>We would love to<br><span>hear from you</span></h1>
+          <p>Whether you have questions about the platform, want to partner with ZIX, or need support — our team is ready to help.</p>
+      </div>
+  </section>
+
+  <section class="contact-info">
+      <div class="contact-header">
+          <div class="section-label">Reach Us</div>
+          <h2>Get in Touch</h2>
+          <p>Have questions about ZIX? Want to partner with us? Reach out through any of the channels below.</p>
+      </div>
+
+      <div class="contact-grid">
+          <div class="contact-card">
+              <div class="contact-icon">✉</div>
+              <h3>Email Us</h3>
+              <p>hello@zix.edu.ph<br>support@zix.edu.ph</p>
+          </div>
+          <div class="contact-card">
+              <div class="contact-icon">☎</div>
+              <h3>Call Us</h3>
+              <p>+63 912 345 6789<br>+63 917 123 4567</p>
+          </div>
+          <div class="contact-card">
+              <div class="contact-icon">📍</div>
+              <h3>Visit Us</h3>
+              <p>Pasig City<br>Metro Manila<br>Philippines</p>
+          </div>
+          <div class="contact-card">
+              <div class="contact-icon">💬</div>
+              <h3>Social Media</h3>
+              <p>@zixedu<br>Facebook, Instagram & TikTok</p>
+          </div>
+      </div>
+  </section>
+
+  <section class="contact-form-section">
+      <div class="form-header">
+          <div class="section-label">Send A Message</div>
+          <h2>How Can We Help?</h2>
+          <p>Fill out the form below and our team will get back to you within 24 hours.</p>
+      </div>
+
+      <form class="contact-form" onsubmit="event.preventDefault(); alert('Message sent successfully!');">
+          <div class="form-row">
+              <div class="form-group">
+                  <label>First Name *</label>
+                  <input type="text" placeholder="Juan" required>
+              </div>
+              <div class="form-group">
+                  <label>Last Name *</label>
+                  <input type="text" placeholder="Dela Cruz" required>
+              </div>
+          </div>
+          <div class="form-row">
+              <div class="form-group">
+                  <label>Email Address *</label>
+                  <input type="email" placeholder="you@example.com" required>
+              </div>
+              <div class="form-group">
+                  <label>Phone Number</label>
+                  <input type="text" placeholder="+63 912 345 6789">
+              </div>
+          </div>
+          <div class="form-group">
+              <label>Inquiry Type *</label>
+              <select required>
+                  <option value="">Select an inquiry type</option>
+                  <option>General Question</option>
+                  <option>Technical Support</option>
+                  <option>Partnership</option>
+                  <option>Subscription</option>
+                  <option>Bug Report</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <label>Subject *</label>
+              <input type="text" placeholder="Brief subject of your message" required>
+          </div>
+          <div class="form-group">
+              <label>Message *</label>
+              <textarea placeholder="Tell us how we can help you..." required></textarea>
+          </div>
+          <button type="submit" class="contact-btn">✈ Send Message</button>
+      </form>
+  </section>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="logo">Z<span>I</span>X</div>
+      <p>A smart, safe, and student-centered platform where users can learn, collaborate, communicate, and grow together.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About Story</a></li>
+        <li><a href="#ai-assistants">AI Learning Team</a></li>
+        <li><a href="#subscription">Subscription</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#contact">Contact Support</a></li>
+        <li><a href="#contact">FAQ</a></li>
+        <li><a href="#contact">Terms of Service</a></li>
+        <li><a href="#contact">Privacy Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-col footer-newsletter">
+      <h4>Stay Updated</h4>
+      <p>Subscribe to our newsletter for updates, learning tips, and news.</p>
+      <div class="newsletter-form">
+        <input type="email" placeholder="Enter your email">
+        <button onclick="alert('Thank you for subscribing!')">➔</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 ZIX Educational Platform. All rights reserved.</p>
+    <div class="social-links">
+      <a href="#home">Facebook</a>
+      <a href="#home">Twitter</a>
+      <a href="#home">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-watermark">ZIX</div>
+</footer>
+
+<script>
+  // Dynamic Tab Handler for Information System Components Pillar
+  const pillarData = {
+    people: {
+      title: "People",
+      desc: "Students, teachers, administrators, tutors, and support staff form the heart of ZIX. Every feature is designed around real educational needs.",
+      items: ["Students (13 years old and above)", "Teachers and Professors", "School Administrators", "Tutors and Mentors", "Academic Support Staff"]
+    },
+    hardware: {
+      title: "Hardware",
+      desc: "ZIX is built to operate across consumer devices and powerful backend server configurations, ensuring accessibility anywhere.",
+      items: ["Smartphones (iOS and Android)", "Tablets and iPads", "Laptops and Desktops", "Cloud Application Servers", "Database and Networking Hardware"]
+    },
+    software: {
+      title: "Software",
+      desc: "The application stack leveraging state-of-the-art UI architectures, real-time messaging engine, and smart models integration.",
+      items: ["Web Interface (HTML5, CSS3, JavaScript)", "Mobile Application Ecosystems", "AI APIs and Core Engine Core", "Secure Encrypted Database Systems", "Content Filters and Automation Engines"]
+    },
+    process: {
+      title: "Process",
+      desc: "The systematic workflows that ensure seamless classroom actions, assignment monitoring, and standard academic operations.",
+      items: ["Secure User Onboarding and Validation", "Virtual Classroom Setup and Grouping", "Digital Assignment Lifecycle Management", "Automated Real-time Content Guardrails", "Data Privacy and Governance Standards"]
+    },
+    data: {
+      title: "Data",
+      desc: "The critical information structured safely within the platform to empower user tracking and deep performance intelligence.",
+      items: ["Verified User Profiles and Credentials", "Comprehensive Learning Records", "Media Attachments and Shared Modules", "AI Training Metadata and Event Logs", "Interactive Chat and Communication Content"]
+    }
+  };
+
+  function showPillar(key, element) {
+    // Deactivate previous button styles
+    document.querySelectorAll('.pillar-tab').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+
+    const data = pillarData[key];
+    const container = document.getElementById('pillar-content');
+    
+    let itemsHTML = data.items.map(i => `<li>✓ ${i}</li>`).join('');
+
+    container.innerHTML = `
+      <div>
+        <h3>${data.title}</h3>
+        <p>${data.desc}</p>
+      </div>
+      <div>
+        <h4>KEY ELEMENTS</h4>
+        <ul>
+          ${itemsHTML}
+        </ul>
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>
