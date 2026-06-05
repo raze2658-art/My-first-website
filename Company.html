@@ -162,7 +162,7 @@
             display: grid;
             grid-template-columns: 1.1fr 0.9fr;
             gap: 60px;
-            align-items: start; /* Changed from center to allow sticky behavior to track correctly */
+            align-items: start;
         }
 
         .badge {
@@ -193,7 +193,7 @@
         /* Sticky Video Showcase Wrapper Container */
         .video-container {
             position: sticky;
-            top: 110px; /* Positions it nicely below your scrolled navigation bar */
+            top: 110px;
             width: 100%;
             border-radius: var(--radius);
             overflow: hidden;
@@ -250,7 +250,7 @@
 
         /* --- About & Portfolios --- */
         .about { padding: 100px 0; background-color: var(--light-bg); }
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: top; }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: top; margin-bottom: 60px; }
         .about-text blockquote { border-left: 4px solid var(--primary); padding-left: 24px; font-style: italic; font-size: 18px; margin: 25px 0; color: var(--dark); }
         
         .mission-vision-container {
@@ -275,7 +275,7 @@
             line-height: 1.6;
         }
 
-        .about-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 40px; }
+        .about-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
         
         .stat-item {
             background: var(--white);
@@ -286,12 +286,12 @@
 
         .stat-item h4 { font-size: 40px; color: var(--primary); font-weight: 800; }
 
-        /* Integrated Team Links Panel Styling */
         .portfolio-panel {
             background: var(--white);
             border: 1px solid var(--border-color);
             border-radius: var(--radius);
             padding: 32px;
+            height: fit-content;
         }
 
         .portfolio-panel h3 {
@@ -304,46 +304,109 @@
         .portfolio-panel p {
             font-size: 14px;
             color: var(--text-muted);
+        }
+
+        /* --- Meet the Team Layout Upgrade --- */
+        .team-section {
+            padding-top: 50px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .team-title-block {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .team-title-block h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .team-title-block p {
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .team-card {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 35px 24px;
+            text-align: center;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.02);
+        }
+
+        .team-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08);
+        }
+
+        .avatar-wrapper {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 24px auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--white);
+            box-shadow: 0 0 0 1px var(--border-color), 0 8px 16px rgba(15, 23, 42, 0.06);
+            transition: var(--transition);
+        }
+
+        .team-card:hover .avatar-wrapper {
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-card h3 {
+            color: var(--dark);
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .team-role {
+            color: var(--primary);
+            font-size: 14px;
+            font-weight: 600;
             margin-bottom: 20px;
         }
 
-        .dev-portfolio-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .dev-link {
-            display: flex;
+        .portfolio-link-btn {
+            display: inline-flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 12px 16px;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: 6px;
             background-color: var(--light-bg);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
             color: var(--text-main);
             text-decoration: none;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             transition: var(--transition);
+            width: 100%;
         }
 
-        .dev-link span.arrow {
-            color: var(--text-muted);
-            transition: var(--transition);
-        }
-
-        .dev-link:hover {
-            background-color: var(--white);
+        .portfolio-link-btn:hover {
+            background-color: var(--primary);
             border-color: var(--primary);
-            color: var(--primary);
-            box-shadow: 0 4px 12px rgba(0, 102, 255, 0.05);
-            transform: translateX(4px);
-        }
-
-        .dev-link:hover span.arrow {
-            color: var(--primary);
-            transform: translateX(2px);
+            color: var(--white);
         }
 
         /* --- Form --- */
@@ -363,8 +426,13 @@
             .hero-content { text-align: center; }
             .hero-actions { justify-content: center; }
             .btn-secondary { margin: 10px 0 0 0; }
-            .video-container { max-width: 550px; margin: 0 auto; position: relative; top: 0; } /* Resets sticky properties on mobile layout */
+            .video-container { max-width: 550px; margin: 0 auto; position: relative; top: 0; }
             .mission-vision-container { grid-template-columns: 1fr; gap: 20px; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .team-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -437,64 +505,117 @@
     </section>
 
     <section id="about" class="about">
-        <div class="container about-grid">
-            <div class="about-text">
-                <h2>Engineering the Future of Enterprise</h2>
-                <p>Founded by a team of systems architects and software engineers, Apex Digital specializes in removing technical friction. We bridge the gap between complex network backbones and smooth end-user applications.</p>
-                
-                <blockquote>
-                    "Efficiency isn't just about speed; it's about building systems that sustain performance under heavy load."
-                </blockquote>
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text">
+                    <h2>Engineering the Future of Enterprise</h2>
+                    <p>Founded by a team of systems architects and software engineers, Apex Digital specializes in removing technical friction. We bridge the gap between complex network backbones and smooth end-user applications.</p>
+                    
+                    <blockquote>
+                        "Efficiency isn't just about speed; it's about building systems that sustain performance under heavy load."
+                    </blockquote>
 
-                <!-- Mission & Vision Block -->
-                <div class="mission-vision-container">
-                    <div class="mv-item">
-                        <h3>🚀 Our Mission</h3>
-                        <p>To eliminate technical friction for growing enterprises by building reliable, scalable software architectures and highly resilient network infrastructures.</p>
+                    <!-- Mission & Vision Block -->
+                    <div class="mission-vision-container">
+                        <div class="mv-item">
+                            <h3>🚀 Our Mission</h3>
+                            <p>To eliminate technical friction for growing enterprises by building reliable, scalable software architectures and highly resilient network infrastructures.</p>
+                        </div>
+                        <div class="mv-item">
+                            <h3>👁️ Our Vision</h3>
+                            <p>To become a premier global architecture hub, setting standard metrics for system uptime, seamless automation, and modern corporate data security.</p>
+                        </div>
                     </div>
-                    <div class="mv-item">
-                        <h3>👁️ Our Vision</h3>
-                        <p>To become a premier global architecture hub, setting standard metrics for system uptime, seamless automation, and modern corporate data security.</p>
+                    
+                    <!-- About Us Stats Row -->
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h4>99.9%</h4>
+                            <p>Uptime Architecture</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4>30+</h4>
+                            <p>Workstations Connected</p>
+                        </div>
                     </div>
                 </div>
-                
-                <!-- About Us Stats Row -->
-                <div class="about-stats">
-                    <div class="stat-item">
-                        <h4>99.9%</h4>
-                        <p>Uptime Architecture</p>
-                    </div>
-                    <div class="stat-item">
-                        <h4>30+</h4>
-                        <p>Workstations Connected</p>
-                    </div>
+
+                <!-- Right Side Context Panel -->
+                <div class="portfolio-panel">
+                    <h3>Core Operations Hub</h3>
+                    <p>Our infrastructure matches distributed teams with production environments flawlessly, ensuring security compliance protocols remain uniform across global deployment channels.</p>
                 </div>
             </div>
 
-            <!-- Integrated Portfolio Hrefs Panel -->
-            <div class="portfolio-panel">
-                <h3>Our Core Project Engineers</h3>
-                <p>Explore the diverse engineering portfolios of our founding design and development team.</p>
-                
-                <div class="dev-portfolio-grid">
-                    <a href="https://danmarkandmonique.my.canva.site/julienne" class="dev-link" target="_blank" rel="noopener noreferrer">
-                        Julienne Portfolio <span class="arrow">→</span>
-                    </a>
-                    <a href="https://javaswing-group2.my.canva.site/jeankaress" class="dev-link" target="_blank" rel="noopener noreferrer">
-                        Jean Karess Portfolio <span class="arrow">→</span>
-                    </a>
-                    <a href="https://mccoylatergo.my.canva.site/richard-merk-d-magdali-portfolio" class="dev-link" target="_blank" rel="noopener noreferrer">
-                        Richard Merk Portfolio <span class="arrow">→</span>
-                    </a>
-                    <a href="https://justinsenadre.my.canva.site/page-2" class="dev-link" target="_blank" rel="noopener noreferrer">
-                        Justin Senadre Portfolio <span class="arrow">→</span>
-                    </a>
-                    <a href="https://melodyplaverte.my.canva.site/" class="dev-link" target="_blank" rel="noopener noreferrer">
-                        Melody Plaverte Portfolio <span class="arrow">→</span>
-                    </a>
-                    <a href="https://raze2658-art.github.io/My-first-website/ME.html" class="dev-link" target="_blank" rel="noopener noreferrer">
-                        Raze Portfolio <span class="arrow">→</span>
-                    </a>
+            <!-- Meet the Team Grid Profile Layout Upgrade -->
+            <div class="team-section">
+                <div class="team-title-block">
+                    <h2>Our Core Project Engineers</h2>
+                    <p>Explore the diverse engineering portfolios of our founding design and development team.</p>
+                </div>
+                <div class="team-grid">
+                    
+                    <!-- Member 1: Yohei -->
+                    <div class="team-card">
+                        <div class="avatar-wrapper">
+                            <img src="Yohei.jpg" alt="Yohei Profile">
+                        </div>
+                        <h3>Yohei</h3>
+                        <div class="team-role">Chief Executive Officer / Co-Founder</div>
+                        <a href="https://raze2658-art.github.io/My-first-website/ME.html" class="portfolio-link-btn" target="_blank" rel="noopener noreferrer">Portfolio Interface ↗</a>
+                    </div>
+
+                    <!-- Member 2: Julienne Legarde -->
+                    <div class="team-card">
+                        <div class="avatar-wrapper">
+                            <img src="Legarde.jpg" alt="Julienne Legarde Profile">
+                        </div>
+                        <h3>Julienne Legarde</h3>
+                        <div class="team-role">Lead Design Coordinator</div>
+                        <a href="https://danmarkandmonique.my.canva.site/julienne" class="portfolio-link-btn" target="_blank" rel="noopener noreferrer">Portfolio Interface ↗</a>
+                    </div>
+
+                    <!-- Member 3: Richard Merk -->
+                    <div class="team-card">
+                        <div class="avatar-wrapper">
+                            <img src="Merk.jpg" alt="Richard Merk Profile">
+                        </div>
+                        <h3>Richard Merk</h3>
+                        <div class="team-role">Senior Systems Architect</div>
+                        <a href="https://mccoylatergo.my.canva.site/richard-merk-d-magdali-portfolio" class="portfolio-link-btn" target="_blank" rel="noopener noreferrer">Portfolio Interface ↗</a>
+                    </div>
+
+                    <!-- Member 4: Jean Karess -->
+                    <div class="team-card">
+                        <div class="avatar-wrapper">
+                            <!-- Utilizing Kristian image asset for the group configuration mapping -->
+                            <img src="Kristian.jpg" alt="Jean Karess Profile">
+                        </div>
+                        <h3>Jean Karess</h3>
+                        <div class="team-role">Research & Documentation Head</div>
+                        <a href="https://javaswing-group2.my.canva.site/jeankaress" class="portfolio-link-btn" target="_blank" rel="noopener noreferrer">Portfolio Interface ↗</a>
+                    </div>
+
+                    <!-- Member 5: Justin Senadre -->
+                    <div class="team-card">
+                        <div class="avatar-wrapper">
+                            <img src="Justine.jpg" alt="Justin Senadre Profile">
+                        </div>
+                        <h3>Justin Senadre</h3>
+                        <div class="team-role">Lead Operations Engineer</div>
+                        <a href="https://justinsenadre.my.canva.site/page-2" class="portfolio-link-btn" target="_blank" rel="noopener noreferrer">Portfolio Interface ↗</a>
+                    </div>
+
+                    <!-- Member 6: Melody Plaverte -->
+                    <div class="team-card">
+                        <div class="avatar-wrapper">
+                            <img src="Melody.jpg" alt="Melody Plaverte Profile">
+                        </div>
+                        <h3>Melody Plaverte</h3>
+                        <div class="team-role">Technical Marketing Specialist</div>
+                        <a href="https://melodyplaverte.my.canva.site/" class="portfolio-link-btn" target="_blank" rel="noopener noreferrer">Portfolio Interface ↗</a>
+                    </div>
+
                 </div>
             </div>
         </div>
