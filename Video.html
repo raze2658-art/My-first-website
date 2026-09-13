@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Video for Langga 🎬</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: #fff0f5;
+            color: #4a3b32;
+        }
+        header {
+            background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+        }
+        header h1 {
+            font-size: 2.3rem;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        main {
+            max-width: 750px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            text-align: center;
+        }
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 12px 30px rgba(255, 182, 193, 0.4);
+            margin-bottom: 2rem;
+            border: 1px solid #ffe4e1;
+        }
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            background: #000;
+            margin-top: 1.5rem;
+        }
+        /* This works for both uploaded files and embedded YouTube videos */
+        .video-wrapper video, .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .back-btn {
+            background-color: #ff69b4;
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
+            margin-top: 1.5rem;
+        }
+        .back-btn:hover {
+            background-color: #ff1493;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 20, 147, 0.4);
+        }
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            background-color: #ffb6c1;
+            color: #7d4b57;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Our Moments Together 🎞️</h1>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2>Press Play, Langga! ❤️</h2>
+            
+            <div class="video-wrapper">
+                <!-- OPTION A: If your video is stored on your laptop/folder, use this line: -->
+                <video controls>
+                    <source src="our-video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+
+                <!-- OPTION B: If you uploaded it to YouTube as Unlisted, comment out Option A and uncomment this line: -->
+                <!-- <iframe src="https://youtube.com" allowfullscreen></iframe> -->
+            </div>
+        </div>
+
+        <a href="index.html" class="back-btn">⬅️ Go Back to Letter</a>
+    </main>
+
+    <footer>
+        <p>Made with all my love for Langga ❤️ | September 2026</p>
+    </footer>
+
+</body>
+</html>
