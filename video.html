@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Video for Langga 🎬</title>
+    <title>Special Videos for Langga 🎬</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,31 +26,46 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
         main {
-            max-width: 750px;
+            max-width: 900px; /* Widened to comfortably display both videos */
             margin: 3rem auto;
             padding: 0 1.5rem;
             text-align: center;
         }
+        /* Grid system to place videos side-by-side on desktop */
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        @media (max-width: 768px) {
+            .video-grid {
+                grid-template-columns: 1fr; /* Stack vertically on phones */
+            }
+        }
         .card {
             background: white;
-            padding: 2.5rem;
+            padding: 2rem;
             border-radius: 20px;
             box-shadow: 0 12px 30px rgba(255, 182, 193, 0.4);
-            margin-bottom: 2rem;
             border: 1px solid #ffe4e1;
+        }
+        .card h2 {
+            color: #ff1493;
+            margin-top: 0;
+            font-size: 1.4rem;
         }
         .video-wrapper {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            padding-bottom: 56.25%; /* Perfect 16:9 Aspect Ratio */
             height: 0;
             overflow: hidden;
             border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             background: #000;
-            margin-top: 1.5rem;
+            margin-top: 1rem;
         }
-        /* This works for both uploaded files and embedded YouTube videos */
-        .video-wrapper video, .video-wrapper iframe {
+        .video-wrapper iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -94,21 +109,33 @@
     </header>
 
     <main>
-        <div class="card">
-            <h2>Press Play, Langga! ❤️</h2>
+        <div class="video-grid">
             
-            <div class="video-wrapper">
-                <!-- OPTION A: If your video is stored on your laptop/folder, use this line: -->
-                <video controls>
-                    <source src="our-video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-
-                <!-- OPTION B: If you uploaded it to YouTube as Unlisted, comment out Option A and uncomment this line: -->
-                <!-- <iframe src="https://youtube.com" allowfullscreen></iframe> -->
+            <!-- FIRST VIDEO BOX -->
+            <div class="card">
+                <h2>Press Play, Langga! ❤️</h2>
+                <div class="video-wrapper">
+                    <iframe src="https://vimeo.com" 
+                            allow="autoplay; fullscreen; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
             </div>
+
+            <!-- SECOND VIDEO BOX -->
+            <div class="card">
+                <h2>Part Two ✨</h2>
+                <div class="video-wrapper">
+                    <iframe src="https://vimeo.com" 
+                            allow="autoplay; fullscreen; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+
         </div>
 
+        <!-- Back Button -->
         <a href="Happy Birthday.html" class="back-btn">⬅️ Go Back to Letter</a>
     </main>
 
