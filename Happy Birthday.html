@@ -12,7 +12,7 @@
             padding: 0;
             background-color: #fff0f5; 
             color: #4a3b32;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Prevents side-scrolling from falling petals */
             position: relative;
         }
         header {
@@ -22,7 +22,7 @@
             text-align: center;
             box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
             position: relative;
-            z-index: 2;
+            z-index: 2; /* Keeps text above background petals */
         }
         header h1 {
             font-size: 2.8rem;
@@ -42,7 +42,7 @@
             z-index: 2;
         }
         .card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.95); /* Slightly transparent to see petals behind cards */
             padding: 3rem 2.5rem;
             border-radius: 20px;
             box-shadow: 0 12px 30px rgba(255, 182, 193, 0.4);
@@ -72,136 +72,6 @@
             text-align: center;
             margin: 1.5rem 0;
         }
-
-        /* 🐶 Interactive Shih Tzu CSS Illustration Box */
-        .dog-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 40px;
-            background: #fff5f7;
-            padding: 2.5rem 1rem;
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            border: 2px dashed #ffb6c1;
-            position: relative;
-            overflow: hidden;
-        }
-        .shih-tzu {
-            position: relative;
-            width: 100px;
-            height: 110px;
-        }
-        .body-fluff {
-            position: absolute;
-            bottom: 0;
-            width: 100px;
-            height: 70px;
-            border-radius: 50% 50% 40% 40%;
-        }
-        .head-fluff {
-            position: absolute;
-            top: 5px;
-            left: 15px;
-            width: 70px;
-            height: 65px;
-            border-radius: 50%;
-            z-index: 3;
-        }
-        .ear {
-            position: absolute;
-            width: 25px;
-            height: 45px;
-            border-radius: 40% 40% 50% 50%;
-            top: 15px;
-            z-index: 2;
-        }
-        .ear.left { left: 5px; transform: rotate(-15deg); }
-        .ear.right { right: 5px; transform: rotate(15deg); }
-        
-        .face-details {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: 4;
-        }
-        .eye {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #2c1e18;
-            border-radius: 50%;
-            top: 30px;
-        }
-        .eye::after {
-            content: '';
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: white;
-            border-radius: 50%;
-            top: 2px;
-            left: 2px;
-        }
-        .eye.left { left: 20px; }
-        .eye.right { right: 20px; }
-        
-        .snout {
-            position: absolute;
-            background: white;
-            width: 32px;
-            height: 22px;
-            border-radius: 50%;
-            top: 35px;
-            left: 19px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .nose {
-            position: absolute;
-            background: #111;
-            width: 12px;
-            height: 8px;
-            border-radius: 40% 40% 50% 50%;
-            top: 4px;
-            left: 10px;
-        }
-        .tongue {
-            position: absolute;
-            background: #ff6b81;
-            width: 10px;
-            height: 12px;
-            border-radius: 0 0 5px 5px;
-            top: 14px;
-            left: 11px;
-            animation: pant 0.6s infinite alternate;
-        }
-
-        /* 🖤 Black and White Shih Tzu Specific Styles */
-        .patched .body-fluff {
-            background: #fcfcfc;
-            background-image: radial-gradient(circle at 15px 20px, #222 30px, transparent 31px),
-                              radial-gradient(circle at 80px 45px, #222 25px, transparent 26px);
-        }
-        .patched .head-fluff { background: #fcfcfc; }
-        .patched .ear.left { background: #222; }
-        .patched .ear.right { background: #222; }
-        .patched .face-details::before {
-            content: '';
-            position: absolute;
-            background: #222;
-            width: 25px;
-            height: 32px;
-            border-radius: 50% 40% 40% 50%;
-            top: 15px;
-            left: 12px;
-        }
-
-        /* 🤍 Pure White Shih Tzu Specific Styles */
-        .white-dog .body-fluff { background: #ffffff; border: 1px solid #fff0f2; }
-        .white-dog .head-fluff { background: #ffffff; border: 1px solid #fff0f2; }
-        .white-dog .ear { background: #fbf8f8; border: 1px solid #fff0f2; }
-        .white-dog .snout { background: #fcf9f9; border: 1px solid #f3ebeb; }
-
         button, .nav-btn {
             background-color: #ff69b4;
             color: white;
@@ -255,19 +125,22 @@
             background-color: #ffb6c1;
             border-radius: 150px 0 150px 150px;
             opacity: 0.8;
-            pointer-events: none;
+            pointer-events: none; /* Allows user to click buttons through petals */
             z-index: 1;
             animation: fall linear infinite;
         }
 
         @keyframes fall {
-            0% { transform: translateY(-50px) translateX(0) rotate(0deg); }
-            100% { transform: translateY(105vh) translateX(100px) rotate(360deg); }
+            0% {
+                top: -50px;
+                transform: translateX(0) rotate(0deg);
+            }
+            100% {
+                top: 105vh;
+                transform: translateX(100px) rotate(360deg);
+            }
         }
-        @keyframes pant {
-            0% { transform: scaleY(1); }
-            100% { transform: scaleY(1.3); }
-        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
@@ -276,46 +149,90 @@
 </head>
 <body>
 
+    <!-- Main Banner -->
     <header>
         <h1>Happy Birthday, Langga! 🎂</h1>
         <p>A little space on the internet made entirely for you.</p>
     </header>
 
+    <!-- Main Content -->
     <main>
+        <!-- Your Personal Birthday Letter -->
         <section class="card letter-section">
+            <h2>To My One and Only 💝</h2>
+            <div class="heart-divider">💖 ✨ 💖</div>
             
-            <!-- 🐶 Two Shih Tzus Custom Illustration Box -->
-            <div class="dog-container">
-                <!-- Dog 1: Black and White Patched -->
-                <div class="shih-tzu patched">
-                    <div class="ear left"></div>
-                    <div class="ear right"></div>
-                    <div class="head-fluff"></div>
-                    <div class="body-fluff"></div>
-                    <div class="face-details">
-                        <div class="eye left"></div>
-                        <div class="eye right"></div>
-                        <div class="snout">
-                            <div class="nose"></div>
-                            <div class="tongue"></div>
-                        </div>
-                    </div>
-                </div>
+            <p>Happy Birthday to my one and only Langga. You hold my whole heart, and being by your side is the greatest blessing of my life. Every single day, I find myself falling more in love with your smile, your warmth, and the incredible person you are.</p>
+            
+            <p>Even though we have only known each other for a little more than a month, it feels like you've been in my heart forever. Thank you so much for giving me the chance to be a part of your life.</p>
+            
+            <p>I still cherish every single moment we've shared so far, from the time we watched our first movie together in the cinema to simply walking home together lost in our own little world. Your endless banter keeps me laughing, and those sweet, flirty moments we share still make my heart skip a beat just like they did on day one.</p>
+            
+            <p>Thank you for being my biggest joy and my best friend. I hope today brings you as much happiness as you have given me in this short, beautiful time. Happy Birthday, Langga. I love you more than words can ever say.</p>
+        </section>
 
-                <!-- Dog 2: Pure White -->
-                <div class="shih-tzu white-dog">
-                    <div class="ear left"></div>
-                    <div class="ear right"></div>
-                    <div class="head-fluff"></div>
-                    <div class="body-fluff"></div>
-                    <div class="face-details">
-                        <div class="eye left"></div>
-                        <div class="eye right"></div>
-                        <div class="snout">
-                            <div class="nose"></div>
-                            <div class="tongue"></div>
-                        </div>
-                    </div>
-                </div>
+        <!-- Interactive Surprise Section -->
+        <section class="card gift-section">
+            <h2>A Little Extra Love... 🎁</h2>
+            <p>Click below to unlock your virtual birthday gift!</p>
+            <button id="giftBtn">Open Gift 💌</button>
+            <a href="video.html" class="nav-btn video-btn">Watch Our Special Video! 🎬</a>
+            
+            <div id="secretMessage">
+                "I can't wait to see you tomorrow and celebrate you properly! Happy Birthday, my beautiful Langga! 🥂✨"
             </div>
+        </section>
+    </main>
 
+    <!-- Footer -->
+    <footer>
+        <p>Made with all my love for Langga ❤️ | September 2026</p>
+    </footer>
+
+    <!-- 🌸 Cherry Blossom Script -->
+    <script>
+        // Smoothly toggle the surprise message reveal
+        document.getElementById('giftBtn').addEventListener('click', function() {
+            var message = document.getElementById('secretMessage');
+            var button = document.getElementById('giftBtn');
+            
+            if (message.style.display === 'none' || message.style.display === '') {
+                message.style.display = 'block';
+                button.textContent = 'Close Gift 🔒';
+            } else {
+                message.style.display = 'none';
+                button.textContent = 'Open Gift 💌';
+            }
+        });
+
+        // Function to create a cherry blossom petal
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            
+            // Randomize sizing, starting positions, and animation speeds for a natural feel
+            const size = Math.random() * 10 + 8; 
+            petal.style.width = `${size}px`;
+            petal.style.height = `${size + 4}px`;
+            petal.style.left = Math.random() * window.innerWidth + 'px';
+            
+            const duration = Math.random() * 5 + 5; 
+            petal.style.animationDuration = `${duration}s`;
+            
+            // Random opacity variations
+            petal.style.opacity = Math.random() * 0.6 + 0.4;
+            
+            document.body.appendChild(petal);
+            
+            // Delete petal after it hits the bottom to save browser speed
+            setTimeout(() => {
+                petal.remove();
+            }, duration * 1000);
+        }
+
+        // Generate a continuous stream of drifting petals
+        setInterval(createPetal, 300);
+    </script>
+
+</body>
+</html>
