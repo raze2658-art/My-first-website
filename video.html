@@ -26,21 +26,18 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
         main {
-            max-width: 900px;
+            max-width: 950px;
             margin: 3rem auto;
             padding: 0 1.5rem;
             text-align: center;
         }
+        /* Flexbox structure to handle different video shapes elegantly */
         .video-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 2rem;
             margin-bottom: 2rem;
-        }
-        @media (max-width: 768px) {
-            .video-grid {
-                grid-template-columns: 1fr;
-            }
         }
         .card {
             background: white;
@@ -48,22 +45,32 @@
             border-radius: 20px;
             box-shadow: 0 12px 30px rgba(255, 182, 193, 0.4);
             border: 1px solid #ffe4e1;
+            flex: 1;
+            min-width: 320px;
+            max-width: 420px;
         }
         .card h2 {
             color: #ff1493;
             margin-top: 0;
             font-size: 1.4rem;
         }
-        /* Custom responsive box wrapper tailored for Google Drive vertical videos */
+        /* Custom responsive wrapper layout setup */
         .video-wrapper {
             position: relative;
-            padding-bottom: 177.78%; /* Maintains 9:16 vertical smartphone layout aspect ratio */
             height: 0;
             overflow: hidden;
             border-radius: 12px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             background: #000;
             margin-top: 1rem;
+        }
+        /* Container aspect ratio tweaked specifically for the vertical YouTube Short */
+        .vertical-ratio {
+            padding-bottom: 177.78%; /* Perfect 9:16 portrait mobile aspect ratio */
+        }
+        /* Container aspect ratio tweaked specifically for the standard widescreen video */
+        .horizontal-ratio {
+            padding-bottom: 56.25%; /* Perfect 16:9 widescreen aspect ratio */
         }
         .video-wrapper iframe {
             position: absolute;
@@ -111,23 +118,23 @@
     <main>
         <div class="video-grid">
             
-            <!-- FIRST VIDEO BOX: Krysh.mp4 -->
+            <!-- FIRST VIDEO BOX: YouTube Short (Vertical) -->
             <div class="card">
                 <h2>Press Play, Langga! ❤️</h2>
-                <div class="video-wrapper">
-                    <iframe src="https://google.com" 
-                            allow="autoplay" 
+                <div class="video-wrapper vertical-ratio">
+                    <iframe src="https://youtube.com" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen>
                     </iframe>
                 </div>
             </div>
 
-            <!-- SECOND VIDEO BOX: 202609132225.mp4 -->
+            <!-- SECOND VIDEO BOX: YouTube Standard (Horizontal) -->
             <div class="card">
                 <h2>Part Two ✨</h2>
-                <div class="video-wrapper">
-                    <iframe src="https://google.com" 
-                            allow="autoplay" 
+                <div class="video-wrapper horizontal-ratio">
+                    <iframe src="https://youtube.com" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -135,7 +142,7 @@
 
         </div>
 
-        <!-- Back Navigation Button -->
+        <!-- Back Button -->
         <a href="Happy Birthday.html" class="back-btn">⬅️ Go Back to Letter</a>
     </main>
 
