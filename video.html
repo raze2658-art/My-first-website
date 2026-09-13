@@ -26,12 +26,11 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
         main {
-            max-width: 900px; /* Widened to comfortably display both videos */
+            max-width: 900px;
             margin: 3rem auto;
             padding: 0 1.5rem;
             text-align: center;
         }
-        /* Grid system to place videos side-by-side on desktop */
         .video-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -40,7 +39,7 @@
         }
         @media (max-width: 768px) {
             .video-grid {
-                grid-template-columns: 1fr; /* Stack vertically on phones */
+                grid-template-columns: 1fr;
             }
         }
         .card {
@@ -55,9 +54,10 @@
             margin-top: 0;
             font-size: 1.4rem;
         }
+        /* Vimeo Responsive Wrapper */
         .video-wrapper {
             position: relative;
-            padding-bottom: 56.25%; /* Perfect 16:9 Aspect Ratio */
+            padding-bottom: 177.78%; /* Updated aspect ratio for vertical/mobile video format */
             height: 0;
             overflow: hidden;
             border-radius: 12px;
@@ -115,8 +115,9 @@
             <div class="card">
                 <h2>Press Play, Langga! ❤️</h2>
                 <div class="video-wrapper">
-                    <iframe src="https://vimeo.com" 
-                            allow="autoplay; fullscreen; picture-in-picture" 
+                    <iframe src="https://player.vimeo.com/video/1226367446?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" 
+                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin"
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -127,7 +128,8 @@
                 <h2>Part Two ✨</h2>
                 <div class="video-wrapper">
                     <iframe src="https://vimeo.com" 
-                            allow="autoplay; fullscreen; picture-in-picture" 
+                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin"
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -138,6 +140,9 @@
         <!-- Back Button -->
         <a href="Happy Birthday.html" class="back-btn">⬅️ Go Back to Letter</a>
     </main>
+
+    <!-- Vimeo API Helper Script -->
+    <script src="https://player.vimeo.com/api/player.js"></script>
 
     <footer>
         <p>Made with all my love for Langga ❤️ | September 2026</p>
