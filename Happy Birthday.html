@@ -145,6 +145,146 @@
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
+          .dog-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 50px;
+            background: #fff5f7;
+            padding: 2.5rem 1rem;
+            border-radius: 15px;
+            margin-top: 2.5rem;
+            border: 2px dashed #ffb6c1;
+        }
+        .shih-tzu {
+            position: relative;
+            width: 120px;
+            height: 140px;
+        }
+        .body-fluff {
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            width: 100px;
+            height: 75px;
+            border-radius: 40px 40px 25px 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .head-fluff {
+            position: absolute;
+            top: 5px;
+            left: 15px;
+            width: 90px;
+            height: 80px;
+            border-radius: 50%;
+            z-index: 5;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.03);
+        }
+        .ear {
+            position: absolute;
+            width: 32px;
+            height: 60px;
+            border-radius: 20px 20px 30px 30px;
+            top: 20px;
+            z-index: 6;
+        }
+        .ear.left { left: 0px; transform: rotate(-10deg); }
+        .ear.right { right: 0px; transform: rotate(10deg); }
+        .eye {
+            position: absolute;
+            width: 11px;
+            height: 11px;
+            background: #2c1e18;
+            border-radius: 50%;
+            top: 32px;
+            z-index: 8;
+        }
+        .eye::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+        }
+        .eye.left { left: 33px; }
+        .eye.right { right: 33px; }
+        .blush {
+            position: absolute;
+            width: 14px;
+            height: 8px;
+            background: #ffb6c1;
+            border-radius: 50%;
+            top: 45px;
+            z-index: 7;
+            opacity: 0.6;
+        }
+        .blush.left { left: 24px; }
+        .blush.right { right: 24px; }
+        .snout {
+            position: absolute;
+            background: white;
+            width: 36px;
+            height: 26px;
+            border-radius: 18px;
+            top: 42px;
+            left: 42px;
+            z-index: 8;
+            border: 1px solid #f9f0f2;
+        }
+        .nose {
+            position: absolute;
+            background: #111;
+            width: 14px;
+            height: 9px;
+            border-radius: 6px 6px 8px 8px;
+            top: 3px;
+            left: 11px;
+        }
+        .tongue {
+            position: absolute;
+            background: #ff6b81;
+            width: 10px;
+            height: 12px;
+            border-radius: 0 0 6px 6px;
+            top: 13px;
+            left: 13px;
+            animation: pant 0.6s infinite alternate;
+        }
+        .paw {
+            position: absolute;
+            width: 20px;
+            height: 16px;
+            background: white;
+            border-radius: 8px 8px 4px 4px;
+            bottom: 0;
+            z-index: 7;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .paw.left { left: 25px; }
+        .paw.right { right: 25px; }
+        .patched .body-fluff {
+            background: white;
+            background-image: radial-gradient(circle at -10px 20px, #333 45px, transparent 46px),
+                              radial-gradient(circle at 90px 40px, #333 35px, transparent 36px);
+        }
+        .patched .head-fluff {
+            background: white;
+            background-image: radial-gradient(circle at 15px 25px, #333 30px, transparent 31px),
+                              radial-gradient(circle at 75px 25px, #333 30px, transparent 31px);
+        }
+        .patched .ear { background: #333; }
+        .patched .paw { background: #fdfdfd; border: 1px solid #eee; }
+        .white-dog .body-fluff { background: #ffffff; border: 1px solid #fff0f2; }
+        .white-dog .head-fluff { background: #ffffff; border: 1px solid #fff0f2; }
+        .white-dog .ear { background: #ffffff; border: 1px solid #fff0f2; }
+        .white-dog .snout { background: #ffffff; }
+        .white-dog .paw { background: #ffffff; border: 1px solid #fff0f2; }
+
+
+        
     </style>
 </head>
 <body>
@@ -181,6 +321,47 @@
             <div id="secretMessage">
                 "I can't wait to see you tomorrow and celebrate you properly! Happy Birthday, my beautiful Langga! 🥂✨"
             </div>
+                        <!-- 🐶 TWO SHIH TZUS SNIPPET (PASTE BELOW BUTTONS) -->
+            <div class="dog-container">
+                <!-- Dog 1: Black and White Patched Shih Tzu -->
+                <div class="shih-tzu patched">
+                    <div class="body-fluff"></div>
+                    <div class="ear left"></div>
+                    <div class="ear right"></div>
+                    <div class="head-fluff"></div>
+                    <div class="blush left"></div>
+                    <div class="blush right"></div>
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+                    <div class="snout">
+                        <div class="nose"></div>
+                        <div class="tongue"></div>
+                    </div>
+                    <div class="paw left"></div>
+                    <div class="paw right"></div>
+                </div>
+
+                <!-- Dog 2: Pure White Shih Tzu -->
+                <div class="shih-tzu white-dog">
+                    <div class="body-fluff"></div>
+                    <div class="ear left"></div>
+                    <div class="ear right"></div>
+                    <div class="head-fluff"></div>
+                    <div class="blush left"></div>
+                    <div class="blush right"></div>
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+                    <div class="snout">
+                        <div class="nose"></div>
+                        <div class="tongue"></div>
+                    </div>
+                    <div class="paw left"></div>
+                    <div class="paw right"></div>
+                </div>
+            </div>
+
+
+            
         </section>
     </main>
 
