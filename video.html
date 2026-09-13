@@ -54,10 +54,10 @@
             margin-top: 0;
             font-size: 1.4rem;
         }
-        /* Vimeo Responsive Wrapper */
+        /* Custom responsive box wrapper tailored for Google Drive vertical videos */
         .video-wrapper {
             position: relative;
-            padding-bottom: 177.78%; /* Updated aspect ratio for vertical/mobile video format */
+            padding-bottom: 177.78%; /* Maintains 9:16 vertical smartphone layout aspect ratio */
             height: 0;
             overflow: hidden;
             border-radius: 12px;
@@ -111,25 +111,23 @@
     <main>
         <div class="video-grid">
             
-            <!-- FIRST VIDEO BOX -->
+            <!-- FIRST VIDEO BOX: Krysh.mp4 -->
             <div class="card">
                 <h2>Press Play, Langga! ❤️</h2>
                 <div class="video-wrapper">
-                    <iframe src="https://player.vimeo.com/video/1226367446?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" 
-                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
-                            referrerpolicy="strict-origin-when-cross-origin"
+                    <iframe src="https://google.com" 
+                            allow="autoplay" 
                             allowfullscreen>
                     </iframe>
                 </div>
             </div>
 
-            <!-- SECOND VIDEO BOX -->
+            <!-- SECOND VIDEO BOX: 202609132225.mp4 -->
             <div class="card">
                 <h2>Part Two ✨</h2>
                 <div class="video-wrapper">
-                    <iframe src="https://vimeo.com" 
-                            allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
-                            referrerpolicy="strict-origin-when-cross-origin"
+                    <iframe src="https://google.com" 
+                            allow="autoplay" 
                             allowfullscreen>
                     </iframe>
                 </div>
@@ -137,12 +135,9 @@
 
         </div>
 
-        <!-- Back Button -->
+        <!-- Back Navigation Button -->
         <a href="Happy Birthday.html" class="back-btn">⬅️ Go Back to Letter</a>
     </main>
-
-    <!-- Vimeo API Helper Script -->
-    <script src="https://player.vimeo.com/api/player.js"></script>
 
     <footer>
         <p>Made with all my love for Langga ❤️ | September 2026</p>
