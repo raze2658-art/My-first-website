@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday, Langga! 💕</title>
     <style>
-        /* Modern, romantic pink color palette */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.8;
             margin: 0;
             padding: 0;
-            background-color: #fff0f5; /* Soft lavender blush pink */
+            background-color: #fff0f5;
             color: #4a3b32;
         }
         header {
-            background: linear-gradient(135deg, #ffb6c1, #ff69b4); /* Romantic pink gradient */
+            background: linear-gradient(135deg, #ffb6c1, #ff69b4);
             color: white;
             padding: 3.5rem 2rem;
             text-align: center;
@@ -51,7 +50,7 @@
             text-align: center;
         }
         h2 {
-            color: #ff1493; /* Deep vibrant pink */
+            color: #ff1493;
             margin-top: 0;
             text-align: center;
             font-size: 1.8rem;
@@ -67,7 +66,7 @@
             text-align: center;
             margin: 1.5rem 0;
         }
-        button {
+        button, .nav-btn {
             background-color: #ff69b4;
             color: white;
             border: none;
@@ -79,14 +78,18 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
             display: inline-block;
-            margin-top: 1rem;
+            margin: 1rem 0.5rem;
+            text-decoration: none;
         }
-        button:hover {
+        button:hover, .nav-btn:hover {
             background-color: #ff1493;
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(255, 20, 147, 0.4);
         }
-        /* Style for the secret surprise message */
+        /* Video page button styling */
+        .video-btn {
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+        }
         #secretMessage {
             display: none;
             margin-top: 2rem;
@@ -116,15 +119,12 @@
 </head>
 <body>
 
-    <!-- Main Banner -->
     <header>
         <h1>Happy Birthday, Langga! 🎂</h1>
         <p>A little space on the internet made entirely for you.</p>
     </header>
 
-    <!-- Main Content -->
     <main>
-        <!-- Your Personal Birthday Letter -->
         <section class="card letter-section">
             <h2>To My One and Only 💝</h2>
             <div class="heart-divider">💖 ✨ 💖</div>
@@ -138,11 +138,13 @@
             <p>Thank you for being my biggest joy and my best friend. I hope today brings you as much happiness as you have given me in this short, beautiful time. Happy Birthday, Langga. I love you more than words can ever say.</p>
         </section>
 
-        <!-- Interactive Surprise Section -->
         <section class="card gift-section">
             <h2>A Little Extra Love... 🎁</h2>
             <p>Click below to unlock your virtual birthday gift!</p>
             <button id="giftBtn">Open Gift 💌</button>
+            
+            <!-- This button goes to the video page -->
+            <a href="video.html" class="nav-btn video-btn">Watch Our Special Video! 🎬</a>
             
             <div id="secretMessage">
                 "I can't wait to see you tomorrow and celebrate you properly! Happy Birthday, my beautiful Langga! 🥂✨"
@@ -150,13 +152,11 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer>
         <p>Made with all my love for Langga ❤️ | September 2026</p>
     </footer>
 
     <script>
-        // Smoothly toggle the surprise message reveal
         document.getElementById('giftBtn').addEventListener('click', function() {
             var message = document.getElementById('secretMessage');
             var button = document.getElementById('giftBtn');
@@ -170,6 +170,5 @@
             }
         });
     </script>
-
 </body>
 </html>
