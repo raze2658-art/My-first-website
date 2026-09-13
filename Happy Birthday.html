@@ -10,15 +10,19 @@
             line-height: 1.8;
             margin: 0;
             padding: 0;
-            background-color: #fff0f5;
+            background-color: #fff0f5; 
             color: #4a3b32;
+            overflow-x: hidden; /* Prevents side-scrolling from falling petals */
+            position: relative;
         }
         header {
-            background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+            background: linear-gradient(135deg, #ffb6c1, #ff69b4); 
             color: white;
             padding: 3.5rem 2rem;
             text-align: center;
             box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+            position: relative;
+            z-index: 2; /* Keeps text above background petals */
         }
         header h1 {
             font-size: 2.8rem;
@@ -34,9 +38,11 @@
             max-width: 650px;
             margin: 3rem auto;
             padding: 0 1.5rem;
+            position: relative;
+            z-index: 2;
         }
         .card {
-            background: white;
+            background: rgba(255, 255, 255, 0.95); /* Slightly transparent to see petals behind cards */
             padding: 3rem 2.5rem;
             border-radius: 20px;
             box-shadow: 0 12px 30px rgba(255, 182, 193, 0.4);
@@ -50,7 +56,7 @@
             text-align: center;
         }
         h2 {
-            color: #ff1493;
+            color: #ff1493; 
             margin-top: 0;
             text-align: center;
             font-size: 1.8rem;
@@ -86,7 +92,6 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(255, 20, 147, 0.4);
         }
-        /* Video page button styling */
         .video-btn {
             background: linear-gradient(135deg, #ff1493, #ff69b4);
         }
@@ -110,7 +115,32 @@
             color: #7d4b57;
             font-weight: 600;
             font-size: 1rem;
+            position: relative;
+            z-index: 2;
         }
+
+        /* 🌸 Cherry Blossom Styling */
+        .petal {
+            position: fixed;
+            background-color: #ffb6c1;
+            border-radius: 150px 0 150px 150px;
+            opacity: 0.8;
+            pointer-events: none; /* Allows user to click buttons through petals */
+            z-index: 1;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50px;
+                transform: translateX(0) rotate(0deg);
+            }
+            100% {
+                top: 105vh;
+                transform: translateX(100px) rotate(360deg);
+            }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
@@ -119,12 +149,15 @@
 </head>
 <body>
 
+    <!-- Main Banner -->
     <header>
         <h1>Happy Birthday, Langga! 🎂</h1>
         <p>A little space on the internet made entirely for you.</p>
     </header>
 
+    <!-- Main Content -->
     <main>
+        <!-- Your Personal Birthday Letter -->
         <section class="card letter-section">
             <h2>To My One and Only 💝</h2>
             <div class="heart-divider">💖 ✨ 💖</div>
@@ -138,12 +171,11 @@
             <p>Thank you for being my biggest joy and my best friend. I hope today brings you as much happiness as you have given me in this short, beautiful time. Happy Birthday, Langga. I love you more than words can ever say.</p>
         </section>
 
+        <!-- Interactive Surprise Section -->
         <section class="card gift-section">
             <h2>A Little Extra Love... 🎁</h2>
             <p>Click below to unlock your virtual birthday gift!</p>
             <button id="giftBtn">Open Gift 💌</button>
-            
-            <!-- This button goes to the video page -->
             <a href="video.html" class="nav-btn video-btn">Watch Our Special Video! 🎬</a>
             
             <div id="secretMessage">
@@ -152,11 +184,14 @@
         </section>
     </main>
 
+    <!-- Footer -->
     <footer>
         <p>Made with all my love for Langga ❤️ | September 2026</p>
     </footer>
 
+    <!-- 🌸 Cherry Blossom Script -->
     <script>
+        // Smoothly toggle the surprise message reveal
         document.getElementById('giftBtn').addEventListener('click', function() {
             var message = document.getElementById('secretMessage');
             var button = document.getElementById('giftBtn');
@@ -169,6 +204,38 @@
                 button.textContent = 'Open Gift 💌';
             }
         });
+
+        // Function to create a cherry blossom petal
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
+            
+            // Randomize sizing, starting positions, and animation speeds for a natural feel
+            const size = Math.random() * 10 + 8; 
+            petal.style.width = `${size}px`;
+            petal.style.height = `${size + 4}px`;
+            petal.style.left = Math.random() * window.innerWidth + 'px';
+            
+            const duration = Math.random() * 5 + 5; 
+            petal.style.animationDuration = `${duration}s`;
+            
+            // Random opacity variations
+            petal.style.opacity = Math.random() * 0.6 + 0.4;
+            
+            document.body.appendChild(petal);
+            
+            // Delete petal after it hits the bottom to save browser speed
+            setTimeout(() => {
+                petal.remove();
+            }, duration * 1000);
+        }
+
+        // Generate a continuous stream of drifting petals
+        setInterval(createPetal, 300);
     </script>
+
+</body>
+</html>
+
 </body>
 </html>
