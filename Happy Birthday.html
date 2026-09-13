@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, Langga! 💕</title>
+    <style>
+        /* Modern, romantic pink color palette */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: #fff0f5; /* Soft lavender blush pink */
+            color: #4a3b32;
+        }
+        header {
+            background: linear-gradient(135deg, #ffb6c1, #ff69b4); /* Romantic pink gradient */
+            color: white;
+            padding: 3.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+        }
+        header h1 {
+            font-size: 2.8rem;
+            margin: 0 0 0.5rem 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        header p {
+            font-size: 1.2rem;
+            margin: 0;
+            opacity: 0.9;
+        }
+        main {
+            max-width: 650px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+        .card {
+            background: white;
+            padding: 3rem 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 12px 30px rgba(255, 182, 193, 0.4);
+            margin-bottom: 3rem;
+            border: 1px solid #ffe4e1;
+        }
+        .letter-section {
+            text-align: justify;
+        }
+        .gift-section {
+            text-align: center;
+        }
+        h2 {
+            color: #ff1493; /* Deep vibrant pink */
+            margin-top: 0;
+            text-align: center;
+            font-size: 1.8rem;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #4a4a4a;
+            margin-bottom: 1.5rem;
+        }
+        .heart-divider {
+            font-size: 1.5rem;
+            color: #ff69b4;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        button {
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            padding: 0.9rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 105, 180, 0.3);
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #ff1493;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 20, 147, 0.4);
+        }
+        /* Style for the secret surprise message */
+        #secretMessage {
+            display: none;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #ffe4e1;
+            border-radius: 12px;
+            border-left: 5px solid #ff69b4;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #ff1493;
+            animation: fadeIn 1s;
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            background-color: #ffb6c1;
+            color: #7d4b57;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Banner -->
+    <header>
+        <h1>Happy Birthday, Langga! 🎂</h1>
+        <p>A little space on the internet made entirely for you.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Your Personal Birthday Letter -->
+        <section class="card letter-section">
+            <h2>To My One and Only 💝</h2>
+            <div class="heart-divider">💖 ✨ 💖</div>
+            
+            <p>Happy Birthday to my one and only Langga. You hold my whole heart, and being by your side is the greatest blessing of my life. Every single day, I find myself falling more in love with your smile, your warmth, and the incredible person you are.</p>
+            
+            <p>Even though we have only known each other for a little more than a month, it feels like you've been in my heart forever. Thank you so much for giving me the chance to be a part of your life.</p>
+            
+            <p>I still cherish every single moment we've shared so far, from the time we watched our first movie together in the cinema to simply walking home together lost in our own little world. Your endless banter keeps me laughing, and those sweet, flirty moments we share still make my heart skip a beat just like they did on day one.</p>
+            
+            <p>Thank you for being my biggest joy and my best friend. I hope today brings you as much happiness as you have given me in this short, beautiful time. Happy Birthday, Langga. I love you more than words can ever say.</p>
+        </section>
+
+        <!-- Interactive Surprise Section -->
+        <section class="card gift-section">
+            <h2>A Little Extra Love... 🎁</h2>
+            <p>Click below to unlock your virtual birthday gift!</p>
+            <button id="giftBtn">Open Gift 💌</button>
+            
+            <div id="secretMessage">
+                "I can't wait to see you tomorrow and celebrate you properly! Happy Birthday, my beautiful Langga! 🥂✨"
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Made with all my love for Langga ❤️ | September 2026</p>
+    </footer>
+
+    <script>
+        // Smoothly toggle the surprise message reveal
+        document.getElementById('giftBtn').addEventListener('click', function() {
+            var message = document.getElementById('secretMessage');
+            var button = document.getElementById('giftBtn');
+            
+            if (message.style.display === 'none' || message.style.display === '') {
+                message.style.display = 'block';
+                button.textContent = 'Close Gift 🔒';
+            } else {
+                message.style.display = 'none';
+                button.textContent = 'Open Gift 💌';
+            }
+        });
+    </script>
+
+</body>
+</html>
