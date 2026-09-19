@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loan Application Form</title>
+    <title>Simple Loan Application</title>
     <style>
         body {
             background-color: #f1f5f9;
@@ -54,14 +54,14 @@
             font-size: 16px;
         }
 
-        .error-text {
+        .error-message {
             color: #dc2626;
             font-size: 13px;
             margin-top: 5px;
             display: none;
         }
 
-        input.error-field, select.error-field {
+        input.invalid, select.invalid {
             border-color: #dc2626;
             background-color: #fef2f2;
         }
@@ -109,17 +109,17 @@
             <div class="form-group">
                 <label>First Name *</label>
                 <input type="text" id="firstName" required>
-                <div class="error-text">First name is required.</div>
+                <div class="error-message">First name is required.</div>
             </div>
             <div class="form-group">
                 <label>Last Name *</label>
                 <input type="text" id="lastName" required>
-                <div class="error-text">Last name is required.</div>
+                <div class="error-message">Last name is required.</div>
             </div>
             <div class="form-group">
                 <label>Email Address *</label>
                 <input type="email" id="email" required>
-                <div class="error-text">Enter a valid email address.</div>
+                <div class="error-message">Enter a valid email address.</div>
             </div>
         </div>
 
@@ -129,7 +129,7 @@
             <div class="form-group">
                 <label>Loan Amount ($) *</label>
                 <input type="number" id="loanAmount" min="1000" max="100000" required>
-                <div class="error-text">Enter an amount between $1,000 and $100,000.</div>
+                <div class="error-message">Enter an amount between $1,000 and $100,000.</div>
             </div>
             <div class="form-group">
                 <label>Loan Term *</label>
@@ -139,7 +139,7 @@
                     <option value="24">24 Months</option>
                     <option value="36">36 Months</option>
                 </select>
-                <div class="error-text">Please select a loan term.</div>
+                <div class="error-message">Please select a loan term.</div>
             </div>
         </div>
 
@@ -153,12 +153,12 @@
                     <option value="employed">Employed</option>
                     <option value="unemployed">Unemployed</option>
                 </select>
-                <div class="error-text">Please select your employment status.</div>
+                <div class="error-message">Please select your employment status.</div>
             </div>
             <div class="form-group">
                 <label>Annual Gross Income ($) *</label>
                 <input type="number" id="income" required>
-                <div class="error-text">Please enter your annual income.</div>
+                <div class="error-message">Please enter your annual income.</div>
             </div>
         </div>
 
@@ -177,7 +177,62 @@
     </form>
 </div>
 
-<!-- CONNECTED SCRIPT FILE -->
-<script src="script.js"></script>
+<script>
+    const steps = Array.from(document.querySelectorAll('.step'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const btnGroup = document.getElementById('btnGroup');
+    const successScreen = document.getElementById('successScreen');
+
+    let currentStep = 1;
+
+    function showStep() {
+        steps.forEach(step => {
+            step.classList.toggle('active', parseInt(step.dataset.step) === currentStep);
+        });
+        prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+        nextBtn.innerText = currentStep === steps.length ? 'Submit' : 'Next';
+    }
+
+    function validateCurrentStep() {
+        const currentStepFields = steps[currentStep - 1].querySelectorAll('input, select');
+        let isValid = true;
+
+        currentStepFields.forEach(field => {
+            const errorText = field.parentElement.querySelector('.error-message');
+            
+            field.classList.remove('invalid');
+            if (errorText) errorText.style.display = 'none';
+
+            if (field.hasAttribute('required') && !field.value.trim()) {
+                isValid = false;
+                field.classList.add('invalid');
+                if (errorText) errorText.style.display = 'block';
+            }
+        });
+
+        return isValid;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (validateCurrentStep()) {
+            if (currentStep < steps.length) {
+                currentStep++;
+                showStep();
+            } else {
+                steps.forEach(step => step.style.display = 'none');
+                btnGroup.style.display = 'none';
+                successScreen.style.display = 'block';
+            }
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep();
+        }
+    });
+</script>
 </body>
 </html>
