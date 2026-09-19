@@ -4,249 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Loan Application</title>
-    <style>
-        :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border-color: #cbd5e1;
-            --error-color: #dc2626;
-            --success-color: #16a34a;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            padding: 2rem 1rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 650px;
-            background: var(--card-bg);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
-
-        h2 {
-            margin-bottom: 0.5rem;
-            color: var(--text-main);
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 2.5rem;
-            position: relative;
-        }
-
-        .progress-container::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            height: 4px;
-            width: 100%;
-            background-color: var(--border-color);
-            z-index: 1;
-        }
-
-        .progress-bar-fill {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            height: 4px;
-            width: 0%;
-            background-color: var(--primary-color);
-            z-index: 1;
-            transition: width 0.3s ease;
-        }
-
-        .step-indicator {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background-color: var(--card-bg);
-            border: 3px solid var(--border-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            z-index: 2;
-            transition: all 0.3s ease;
-            color: var(--text-muted);
-        }
-
-        .step-indicator.active {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            transform: scale(1.1);
-        }
-
-        .step-indicator.completed {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-            color: white;
-        }
-
-        /* Form Steps Layout */
-        .form-step {
-            display: none;
-        }
-
-        .form-step.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Input Controls */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        @media (max-width: 480px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        .error-message {
-            color: var(--error-color);
-            font-size: 0.8rem;
-            margin-top: 0.35rem;
-            display: none;
-        }
-
-        input.invalid, select.invalid {
-            border-color: var(--error-color);
-            background-color: #fef2f2;
-        }
-
-        /* Live Preview Calculator */
-        .calc-preview {
-            background-color: #f1f5f9;
-            padding: 1rem;
-            border-radius: 6px;
-            margin-top: 1rem;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .calc-preview p {
-            font-size: 0.95rem;
-            color: var(--text-main);
-        }
-
-        .calc-preview span {
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        /* Navigation Buttons */
-        .btn-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
-
-        button {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-next {
-            background-color: var(--primary-color);
-            color: white;
-            margin-left: auto;
-        }
-
-        .btn-next:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-prev {
-            background-color: transparent;
-            color: var(--text-muted);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-prev:hover {
-            background-color: #f1f5f9;
-            color: var(--text-main);
-        }
-
-        .success-screen {
-            text-align: center;
-            padding: 2rem 0;
-        }
-
-        .success-icon {
-            font-size: 4rem;
-            color: var(--success-color);
-            margin-bottom: 1rem;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -325,3 +83,29 @@
                     <option value="self-employed">Self-Employed</option>
                     <option value="unemployed">Unemployed</option>
                 </select>
+                <div class="error-message">Please select your employment status.</div>
+            </div>
+            <div class="form-group">
+                <label for="income">Annual Gross Income ($) *</label>
+                <input type="number" id="income" min="0" required>
+                <div class="error-message">Please provide a valid annual income.</div>
+            </div>
+        </div>
+
+        <div class="success-screen" id="successScreen" style="display: none;">
+            <div class="success-icon">✓</div>
+            <h3>Application Submitted!</h3>
+            <p class="subtitle">Thank you. Your loan application has been received and is being processed.</p>
+        </div>
+
+        <div class="btn-container" id="btnContainer">
+            <button type="button" class="btn-prev" id="prevBtn" style="display: none;">Back</button>
+            <button type="button" class="btn-next" id="nextBtn">Next</button>
+        </div>
+    </form>
+</div>
+
+<!-- The script tag is now added properly right here -->
+<script src="script.js"></script>
+</body>
+</html>
