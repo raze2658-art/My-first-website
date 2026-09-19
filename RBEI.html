@@ -278,6 +278,8 @@
     </form>
 </div>
 
+<!-- ... Up here is all your form's HTML inputs and buttons ... -->
+
 <!-- Embedded Form Navigation Engine Logic -->
 <script>
     const steps = Array.from(document.querySelectorAll('.step'));
@@ -295,13 +297,45 @@
         prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
         nextBtn.innerText = currentStep === steps.length ? 'Submit Application' : 'Next Step';
     }
- field.classList.add('invalid');
-                if (errorText) errorText.style.display = 'block';
+
+    /* 🟢 REPLACE YOUR OLD VALIDATION LOGIC WITH THIS PIECE EXACTLY 🟢 */
+    function validateCurrentStep() {
+        const currentStepFields = steps[currentStep - 1].querySelectorAll('input, select');
+        let isValid = true;
+
+        currentStepFields.forEach(field => {
+            const errorText = field.parentElement.querySelector('.error-message');
+            
+            // Clear past errors
+            field.classList.remove('invalid');
+            if (errorText) errorText.style.display = 'none';
+
+            // 1. Check if the required field is empty
+            if (field.hasAttribute('required') && !field.value.trim()) {
+                isValid = false;
+                field.classList.add('invalid');
+                if (errorText) {
+                    errorText.innerText = "This field is required.";
+                    errorText.style.display = 'block';
+                }
+            } 
+            // 2. Extra check: If it's an email field, make sure it has an @ symbol
+            else if (field.type === 'email' && field.value.trim() !== '') {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailPattern.test(field.value.trim())) {
+                    isValid = false;
+                    field.classList.add('invalid');
+                    if (errorText) {
+                        errorText.innerText = "Please enter a valid email address (e.g., name@email.com).";
+                        errorText.style.display = 'block';
+                    }
+                }
             }
         });
 
         return isValid;
     }
+    /* 🟢 END OF NEW REPLACEMENT PIECE 🟢 */
 
     nextBtn.addEventListener('click', () => {
         if (validateCurrentStep()) {
@@ -322,8 +356,6 @@
             showStep();
         }
     });
-    /* ⏫ ==================== END OF YOUR PIECE ==================== ⏫ */
 </script>
 </body>
 </html>
-   
