@@ -295,5 +295,35 @@
         prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
         nextBtn.innerText = currentStep === steps.length ? 'Submit Application' : 'Next Step';
     }
+ field.classList.add('invalid');
+                if (errorText) errorText.style.display = 'block';
+            }
+        });
 
+        return isValid;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (validateCurrentStep()) {
+            if (currentStep < steps.length) {
+                currentStep++;
+                showStep();
+            } else {
+                steps.forEach(step => step.style.display = 'none');
+                btnGroup.style.display = 'none';
+                successScreen.style.display = 'block';
+            }
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep();
+        }
+    });
+    /* ⏫ ==================== END OF YOUR PIECE ==================== ⏫ */
+</script>
+</body>
+</html>
    
