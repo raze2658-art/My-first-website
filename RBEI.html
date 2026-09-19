@@ -661,27 +661,4 @@
 </body>
 </html>
 
-    nextBtn.addEventListener('click', () => {
-        if (validateCurrentStep()) {
-            if (currentStep < 5) {
-                currentStep++;
-                if (currentStep === 5) generateSummaryReview();
-                updateWizardProgress();
-            } else {
-                steps.forEach(step => step.style.display = 'none');
-                stepperRibbon.style.display = 'none';
-                btnGroup.style.display = 'none';
-                successScreen.style.display = 'block';
-            }
-        }
-    });
-
-    prevBtn.addEventListener('click', () => {
-        if (currentStep > 1) {
-            currentStep--;
-            updateWizardProgress();
-        }
-    });
-</script>
-</body>
-</html>
+    
