@@ -372,7 +372,7 @@
             </div>
         </div>
 
-                            <!-- WIREFRAME SCREEN 4: Required Document Attachment Fields -->
+                <!-- WIREFRAME SCREEN 4: Required Document Attachment Fields -->
         <div class="form-step" data-step="4">
             <h2>Upload Required Documents</h2>
             
@@ -447,7 +447,8 @@
     </form>
 </div>
 
-        <!-- Embedded Form Navigation Engine Logic -->
+
+    <!-- Embedded Form Navigation Engine Logic -->
 <script>
     const steps = Array.from(document.querySelectorAll('.form-step'));
     const prevBtn = document.getElementById('prevBtn');
@@ -459,12 +460,10 @@
     let currentStep = 1;
 
     function updateWizardProgress() {
-        // Toggle active screen visibility layers
         steps.forEach(step => {
             step.classList.toggle('active', parseInt(step.dataset.step) === currentStep);
         });
 
-        // Toggle navigation layout buttons depending on layout step indices
         if (currentStep === 1) {
             prevBtn.style.display = 'none';
             nextBtn.innerText = 'Start Application →';
@@ -481,7 +480,6 @@
             }
         }
 
-        // Stepper Progress Badge Nodes Tracking Sync
         if (currentStep > 1) {
             const visualStep = currentStep - 1;
             for (let i = 1; i <= 4; i++) {
@@ -502,7 +500,8 @@
 
     function updateUploadLabel(input) {
         const errorDiv = document.getElementById(input.id + '-err');
-        if (input.files.length > 0) {
+        if (input.files && input.files.length > 0) {
+            // Updated file array target structure
             input.parentElement.querySelector('button').innerText = "✓ " + input.files[0].name.substring(0, 15) + "...";
             input.parentElement.style.borderColor = "var(--success-green)";
             if(errorDiv) errorDiv.style.display = 'none';
@@ -521,74 +520,12 @@
         document.getElementById('rev-term').innerText = document.getElementById('term').value;
     }
 
-    f<!-- 🔍 SCROLL PAST ALL YOUR FORM FIELDS UNTIL YOU REACH THIS SCRIPT TAG NEAR THE BOTTOM -->
-<script>
-    const steps = Array.from(document.querySelectorAll('.form-step'));
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const btnGroup = document.getElementById('btnGroup');
-    const successScreen = document.getElementById('successScreen');
-    const stepperRibbon = document.getElementById('stepperRibbon');
-
-    let currentStep = 1;
-
-    function updateWizardProgress() {
-        steps.forEach(step => {
-            step.classList.toggle('active', parseInt(step.dataset.step) === currentStep);
-        });
-
-        if (currentStep === 1) {
-            prevBtn.style.display = 'none';
-            nextBtn.innerText = 'Start Application →';
-            stepperRibbon.style.display = 'none'; 
-        } else {
-            stepperRibbon.style.display = 'flex';
-            prevBtn.style.display = 'block';
-            prevBtn.innerText = '← Back';
-            
-            if (currentStep === 5) {
-                nextBtn.innerText = 'Submit Application';
-            } else {
-                nextBtn.innerText = 'Next →';
-            }
-        }
-
-        if (currentStep > 1) {
-            const visualStep = currentStep - 1;
-            for (let i = 1; i <= 4; i++) {
-                const node = document.getElementById(`node-${i}`);
-                if (i < visualStep) {
-                    node.className = 'step-node completed';
-                    node.querySelector('.circle-badge').innerText = '✓';
-                } else if (i === visualStep) {
-                    node.className = 'step-node active';
-                    node.querySelector('.circle-badge').innerText = i;
-                } else {
-                    node.className = 'step-node';
-                    node.querySelector('.circle-badge').innerText = i;
-                }
-            }
-        }
-    }
-
-        // 🟢 FIXED: Correctly reads the first uploaded file name from the array index
-    function updateUploadLabel(input) {
-        const errorDiv = document.getElementById(input.id + '-err');
-        if (input.files && input.files.length > 0) {
-            input.parentElement.querySelector('button').innerText = "✓ " + input.files[0].name.substring(0, 15) + "...";
-            input.parentElement.style.borderColor = "var(--success-green)";
-            if(errorDiv) errorDiv.style.display = 'none';
-        }
-    }
-
-    // 🟢 FIXED: Completely native validation bypasses email regular expression bugs
     function validateCurrentStep() {
-        if (currentStep === 1) return true; // Step 1 is the landing screen, always valid!
+        if (currentStep === 1) return true; 
         
         const currentStepContainer = document.querySelector(`.form-step[data-step="${currentStep}"]`);
         let stepValid = true;
 
-        // Check text fields and drop-downs
         const inputs = currentStepContainer.querySelectorAll('input[required], select[required]');
         inputs.forEach(input => {
             const errorDiv = input.parentElement.querySelector('.error-message');
@@ -596,11 +533,10 @@
             if (errorDiv) errorDiv.style.display = 'none';
 
             let isValidField = true;
-            
             if (!input.value.trim()) {
                 isValidField = false;
             } else if (input.type === 'email') {
-                isValidField = input.checkValidity(); // Native browser-managed validity checker
+                isValidField = input.checkValidity(); // Native browser validator bypasses regex string limits
             }
 
             if (!isValidField) {
@@ -610,7 +546,6 @@
             }
         });
 
-        // Unique step validation override logic for uploads panel
         if (currentStep === 4) {
             ['idFile', 'incomeFile', 'billingFile'].forEach(id => {
                 const fileEl = document.getElementById(id);
@@ -626,7 +561,6 @@
 
         return stepValid;
     }
-
 
     nextBtn.addEventListener('click', () => {
         if (validateCurrentStep()) {
@@ -652,5 +586,3 @@
 </script>
 </body>
 </html>
-
-    
