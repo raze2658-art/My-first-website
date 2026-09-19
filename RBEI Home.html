@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RBEI - Fast & Secure Digital Loans</title>
+    <style>
+        :root {
+            --rbei-navy: #1e293b;
+            --rbei-blue: #3b82f6;
+            --rbei-blue-hover: #2563eb;
+            --rbei-gray-bg: #f8fafc;
+            --rbei-border: #cbd5e1;
+            --text-main: #334155;
+            --text-light: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Institutional Bank Navigation Bar Wrapper */
+        .bank-navbar {
+            background-color: var(--rbei-gray-bg);
+            border-bottom: 1px solid var(--rbei-border);
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .bank-logo {
+            font-weight: 800;
+            font-size: 22px;
+            color: var(--rbei-navy);
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--rbei-blue);
+        }
+
+        .btn-login {
+            background-color: transparent;
+            color: var(--rbei-navy);
+            border: 1px solid var(--rbei-border);
+            padding: 8px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-login:hover {
+            background-color: #e2e8f0;
+            color: var(--rbei-navy);
+        }
+
+        /* Hero Main Layout Grid Container */
+        .hero-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 768px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                margin: 20px auto;
+            }
+        }
+
+        .hero-text-side h1 {
+            font-size: 42px;
+            color: var(--rbei-navy);
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+
+        .hero-text-side h1 span {
+            color: var(--rbei-blue);
+        }
+
+        .hero-text-side p {
+            font-size: 16px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        /* Call To Action Accent Controls Button */
+        .btn-cta {
+            background-color: var(--rbei-navy);
+            color: white;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            transition: background-color 0.2s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-cta:hover {
+            background-color: #0f172a;
+            transform: translateY(-1px);
+        }
+
+        /* Wireframe Structural Icon Graphic Graphic representation mockup asset box */
+        .hero-graphic-side {
+            background-color: white;
+            border: 1px solid var(--rbei-border);
+            border-radius: 12px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            text-align: center;
+            min-height: 320px;
+        }
+
+        .graphic-icon-box {
+            width: 80px;
+            height: 80px;
+            background-color: #f1f5f9;
+            border: 2px solid var(--rbei-border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .hero-graphic-side h3 {
+            font-size: 18px;
+            color: var(--rbei-navy);
+            margin-bottom: 8px;
+        }
+
+        .hero-graphic-side p {
+            font-size: 14px;
+            color: var(--text-light);
+            max-width: 280px;
+            line-height: 1.5;
+        }
+
+        /* Footer Corporate Strip */
+        .bank-footer {
+            background-color: var(--rbei-navy);
+            color: #94a3b8;
+            text-align: center;
+            padding: 15px;
+            font-size: 13px;
+            margin-top: auto;
+            border-top: 1px solid #334155;
+        }
+    </style>
+</head>
+<body>
+
+<!-- RBEI Application Platform Navigation Bar Header -->
+<nav class="bank-navbar">
+    <a href="#" class="bank-logo">RBEI</a>
+    <div class="nav-links">
+        <a href="#" class="active">Home</a>
+        <a href="#">Loans</a>
+        <a href="#">Help</a>
+    </div>
+    <button class="btn-login" type="button">Login</button>
+</nav>
+
+<!-- Core Hero Welcome Portal Area Layout -->
+<main class="hero-container">
+    
+    <!-- Left Column text strings layout -->
+    <div class="hero-text-side">
+        <h1>Apply for a Loan in <span>Just a Few Steps</span></h1>
+        <p>Fast. Secure. Convenient. Get the financial assistance you need to fund education, fuel business growth, or settle personal milestones. Complete our unified application packet online and track your processing feedback instantly.</p>
+        
+        <!-- Redirect link hook pointing directly over to your loan application wizard file -->
+        <a href="form.html" class="btn-cta">Start Application →</a>
+    </div>
+
+    <!-- Right Column schematic interface drawing box -->
+    <div class="hero-graphic-side">
+        <div class="graphic-icon-box">📄</div>
+        <h3>Paperless Digital Processing</h3>
+        <p>Upload required document credentials securely from any smartphone device or home computer viewport.</p>
+    </div>
+
+</main>
+
+<!-- Footer Layout Element -->
+<footer class="bank-footer">
+    &copy; 2026 RBEI Financial Services System Corporation. All Rights Reserved.
+</footer>
+
+</body>
+</html>
