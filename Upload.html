@@ -285,116 +285,142 @@
         </div>
     </div> <!-- Close of upload-card -->
 
-    <!-- 🌐 SCRIPT SECTION AT THE VERY BOTTOM OF THE FILE 🌐 -->
-    <script>
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
-        const fileQueue = document.getElementById('fileQueue');
-        const listTitle = document.getElementById('listTitle');
-        const errorBanner = document.getElementById('errorBanner');
+    <!-- 🔍 SCROLL PAST ALL YOUR FORM FIELDS UNTIL YOU REACH THIS SCRIPT TAG NEAR THE BOTTOM -->
+<script>
+    const steps = Array.from(document.querySelectorAll('.form-step'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const btnGroup = document.getElementById('btnGroup');
+    const successScreen = document.getElementById('successScreen');
+    const stepperRibbon = document.getElementById('stepperRibbon');
 
-        const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-        const ALLOWED_TYPES = ['application/pdf', 'image/png', 'image/jpeg'];
-        let trackedFiles = [];
+    let currentStep = 1;
 
-        dropZone.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', (e) => { handleFileSelection(e.target.files); });
-        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-        dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('drag-over'); });
-        dropZone.addEventListener('drop', (e) => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFileSelection(e.dataTransfer.files); });
-
-        function handleFileSelection(files) {
-            errorBanner.style.display = 'none';
-            
-            Array.from(files).forEach(file => {
-                if (file.size > MAX_FILE_SIZE) {
-                    showError(`"${file.name}" exceeds the maximum allow limit size of 5MB.`);
-                    return;
-                }
-                if (!ALLOWED_TYPES.includes(file.type)) {
-                    showError(`"${file.name}" has an invalid file extension. Please choose a PDF, PNG, or JPG document.`);
-                    return;
-                }
-
-                /* ⏬ =================== START OF YOUR CODE =================== ⏬ */
-                if (trackedFiles.some(f => f.name === file.name && f.size === file.size)) return;
-                trackedFiles.push(file);
-                renderFileRow(file);
-            });
-
-            toggleListTitle();
-        }
-
-        function renderFileRow(file) {
-            const fileId = 'file-' + Date.now() + '-' + Math.floor(Math.random() * 100);
-            
-            const sizeText = file.size > 1024 * 1024 
-                ? (file.size / (1024 * 1024)).toFixed(2) + ' MB' 
-                : (file.size / 1024).toFixed(0) + ' KB';
-
-            const icon = file.type === 'application/pdf' ? '📄' : '🖼️';
-
-            const itemRow = document.createElement('div');
-            itemRow.className = 'file-item';
-            itemRow.id = fileId;
-            itemRow.innerHTML = `
-                <div class="file-icon">${icon}</div>
-                <div class="file-details">
-                    <div class="file-name">${file.name}</div>
-                    <div class="file-size">${sizeText}</div>
-                </div>
-                <span class="status-badge status-uploading" id="badge-${fileId}">Uploading</span>
-                <button class="remove-btn" title="Remove file">✕</button>
-            `;
-
-            itemRow.querySelector('.remove-btn').addEventListener('click', (e) => {
-                e.stopPropagation();
-                itemRow.remove();
-                trackedFiles = trackedFiles.filter(f => f.name !== file.name);
-                toggleListTitle();
-            });
-
-            fileQueue.appendChild(itemRow);
-
-            setTimeout(() => {
-                const badge = document.getElementById(`badge-${fileId}`);
-                if (badge) {
-                    if (file.name.toLowerCase().includes('error')) {
-                        badge.className = 'status-badge status-error';
-                        badge.innerText = 'Failed';
-                    } else {
-                        badge.className = 'status-badge status-success';
-                        badge.innerText = 'Ready';
-                    }
-                }
-            }, 1500);
-        }
-
-        function toggleListTitle() {
-            listTitle.style.display = trackedFiles.length > 0 ? 'block' : 'none';
-        }
-
-               function showError(message) {
-            errorBanner.innerText = message;
-            errorBanner.style.display = 'block';
-        }
-
-        /* ==================== PASTE THE NEW BUTTON CODE HERE ==================== */
-        const uploadBtn = document.getElementById('uploadBtn');
-        uploadBtn.addEventListener('click', () => {
-            if (trackedFiles.length === 0) {
-                showError("Please upload at least one collateral document before submitting.");
-                return;
-            }
-            alert("Documents uploaded and verified successfully!");
-            document.querySelector('.upload-card').innerHTML = `
-                <div style="text-align: center; padding: 40px 0;">
-                    <h2 style="color: var(--bank-success);">✓ Verification Complete</h2>
-                    <p style="color: var(--text-dark); margin-top: 10px;">Your collateral documents have been securely processed.</p>
-                </div>
-            `;
+    function updateWizardProgress() {
+        steps.forEach(step => {
+            step.classList.toggle('active', parseInt(step.dataset.step) === currentStep);
         });
-        /* ========================================================================= */
-    </script>
+
+        if (currentStep === 1) {
+            prevBtn.style.display = 'none';
+            nextBtn.innerText = 'Start Application →';
+            stepperRibbon.style.display = 'none'; 
+        } else {
+            stepperRibbon.style.display = 'flex';
+            prevBtn.style.display = 'block';
+            prevBtn.innerText = '← Back';
+            
+            if (currentStep === 5) {
+                nextBtn.innerText = 'Submit Application';
+            } else {
+                nextBtn.innerText = 'Next →';
+            }
+        }
+
+        if (currentStep > 1) {
+            const visualStep = currentStep - 1;
+            for (let i = 1; i <= 4; i++) {
+                const node = document.getElementById(`node-${i}`);
+                if (i < visualStep) {
+                    node.className = 'step-node completed';
+                    node.querySelector('.circle-badge').innerText = '✓';
+                } else if (i === visualStep) {
+                    node.className = 'step-node active';
+                    node.querySelector('.circle-badge').innerText = i;
+                } else {
+                    node.className = 'step-node';
+                    node.querySelector('.circle-badge').innerText = i;
+                }
+            }
+        }
+    }
+
+    function updateUploadLabel(input) {
+        const errorDiv = document.getElementById(input.id + '-err');
+        if (input.files.length > 0) {
+            input.parentElement.querySelector('button').innerText = "✓ " + input.files[0].name.substring(0, 15) + "...";
+            input.parentElement.style.borderColor = "var(--success-green)";
+            if(errorDiv) errorDiv.style.display = 'none';
+        }
+    }
+
+    function generateSummaryReview() {
+        document.getElementById('rev-name').innerText = document.getElementById('fullName').value;
+        document.getElementById('rev-dob').innerText = document.getElementById('dob').value;
+        document.getElementById('rev-addr').innerText = document.getElementById('address').value;
+        document.getElementById('rev-phone').innerText = document.getElementById('contactNumber').value;
+        document.getElementById('rev-email').innerText = document.getElementById('email').value;
+        document.getElementById('rev-amount').innerText = "₱" + parseFloat(document.getElementById('loanAmount').value).toLocaleString();
+        document.getElementById('rev-type').innerText = document.getElementById('loanType').value;
+        document.getElementById('rev-purpose').innerText = document.getElementById('purpose').value;
+        document.getElementById('rev-term').innerText = document.getElementById('term').value;
+    }
+
+    /* 🟢 PLACE THIS UPDATED LOGIC HERE (LINES 70-115 OF SCRIPT) 🟢 */
+    function validateCurrentStep() {
+        if (currentStep === 1) return true; 
+        
+        const currentStepContainer = document.querySelector(`.form-step[data-step="${currentStep}"]`);
+        let stepValid = true;
+
+        const inputs = currentStepContainer.querySelectorAll('input[required], select[required]');
+        inputs.forEach(input => {
+            const errorDiv = input.parentElement.querySelector('.error-message');
+            input.classList.remove('invalid');
+            if (errorDiv) errorDiv.style.display = 'none';
+
+            let isValidField = true;
+            if (!input.value.trim()) {
+                isValidField = false;
+            } else if (input.type === 'email') {
+                // Fixed Email rule check patterns
+                isValidField = /^[^\s@]+@[^\s@]+\.[^\s@]+\$/.test(input.value.trim());
+            }
+
+            if (!isValidField) {
+                stepValid = false;
+                input.classList.add('invalid');
+                if (errorDiv) errorDiv.style.display = 'block';
+            }
+        });
+
+        if (currentStep === 4) {
+            ['idFile', 'incomeFile', 'billingFile'].forEach(id => {
+                const fileEl = document.getElementById(id);
+                const errorDiv = document.getElementById(id + '-err');
+                if (fileEl.files.length === 0) {
+                    stepValid = false;
+                    errorDiv.style.display = 'block';
+                } else {
+                    errorDiv.style.display = 'none';
+                }
+            });
+        }
+
+        return stepValid;
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (validateCurrentStep()) {
+            if (currentStep < 5) {
+                currentStep++;
+                if (currentStep === 5) generateSummaryReview();
+                updateWizardProgress();
+            } else {
+                steps.forEach(step => step.style.display = 'none');
+                stepperRibbon.style.display = 'none';
+                btnGroup.style.display = 'none';
+                successScreen.style.display = 'block';
+            }
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+            currentStep--;
+            updateWizardProgress();
+        }
+    });
+</script>
 </body>
 </html>
