@@ -78,6 +78,7 @@
             padding-bottom: 10px;
         }
 
+        /* Essential step controls */
         .step {
             display: none;
         }
@@ -202,9 +203,9 @@
 <div class="form-card">
     <form id="loanForm" novalidate>
         
-        <!-- STEP 1 -->
+        <!-- STEP 1: Personal Info -->
         <div class="step active" data-step="1">
-            <h2>Personal Information</h2>
+            <h2>Personal Information (Step 1 of 3)</h2>
             <div class="form-group">
                 <label>First Name *</label>
                 <input type="text" id="firstName" required>
@@ -222,9 +223,9 @@
             </div>
         </div>
 
-        <!-- STEP 2 -->
+        <!-- STEP 2: Loan Details -->
         <div class="step" data-step="2">
-            <h2>Loan Request Options</h2>
+            <h2>Loan Request Options (Step 2 of 3)</h2>
             <div class="form-group">
                 <label>Desired Loan Amount ($) *</label>
                 <input type="number" id="loanAmount" min="1000" max="100000" placeholder="e.g., 5000" required>
@@ -242,9 +243,9 @@
             </div>
         </div>
 
-        <!-- STEP 3 -->
+        <!-- STEP 3: Financial Profile -->
         <div class="step" data-step="3">
-            <h2>Financial Profile Verification</h2>
+            <h2>Financial Profile Verification (Step 3 of 3)</h2>
             <div class="form-group">
                 <label>Current Employment Status *</label>
                 <select id="employment" required>
@@ -268,7 +269,7 @@
             <p class="success-meta">Confirmation Code: #APX-79210-LN</p>
         </div>
 
-        <!-- BUTTONS -->
+        <!-- NAVIGATION UTILITY BUTTONS -->
         <div class="button-group" id="btnGroup">
             <button type="button" id="prevBtn" style="display: none;">Back</button>
             <button type="button" id="nextBtn">Next Step</button>
@@ -277,6 +278,7 @@
     </form>
 </div>
 
+<!-- Embedded Form Navigation Engine Logic -->
 <script>
     const steps = Array.from(document.querySelectorAll('.step'));
     const prevBtn = document.getElementById('prevBtn');
@@ -305,35 +307,7 @@
             if (errorText) errorText.style.display = 'none';
 
             if (field.hasAttribute('required') && !field.value.trim()) {
-                isValid = false;
-                field.classList.add('invalid');
-                if (errorText) errorText.style.display = 'block';
-            }
-        });
-
-        return isValid;
-    }
-
-    <!-- ... The rest of your form HTML layout sits up here ... -->
-
-<script>
-    const steps = Array.from(document.querySelectorAll('.step'));
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const btnGroup = document.getElementById('btnGroup');
-    const successScreen = document.getElementById('successScreen');
-
-    let currentStep = 1;
-
-    function showStep() {
-        steps.forEach(step => {
-            step.classList.toggle('active', parseInt(step.dataset.step) === currentStep);
-        });
-        prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
-        nextBtn.innerText = currentStep === steps.length ? 'Submit Application' : 'Next Step';
-    }
-
-    function validateCurrentStep() {
+                isValid = false;    function validateCurrentStep() {
         const currentStepFields = steps[currentStep - 1].querySelectorAll('input, select');
         let isValid = true;
 
@@ -345,6 +319,8 @@
 
             if (field.hasAttribute('required') && !field.value.trim()) {
                 isValid = false;
+                
+                // 🟢 YOUR CODE BLOCK STARTS EXACTLY HERE:
                 field.classList.add('invalid');
                 if (errorText) errorText.style.display = 'block';
             }
@@ -353,7 +329,6 @@
         return isValid;
     }
 
-    // 🟢 IT SITS EXACTLY HERE AT THE BOTTOM OF THE SCRIPT 🟢
     nextBtn.addEventListener('click', () => {
         if (validateCurrentStep()) {
             if (currentStep < steps.length) {
@@ -372,9 +347,7 @@
             currentStep--;
             showStep();
         }
-    });
-</script>
-</body>
-</html>
+    }); // 🟢 YOUR CODE BLOCK ENDS HERE
 
 
+                
