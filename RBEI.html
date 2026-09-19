@@ -571,34 +571,24 @@
         }
     }
 
+        // 🟢 FIXED: Correctly reads the first uploaded file name from the array index
     function updateUploadLabel(input) {
         const errorDiv = document.getElementById(input.id + '-err');
-        if (input.files.length > 0) {
+        if (input.files && input.files.length > 0) {
             input.parentElement.querySelector('button').innerText = "✓ " + input.files[0].name.substring(0, 15) + "...";
             input.parentElement.style.borderColor = "var(--success-green)";
             if(errorDiv) errorDiv.style.display = 'none';
         }
     }
 
-    function generateSummaryReview() {
-        document.getElementById('rev-name').innerText = document.getElementById('fullName').value;
-        document.getElementById('rev-dob').innerText = document.getElementById('dob').value;
-        document.getElementById('rev-addr').innerText = document.getElementById('address').value;
-        document.getElementById('rev-phone').innerText = document.getElementById('contactNumber').value;
-        document.getElementById('rev-email').innerText = document.getElementById('email').value;
-        document.getElementById('rev-amount').innerText = "₱" + parseFloat(document.getElementById('loanAmount').value).toLocaleString();
-        document.getElementById('rev-type').innerText = document.getElementById('loanType').value;
-        document.getElementById('rev-purpose').innerText = document.getElementById('purpose').value;
-        document.getElementById('rev-term').innerText = document.getElementById('term').value;
-    }
-
-    /* 🟢 PLACE THIS UPDATED LOGIC HERE (LINES 70-115 OF SCRIPT) 🟢 */
+    // 🟢 FIXED: Completely native validation bypasses email regular expression bugs
     function validateCurrentStep() {
-        if (currentStep === 1) return true; 
+        if (currentStep === 1) return true; // Step 1 is the landing screen, always valid!
         
         const currentStepContainer = document.querySelector(`.form-step[data-step="${currentStep}"]`);
         let stepValid = true;
 
+        // Check text fields and drop-downs
         const inputs = currentStepContainer.querySelectorAll('input[required], select[required]');
         inputs.forEach(input => {
             const errorDiv = input.parentElement.querySelector('.error-message');
@@ -606,11 +596,11 @@
             if (errorDiv) errorDiv.style.display = 'none';
 
             let isValidField = true;
+            
             if (!input.value.trim()) {
                 isValidField = false;
             } else if (input.type === 'email') {
-                // Fixed Email rule check patterns
-                isValidField = /^[^\s@]+@[^\s@]+\.[^\s@]+\$/.test(input.value.trim());
+                isValidField = input.checkValidity(); // Native browser-managed validity checker
             }
 
             if (!isValidField) {
@@ -620,11 +610,12 @@
             }
         });
 
+        // Unique step validation override logic for uploads panel
         if (currentStep === 4) {
             ['idFile', 'incomeFile', 'billingFile'].forEach(id => {
                 const fileEl = document.getElementById(id);
                 const errorDiv = document.getElementById(id + '-err');
-                if (fileEl.files.length === 0) {
+                if (!fileEl.files || fileEl.files.length === 0) {
                     stepValid = false;
                     errorDiv.style.display = 'block';
                 } else {
@@ -635,6 +626,7 @@
 
         return stepValid;
     }
+
 
     nextBtn.addEventListener('click', () => {
         if (validateCurrentStep()) {
