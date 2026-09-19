@@ -374,11 +374,27 @@
             listTitle.style.display = trackedFiles.length > 0 ? 'block' : 'none';
         }
 
-        function showError(message) {
+               function showError(message) {
             errorBanner.innerText = message;
             errorBanner.style.display = 'block';
         }
-        /* ⏫ ==================== END OF YOUR CODE ==================== ⏫ */
+
+        /* ==================== PASTE THE NEW BUTTON CODE HERE ==================== */
+        const uploadBtn = document.getElementById('uploadBtn');
+        uploadBtn.addEventListener('click', () => {
+            if (trackedFiles.length === 0) {
+                showError("Please upload at least one collateral document before submitting.");
+                return;
+            }
+            alert("Documents uploaded and verified successfully!");
+            document.querySelector('.upload-card').innerHTML = `
+                <div style="text-align: center; padding: 40px 0;">
+                    <h2 style="color: var(--bank-success);">✓ Verification Complete</h2>
+                    <p style="color: var(--text-dark); margin-top: 10px;">Your collateral documents have been securely processed.</p>
+                </div>
+            `;
+        });
+        /* ========================================================================= */
     </script>
 </body>
 </html>
