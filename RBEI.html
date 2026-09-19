@@ -521,13 +521,84 @@
         document.getElementById('rev-term').innerText = document.getElementById('term').value;
     }
 
+    f<!-- 🔍 SCROLL PAST ALL YOUR FORM FIELDS UNTIL YOU REACH THIS SCRIPT TAG NEAR THE BOTTOM -->
+<script>
+    const steps = Array.from(document.querySelectorAll('.form-step'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const btnGroup = document.getElementById('btnGroup');
+    const successScreen = document.getElementById('successScreen');
+    const stepperRibbon = document.getElementById('stepperRibbon');
+
+    let currentStep = 1;
+
+    function updateWizardProgress() {
+        steps.forEach(step => {
+            step.classList.toggle('active', parseInt(step.dataset.step) === currentStep);
+        });
+
+        if (currentStep === 1) {
+            prevBtn.style.display = 'none';
+            nextBtn.innerText = 'Start Application →';
+            stepperRibbon.style.display = 'none'; 
+        } else {
+            stepperRibbon.style.display = 'flex';
+            prevBtn.style.display = 'block';
+            prevBtn.innerText = '← Back';
+            
+            if (currentStep === 5) {
+                nextBtn.innerText = 'Submit Application';
+            } else {
+                nextBtn.innerText = 'Next →';
+            }
+        }
+
+        if (currentStep > 1) {
+            const visualStep = currentStep - 1;
+            for (let i = 1; i <= 4; i++) {
+                const node = document.getElementById(`node-${i}`);
+                if (i < visualStep) {
+                    node.className = 'step-node completed';
+                    node.querySelector('.circle-badge').innerText = '✓';
+                } else if (i === visualStep) {
+                    node.className = 'step-node active';
+                    node.querySelector('.circle-badge').innerText = i;
+                } else {
+                    node.className = 'step-node';
+                    node.querySelector('.circle-badge').innerText = i;
+                }
+            }
+        }
+    }
+
+    function updateUploadLabel(input) {
+        const errorDiv = document.getElementById(input.id + '-err');
+        if (input.files.length > 0) {
+            input.parentElement.querySelector('button').innerText = "✓ " + input.files[0].name.substring(0, 15) + "...";
+            input.parentElement.style.borderColor = "var(--success-green)";
+            if(errorDiv) errorDiv.style.display = 'none';
+        }
+    }
+
+    function generateSummaryReview() {
+        document.getElementById('rev-name').innerText = document.getElementById('fullName').value;
+        document.getElementById('rev-dob').innerText = document.getElementById('dob').value;
+        document.getElementById('rev-addr').innerText = document.getElementById('address').value;
+        document.getElementById('rev-phone').innerText = document.getElementById('contactNumber').value;
+        document.getElementById('rev-email').innerText = document.getElementById('email').value;
+        document.getElementById('rev-amount').innerText = "₱" + parseFloat(document.getElementById('loanAmount').value).toLocaleString();
+        document.getElementById('rev-type').innerText = document.getElementById('loanType').value;
+        document.getElementById('rev-purpose').innerText = document.getElementById('purpose').value;
+        document.getElementById('rev-term').innerText = document.getElementById('term').value;
+    }
+
+    /* 🟢 PLACE THIS UPDATED LOGIC HERE (LINES 70-115 OF SCRIPT) 🟢 */
     function validateCurrentStep() {
         if (currentStep === 1) return true; 
         
         const currentStepContainer = document.querySelector(`.form-step[data-step="${currentStep}"]`);
         let stepValid = true;
 
-        // General standard required elements processing routine
         const inputs = currentStepContainer.querySelectorAll('input[required], select[required]');
         inputs.forEach(input => {
             const errorDiv = input.parentElement.querySelector('.error-message');
@@ -538,6 +609,7 @@
             if (!input.value.trim()) {
                 isValidField = false;
             } else if (input.type === 'email') {
+                // Fixed Email rule check patterns
                 isValidField = /^[^\s@]+@[^\s@]+\.[^\s@]+\$/.test(input.value.trim());
             }
 
@@ -548,7 +620,6 @@
             }
         });
 
-        // File uploads presence enforcement logic route
         if (currentStep === 4) {
             ['idFile', 'incomeFile', 'billingFile'].forEach(id => {
                 const fileEl = document.getElementById(id);
@@ -564,6 +635,31 @@
 
         return stepValid;
     }
+
+    nextBtn.addEventListener('click', () => {
+        if (validateCurrentStep()) {
+            if (currentStep < 5) {
+                currentStep++;
+                if (currentStep === 5) generateSummaryReview();
+                updateWizardProgress();
+            } else {
+                steps.forEach(step => step.style.display = 'none');
+                stepperRibbon.style.display = 'none';
+                btnGroup.style.display = 'none';
+                successScreen.style.display = 'block';
+            }
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+            currentStep--;
+            updateWizardProgress();
+        }
+    });
+</script>
+</body>
+</html>
 
     nextBtn.addEventListener('click', () => {
         if (validateCurrentStep()) {
