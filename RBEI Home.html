@@ -417,7 +417,7 @@
     &copy; 2026 RBEI Financial Services System Corporation. All Rights Reserved.
 </footer>
 
-        <script>
+    <script>
     const statusModal = document.getElementById('statusModal');
     const loginBtn = document.getElementById('loginBtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
@@ -427,30 +427,16 @@
     const statusError = document.getElementById('statusError');
     const statusResult = document.getElementById('statusResult');
 
-    // Mock Application Database Array Record Lookups
-    const mockDatabase = {
-        "RBEI-2025-001234": {
-            name: "Juan Dela Cruz",
-            type: "Personal Loan",
-            stage: "Under Review",
-            pillClass: "status-pill pill-pending",
-            date: "Sept 18, 2026"
-        },
-        "RBEI-2025-005678": {
-            name: "Maria Santos",
-            type: "Business Loan",
-            stage: "Approved",
-            pillClass: "status-pill pill-approved",
-            date: "Sept 19, 2026"
-        }
-    };
-
     // Open Modal Panel
-    loginBtn.addEventListener('click', () => {
+    function openModal() {
         statusModal.classList.add('open');
-        refInput.value = ""; 
         statusError.style.display = 'none';
         statusResult.style.display = 'none';
+    }
+
+    loginBtn.addEventListener('click', () => {
+        openModal();
+        refInput.value = ""; 
     });
 
     // Close Modal Panel
@@ -458,16 +444,15 @@
         statusModal.classList.remove('open');
     });
 
-    // Close Modal on clicking outside the card block layout
+    // Close Modal on clicking outside background overlay
     statusModal.addEventListener('click', (e) => {
         if (e.target === statusModal) {
             statusModal.classList.remove('open');
         }
     });
 
-    // Perform database lookups
-    checkStatusBtn.addEventListener('click', () => {
-        const query = refInput.value.trim();
+    // Perform real localStorage application lookups
+    function searchApplication(query) {
         statusError.style.display = 'none';
         statusResult.style.display = 'none';
 
@@ -477,22 +462,48 @@
             return;
         }
 
-        // Search Mock Repository Records
-        if (mockDatabase[query]) {
-            const data = mockDatabase[query];
+        // Retrieve dynamically submitted application records from localStorage
+        const storedApps = JSON.parse(localStorage.getItem('rbei_applications')) || {};
+
+        if (storedApps[query]) {
+            const data = storedApps[query];
             document.getElementById('res-ref').innerText = query;
             document.getElementById('res-name').innerText = data.name;
             document.getElementById('res-type').innerText = data.type;
             
             const pill = document.getElementById('res-pill');
-            pill.innerText = data.stage;
-            pill.className = data.pillClass;
+            const statusText = data.status || "Under Review";
+            pill.innerText = statusText;
             
-            document.getElementById('res-date').innerText = data.date;
+            // Set badge styles dynamically based on status
+            if (statusText === 'Approved') {
+                pill.className = 'status-pill pill-approved';
+            } else {
+                pill.className = 'status-pill pill-pending';
+            }
+            
+            // Format current date or fallback
+            document.getElementById('res-date').innerText = new Date().toLocaleDateString();
             statusResult.style.display = 'block';
         } else {
-            statusError.innerText = "No application matches found for reference key tracking ID. Check code spelling configuration constraints.";
+            statusError.innerText = "No application matches found for this reference ID. Please check the code and try again.";
             statusError.style.display = 'block';
+        }
+    }
+
+    checkStatusBtn.addEventListener('click', () => {
+        searchApplication(refInput.value.trim());
+    });
+
+    // Automatically open modal and perform lookup if redirected with a URL parameter
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const refFromUrl = urlParams.get('ref');
+        
+        if (refFromUrl) {
+            openModal();
+            refInput.value = refFromUrl;
+            searchApplication(refFromUrl);
         }
     });
 </script>
