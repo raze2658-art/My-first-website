@@ -155,7 +155,7 @@
     <div class="navbar-brand">RBEI Application Portal</div>
     <div style="font-size: 12px; opacity: 0.8;">Online Submission Portal</div>
 
-    <div class="container">
+<div class="container">
     <div class="card">
         <h2>Borrower Application Form</h2>
         <p>Please fill out your complete information below to initiate underwriting review.</p>
@@ -244,20 +244,20 @@
 
     <script>
     document.getElementById('rbeiForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevents page refresh
+        e.preventDefault(); // Prevents default form refresh
 
         const submitBtn = document.getElementById('submitBtn');
         const alertBox = document.getElementById('submissionAlert');
 
-        // Disable button while processing network submission
+        // Disable button during network request
         submitBtn.disabled = true;
         submitBtn.innerText = "Transmitting Application...";
         alertBox.style.display = "none";
 
-        // Generate Reference Code matching Admin Panel format
+        // Generate Reference Code
         const refCode = "RBEI-" + new Date().getFullYear() + "-" + Math.floor(100000 + Math.random() * 900000);
 
-        // Gather all inputs from form fields
+        // Gather all form inputs
         const applicationData = {
             name: document.getElementById('fullNameInput').value.trim(),
             dob: document.getElementById('dobInput').value.trim(),
@@ -272,7 +272,7 @@
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         };
 
-        // 🟢 SAVE DIRECTLY TO FIRESTORE COLLECTION "rbei_applications"
+        // 🟢 UPLOAD DIRECTLY TO FIRESTORE COLLECTION "rbei_applications"
         db.collection("rbei_applications").doc(refCode).set(applicationData)
         .then(() => {
             alertBox.style.display = "block";
@@ -292,11 +292,11 @@
             alertBox.innerText = "❌ Submission failed: " + error.message;
 
             submitBtn.disabled = false;
-            submitBtn.innerText = "Submit Application to Cloud";
+            submitBtn.innerText = "Submit Application";
         });
     });
 </script>
 
 </body>
 </html>
-</nav>
+  
