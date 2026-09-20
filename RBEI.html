@@ -590,9 +590,8 @@
                 };
 
                 // Pull old records queue array, push new case record, and save back to browser memory
-                let storedApps = JSON.parse(localStorage.getItem('rbei_applications')) || {};
-                storedApps[trackingNumber] = newApplication;
-                localStorage.setItem('rbei_applications', JSON.stringify(storedApps));
+                // Replace localStorage.setItem with Firebase addDoc/setDoc
+              await db.collection("rbei_applications").doc(trackingNumber).set(newApplication);
 
                 // Update the user success panel confirmation reference number on screen dynamically
                 document.querySelector('.ref-box').innerText = trackingNumber;
