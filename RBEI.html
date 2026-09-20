@@ -562,13 +562,38 @@
         return stepValid;
     }
 
-    nextBtn.addEventListener('click', () => {
+      nextBtn.addEventListener('click', () => {
         if (validateCurrentStep()) {
             if (currentStep < 5) {
                 currentStep++;
                 if (currentStep === 5) generateSummaryReview();
                 updateWizardProgress();
             } else {
+                // 🟢 NEW LIVE CONNECTION PIPELINE: Pack up form data
+                const trackingNumber = "RBEI-2026-" + Math.floor(100000 + Math.random() * 900000);
+                
+                const newApplication = {
+                    name: document.getElementById('fullName').value,
+                    dob: document.getElementById('dob').value,
+                    addr: document.getElementById('address').value,
+                    phone: document.getElementById('contactNumber').value,
+                    email: document.getElementById('email').value,
+                    amount: "₱" + parseFloat(document.getElementById('loanAmount').value).toLocaleString(),
+                    type: document.getElementById('loanType').value,
+                    purpose: document.getElementById('purpose').value,
+                    term: document.getElementById('term').value,
+                    status: "Under Review"
+                };
+
+                // Pull old records queue array, push new case record, and save back to browser memory
+                let storedApps = JSON.parse(localStorage.getItem('rbei_applications')) || {};
+                storedApps[trackingNumber] = newApplication;
+                localStorage.setItem('rbei_applications', JSON.stringify(storedApps));
+
+                // Update the user success panel confirmation reference number on screen dynamically
+                document.querySelector('.ref-box').innerText = trackingNumber;
+
+                // Launch layout success screen transitions
                 steps.forEach(step => step.style.display = 'none');
                 stepperRibbon.style.display = 'none';
                 btnGroup.style.display = 'none';
