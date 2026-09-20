@@ -441,79 +441,101 @@
     });
 
     // Fetch live applications from Google Sheets API endpoint
-function fetchLiveApplications() {
-    queueTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--text-light);">Loading applications from cloud...</td></tr>`;
+    function fetchLiveApplications() {
+        queueTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--text-light);">Loading applications from cloud...</td></tr>`;
 
-    fetch(webAppUrl)
-        .then(res => res.json())
-        .then(data => {
-            applicationsData = Array.isArray(data) ? data : [];
-            buildQueueTable();
-        })
-        .catch(err => {
-            console.error("Error fetching data:", err);
-            queueTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--danger-red); padding:15px;">Failed to connect to backend.</td></tr>`;
-        });
-}
-
-// Populate administrative database queue table
-function buildQueueTable() {
-    queueTableBody.innerHTML = "";
-
-    if (applicationsData.length === 0) {
-        queueTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--text-light);">No loan applications found.</td></tr>`;
-        detailPanel.style.visibility = 'hidden';
-        return;
+        fetch(webAppUrl)
+            .then(res => res.json())
+            .then(data => {
+                applicationsData = Array.isArray(data) ? data : [];
+                buildQueueTable();
+            })
+            .catch(err => {
+                console.error("Error fetching data:", err);
+                queueTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--danger-red); padding:15px;">Failed to connect to backend.</td></tr>`;
+            });
     }
 
-    applicationsData.forEach((app, index) => {
-        // Multi-key detection for reference number
-        const ref = app.ref || app.References || app.referenceCode || app.reference || (`APP-${index + 1}`);
-        const name = app.name || app.Name || "Unknown";
-        const status = app.status || app.Status || "Under Review";
+    // Populate administrative database queue table
+    function buildQueueTable() {
+        queueTableBody.innerHTML = "";
 
-        let badgeClass = "badge-status status-review";
-        if (status === "Approved") badgeClass = "badge-status status-approved";
-        if (status === "Rejected") badgeClass = "badge-status status-rejected";
+        if (applicationsData.length === 0) {
+            queueTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--text-light);">No loan applications found.</td></tr>`;
+            detailPanel.style.visibility = 'hidden';
+            return;
+        }
 
-        const row = document.createElement('tr');
-        row.className = `queue-row ${activeSelectedRef === ref ? 'selected' : ''}`;
-        row.innerHTML = `
-            <td style="font-family: monospace; font-weight: 700; color: var(--rbei-blue);">${ref}</td>
-            <td><strong>${name}</strong></td>
-            <td><span class="${badgeClass}">${status}</span></td>
-        `;
+        applicationsData.forEach((app, index) => {
+            // Multi-key detection for reference number
+            const ref = app.ref || app.References || app.referenceCode || app.reference || (`APP-${index + 1}`);
+            const name = app.name || app.Name || "Unknown";
+            const status = app.status || app.Status || "Under Review";
 
-        row.addEventListener('click', () => selectCaseRecord(ref, index));
-        queueTableBody.appendChild(row);
-    });
-}
+            let badgeClass = "badge-status status-review";
+            if (status === "Approved") badgeClass = "badge-status status-approved";
+            if (status === "Rejected") badgeClass = "badge-status status-rejected";
 
-// Display selected single file record in inspection grid
-function selectCaseRecord(ref, index) {
-    activeSelectedRef = ref;
-    buildQueueTable();
+            const row = document.createElement('tr');
+            row.className = `queue-row ${activeSelectedRef === ref ? 'selected' : ''}`;
+            row.innerHTML = `
+                <td style="font-family: monospace; font-weight: 700; color: var(--rbei-blue);">${ref}</td>
+                <td><strong>${name}</strong></td>
+                <td><span class="${badgeClass}">${status}</span></td>
+            `;
 
-    const record = applicationsData.find((app, idx) => {
-        const appRef = app.ref || app.References || app.referenceCode || app.reference || (`APP-${idx + 1}`);
-        return appRef === ref || idx === index;
-    });
+            row.addEventListener('click', () => selectCaseRecord(ref, index));
+            queueTableBody.appendChild(row);
+        });
+    }
 
-    if (!record) return;
+    // UPDATED: Display selected single file record with proper date and amount formatting
+    function selectCaseRecord(ref, index) {
+        activeSelectedRef = ref;
+        buildQueueTable();
 
-    document.getElementById('det-ref-title').innerText = "Inspecting Case File: " + ref;
-    document.getElementById('det-name').innerText = record.name || record.Name || '-';
-    document.getElementById('det-dob').innerText = record.dob || record.DOB || '-';
-    document.getElementById('det-addr').innerText = record.addr || record.Address || '-';
-    document.getElementById('det-phone').innerText = record.phone || record.Phone || '-';
-    document.getElementById('det-email').innerText = record.email || record.Email || '-';
-    document.getElementById('det-amount').innerText = record.amount || record.Amount || '-';
-    document.getElementById('det-type').innerText = record.type || record.Type || '-';
-    document.getElementById('det-purpose').innerText = record.purpose || record.Purpose || '-';
-    document.getElementById('det-term').innerText = record.term || record.Terms || record.term || '-';
+        const record = applicationsData.find((app, idx) => {
+            const appRef = app.ref || app.References || app.referenceCode || app.reference || (`APP-${idx + 1}`);
+            return appRef === ref || idx === index;
+        });
 
-    detailPanel.style.visibility = 'visible';
-}
+        if (!record) return;
+
+        document.getElementById('det-ref-title').innerText = "Inspecting Case File: " + ref;
+        document.getElementById('det-name').innerText = record.name || record.Name || '-';
+        
+        // Clean format for Date of Birth (e.g. Sep 3, 2026)
+        document.getElementById('det-dob').innerText = formatDate(record.dob || record.DOB);
+        
+        document.getElementById('det-addr').innerText = record.addr || record.Address || '-';
+        document.getElementById('det-phone').innerText = record.phone || record.Phone || '-';
+        document.getElementById('det-email').innerText = record.email || record.Email || '-';
+        
+        // Clean format for Amount with currency sign (₱)
+        const rawAmount = record.amount || record.Amount;
+        document.getElementById('det-amount').innerText = rawAmount ? `₱${Number(rawAmount).toLocaleString()}` : '-';
+        
+        document.getElementById('det-type').innerText = record.type || record.Type || '-';
+        document.getElementById('det-purpose').innerText = record.purpose || record.Purpose || '-';
+        
+        // Clean format for Repayment Term
+        const rawTerm = record.term || record.Terms;
+        document.getElementById('det-term').innerText = rawTerm ? `${rawTerm} months` : '-';
+
+        detailPanel.style.visibility = 'visible';
+    }
+
+    // Helper method for formatting ISO dates into readable text
+    function formatDate(rawDate) {
+        if (!rawDate || rawDate === '-') return '-';
+        try {
+            const d = new Date(rawDate);
+            if (isNaN(d.getTime())) return rawDate; // Fallback if already text
+            return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        } catch (e) {
+            return rawDate;
+        }
+    }
 
     // Helper method for sending updates (Status Update / Deletion)
     function sendApiUpdate(payload, successMessage) {
@@ -565,3 +587,4 @@ function selectCaseRecord(ref, index) {
 </script>
 </body>
 </html>
+    
