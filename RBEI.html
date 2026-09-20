@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RBEI - Digital Loan Application Form</title>
+    <title>RBEI - Loan Application Portal</title>
     
-    <!-- 🟢 FIREBASE LIBRARIES (REQUIRED FOR CLOUD SAVING) -->
+    <!-- 🟢 FIREBASE SDKs (COMPAT VERSION) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -13,11 +13,13 @@
         :root {
             --rbei-navy: #1e293b;
             --rbei-blue: #3b82f6;
-            --rbei-gray: #f8fafc;
+            --rbei-gray-bg: #f1f5f9;
+            --rbei-card-bg: #ffffff;
             --rbei-border: #cbd5e1;
             --text-main: #334155;
-            --error-red: #dc2626;
+            --text-light: #64748b;
             --success-green: #16a34a;
+            --danger-red: #dc2626;
         }
 
         * {
@@ -28,437 +30,205 @@
         }
 
         body {
-            background-color: #f1f5f9;
+            background-color: var(--rbei-gray-bg);
             color: var(--text-main);
-            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Top Header Navigation Panel */
-        .bank-navbar {
-            max-width: 650px;
-            margin: 10px auto 0 auto;
-            background-color: var(--rbei-gray);
-            border: 1px solid var(--rbei-border);
-            border-bottom: none;
-            padding: 12px 25px;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
+        .navbar {
+            background-color: var(--rbei-navy);
+            color: white;
+            padding: 15px 5%;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .bank-logo {
+        .navbar-brand {
             font-weight: 800;
-            font-size: 18px;
-            color: var(--rbei-navy);
+            font-size: 20px;
             letter-spacing: 0.5px;
         }
 
-        .nav-links {
-            font-size: 13px;
-            font-weight: 600;
-            color: #64748b;
+        .container {
+            max-width: 700px;
+            width: 90%;
+            margin: 30px auto;
         }
 
-        /* Main Form Sheet Card */
-        .form-card {
-            background-color: #ffffff;
-            max-width: 650px;
-            margin: 0 auto 40px auto;
-            padding: 35px 30px;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+        .card {
+            background-color: var(--rbei-card-bg);
             border: 1px solid var(--rbei-border);
-            box-sizing: border-box;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
-        /* Stepper Roadmap Ribbon Component */
-        .stepper-ribbon {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #e2e8f0;
-            padding-bottom: 15px;
-            display: none; /* Hidden on landing page step 1 */
-        }
-
-        .step-node {
-            text-align: center;
-            flex: 1;
-            font-size: 11px;
-            font-weight: 700;
-            color: #94a3b8;
-        }
-
-        .step-node.active { color: var(--rbei-blue); }
-        .step-node.completed { color: var(--success-green); }
-
-        .circle-badge {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: #e2e8f0;
-            color: #64748b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 6px auto;
-            font-size: 11px;
-        }
-
-        .step-node.active .circle-badge {
-            background-color: var(--rbei-blue);
-            color: white;
-        }
-
-        .step-node.completed .circle-badge {
-            background-color: var(--success-green);
-            color: white;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: var(--rbei-navy);
+        .card h2 {
             font-size: 22px;
+            color: var(--rbei-navy);
+            margin-bottom: 6px;
         }
 
-        .form-step { display: none; }
-        .form-step.active { display: block; }
+        .card p {
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 25px;
+        }
 
-        .form-group { margin-bottom: 18px; }
-        
         .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
         }
 
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
         }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 13px;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px 12px;
-            box-sizing: border-box;
-            border: 1px solid var(--rbei-border);
-            border-radius: 6px;
-            font-size: 14px;
-            background-color: #fff;
-            outline: none;
-        }
-
-        input:focus, select:focus {
-            border-color: var(--rbei-blue);
-        }
-
-        /* File Attachment Selector Bar Row Formatting */
-        .file-upload-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: #f8fafc;
-            border: 1px solid var(--rbei-border);
-            padding: 12px 15px;
-            border-radius: 6px;
-            margin-bottom: 12px;
-        }
-
-        .file-info-label span {
-            display: block;
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-
-        .btn-browse {
-            background-color: #e2e8f0;
-            color: #334155;
-            padding: 6px 12px;
-            font-size: 12px;
-            border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        /* Review Section Output Sheet List Rules */
-        .review-data-box {
-            background-color: #f8fafc;
-            border: 1px solid var(--rbei-border);
-            border-radius: 6px;
-            padding: 15px;
+        .form-group {
             margin-bottom: 15px;
         }
 
-        .review-row {
-            display: flex;
-            justify-content: space-between;
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 600px) {
+            .form-group.full-width { grid-column: span 1; }
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--rbei-navy);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--rbei-border);
+            border-radius: 6px;
             font-size: 14px;
-            padding: 8px 0;
-            border-bottom: 1px dashed #e2e8f0;
+            outline: none;
         }
 
-        .review-row:last-child { border-bottom: none; }
-        .review-label { font-weight: 600; color: #64748b; }
-
-        .error-message {
-            color: var(--error-red);
-            font-size: 12px;
-            margin-top: 4px;
-            display: none;
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--rbei-blue);
         }
 
-        input.invalid, select.invalid {
-            border-color: var(--error-red);
-            background-color: #fff1f2;
-        }
-
-        /* Action Nav Buttons */
-        .button-group {
-            margin-top: 30px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        button.nav-action {
-            padding: 10px 22px;
-            font-size: 14px;
+        .btn-submit {
+            width: 100%;
+            background-color: var(--rbei-blue);
+            color: white;
             border: none;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: 600;
+            margin-top: 15px;
+            transition: background-color 0.2s;
         }
 
-        #nextBtn { background-color: var(--rbei-navy); color: white; margin-left: auto; }
-        #prevBtn { background-color: #fff; color: #475569; border: 1px solid var(--rbei-border); }
+        .btn-submit:hover { background-color: #2563eb; }
+        .btn-submit:disabled { background-color: #94a3b8; cursor: not-allowed; }
 
-        /* Success Panel Screen Layout Formatting */
-        .success-panel {
-            text-align: center;
-            padding: 20px 0;
+        .alert-box {
             display: none;
-        }
-
-        .success-icon-shield {
-            width: 60px;
-            height: 60px;
-            background-color: #cbd5e1;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            margin: 0 auto 20px auto;
-        }
-
-        .ref-box {
-            background-color: #f1f5f9;
-            border: 1px solid var(--rbei-border);
-            padding: 12px;
+            margin-top: 20px;
+            padding: 12px 15px;
             border-radius: 6px;
-            font-family: monospace;
-            font-size: 16px;
-            font-weight: 700;
-            margin: 20px 0;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
         }
     </style>
 </head>
-
 <body>
 
-<!-- RBEI Top App Navigation Title Layout Header -->
-<div class="bank-navbar">
-    <div class="bank-logo">RBEI</div>
-    <div class="nav-links">
-        <a href="RBEI Home.html" style="color: inherit; text-decoration: none;">Home</a> &nbsp;&nbsp; Loans &nbsp;&nbsp; Help
+<nav class="navbar">
+    <div class="navbar-brand">RBEI Application Portal</div>
+    <div style="font-size: 12px; opacity: 0.8;">Online Submission Portal</div>
+
+    <div class="container">
+    <div class="card">
+        <h2>Borrower Application Form</h2>
+        <p>Please fill out your complete information below to initiate underwriting review.</p>
+
+        <form id="rbeiForm">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="fullNameInput">Full Borrower Name</label>
+                    <input type="text" id="fullNameInput" placeholder="e.g., Juan Dela Cruz" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="dobInput">Date of Birth</label>
+                    <input type="text" id="dobInput" placeholder="MM/DD/YYYY" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phoneInput">Contact Number</label>
+                    <input type="text" id="phoneInput" placeholder="e.g., 0912 345 6789" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="emailInput">Email Address</label>
+                    <input type="email" id="emailInput" placeholder="e.g., borrower@email.com" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="addressInput">Billing / Residential Address</label>
+                    <input type="text" id="addressInput" placeholder="e.g., Street, City, Province" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="loanTypeInput">Loan Category</label>
+                    <select id="loanTypeInput" required>
+                        <option value="">Select Category...</option>
+                        <option value="Personal Loan">Personal Loan</option>
+                        <option value="Business Loan">Business Loan</option>
+                        <option value="Educational Loan">Educational Loan</option>
+                        <option value="Emergency Loan">Emergency Loan</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="amountInput">Loan Amount Requested</label>
+                    <input type="text" id="amountInput" placeholder="e.g., ₱50,000" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="purposeInput">Funding Rationale / Purpose</label>
+                    <input type="text" id="purposeInput" placeholder="e.g., Education / Business" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="termInput">Repayment Term</label>
+                    <select id="termInput" required>
+                        <option value="">Select Term...</option>
+                        <option value="6 months">6 months</option>
+                        <option value="12 months">12 months</option>
+                        <option value="24 months">24 months</option>
+                        <option value="36 months">36 months</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-submit">Submit Application to Cloud</button>
+        </form>
+
+        <div id="submissionAlert" class="alert-box"></div>
     </div>
 </div>
 
-    <div class="form-card">
-    <!-- Visual Stepper Progress Ribbon Bar Header -->
-    <div class="stepper-ribbon" id="stepperRibbon">
-        <div class="step-node active" id="node-1"><div class="circle-badge">1</div>Customer Info</div>
-        <div class="step-node" id="node-2"><div class="circle-badge">2</div>Loan Details</div>
-        <div class="step-node" id="node-3"><div class="circle-badge">3</div>Documents</div>
-        <div class="step-node" id="node-4"><div class="circle-badge">4</div>Review</div>
-    </div>
-
-    <form id="loanForm" novalidate>
-
-        <!-- WIREFRAME SCREEN 1: Welcome/Start Application -->
-        <div class="form-step active" data-step="1">
-            <h2>Apply for a Loan in Just a Few Steps</h2>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 25px; line-height: 1.6;">
-                Fast. Secure. Convenient. Get the funds you need for your goals. Complete the application form and we'll take it from there.
-            </p>
-        </div>
-
-        <!-- WIREFRAME SCREEN 2: Customer Information Fields -->
-        <div class="form-step" data-step="2">
-            <h2>Personal Information</h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Full Name *</label>
-                    <input type="text" id="fullName" placeholder="Enter your full name" required>
-                    <div class="error-message">Please enter your full name.</div>
-                </div>
-                <div class="form-group">
-                    <label>Date of Birth *</label>
-                    <input type="date" id="dob" required>
-                    <div class="error-message">Date of birth is required.</div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Address *</label>
-                <input type="text" id="address" placeholder="House No., Street, Barangay, City, Province" required>
-                <div class="error-message">Please provide your complete billing address.</div>
-            </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Contact Number *</label>
-                    <input type="tel" id="contactNumber" placeholder="09XX XXX XXXX" required>
-                    <div class="error-message">Provide a valid contact number.</div>
-                </div>
-                <div class="form-group">
-                    <label>Email Address *</label>
-                    <input type="email" id="email" placeholder="example@email.com" required>
-                    <div class="error-message">Enter a valid email address.</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- WIREFRAME SCREEN 3: Loan Option Details Selection -->
-        <div class="form-step" data-step="3">
-            <h2>Loan Details</h2>
-            <div class="form-group">
-                <label>Loan Amount *</label>
-                <input type="number" id="loanAmount" placeholder="Enter amount (e.g. 50000)" min="1000" required>
-                <div class="error-message">Please input a valid loan request amount.</div>
-            </div>
-            <div class="form-group">
-                <label>Loan Type *</label>
-                <select id="loanType" required>
-                    <option value="">Select loan type</option>
-                    <option value="Personal Loan">Personal Loan</option>
-                    <option value="Business Loan">Business Loan</option>
-                    <option value="Auto Loan">Auto Loan</option>
-                </select>
-                <div class="error-message">Please pick a target classification category.</div>
-            </div>
-            <div class="form-group">
-                <label>Purpose of Loan *</label>
-                <select id="purpose" required>
-                    <option value="">Select purpose</option>
-                    <option value="Education">Education</option>
-                    <option value="Medical Emergency">Medical Emergency</option>
-                    <option value="Business Capital">Business Capital</option>
-                    <option value="Home Renovation">Home Renovation</option>
-                </select>
-                <div class="error-message">Please declare your funding rationale purpose.</div>
-            </div>
-            <div class="form-group">
-                <label>Term (Months) *</label>
-                <select id="term" required>
-                    <option value="">Select term</option>
-                    <option value="12 months">12 Months (1 Year)</option>
-                    <option value="24 months">24 Months (2 Years)</option>
-                    <option value="36 months">36 Months (3 Years)</option>
-                </select>
-                <div class="error-message">Please select a timeline maturity term option.</div>
-            </div>
-        </div>
-
-        <!-- WIREFRAME SCREEN 4: Required Document Attachment Fields -->
-        <div class="form-step" data-step="4">
-            <h2>Upload Required Documents</h2>
-            
-            <div class="file-upload-row">
-                <div class="file-info-label"><strong>Valid ID *</strong><span>JPG, PNG, PDF - Max 5MB</span></div>
-                <button type="button" class="btn-browse" onclick="document.getElementById('idFile').click()">Choose File</button>
-                <input type="file" id="idFile" style="display:none;" required onchange="updateUploadLabel(this)">
-            </div>
-            <div class="error-message" id="idFile-err" style="margin-bottom:12px;">Valid identification upload is required.</div>
-
-            <div class="file-upload-row">
-                <div class="file-info-label"><strong>Proof of Income *</strong><span>JPG, PNG, PDF - Max 5MB</span></div>
-                <button type="button" class="btn-browse" onclick="document.getElementById('incomeFile').click()">Choose File</button>
-                <input type="file" id="incomeFile" style="display:none;" required onchange="updateUploadLabel(this)">
-            </div>
-            <div class="error-message" id="incomeFile-err" style="margin-bottom:12px;">Proof of income generation upload is required.</div>
-
-            <div class="file-upload-row">
-                <div class="file-info-label"><strong>Proof of Billing Address *</strong><span>JPG, PNG, PDF - Max 5MB</span></div>
-                <button type="button" class="btn-browse" onclick="document.getElementById('billingFile').click()">Choose File</button>
-                <input type="file" id="billingFile" style="display:none;" required onchange="updateUploadLabel(this)">
-            </div>
-            <div class="error-message" id="billingFile-err" style="margin-bottom:12px;">Proof of billing statement verification record required.</div>
-
-            <div class="file-upload-row">
-                <div class="file-info-label"><strong>Other Supporting Document (Optional)</strong><span>JPG, PNG, PDF - Max 5MB</span></div>
-                <button type="button" class="btn-browse" onclick="document.getElementById('optionalFile').click()">Choose File</button>
-                <input type="file" id="optionalFile" style="display:none;" onchange="updateUploadLabel(this)">
-            </div>
-        </div>
-
-        <!-- WIREFRAME SCREEN 5: Summary Review Matrix Output -->
-        <div class="form-step" data-step="5">
-            <h2>Review Your Application</h2>
-            
-            <h3 style="font-size:14px; margin:15px 0 8px 0; color:var(--rbei-blue);">Personal Information</h3>
-            <div class="review-data-box">
-                <div class="review-row"><span class="review-label">Full Name:</span><span id="rev-name">-</span></div>
-                <div class="review-row"><span class="review-label">Date of Birth:</span><span id="rev-dob">-</span></div>
-                <div class="review-row"><span class="review-label">Address:</span><span id="rev-addr">-</span></div>
-                <div class="review-row"><span class="review-label">Contact Number:</span><span id="rev-phone">-</span></div>
-                <div class="review-row"><span class="review-label">Email Address:</span><span id="rev-email">-</span></div>
-            </div>
-
-            <h3 style="font-size:14px; margin:15px 0 8px 0; color:var(--rbei-blue);">Loan Details</h3>
-            <div class="review-data-box">
-                <div class="review-row"><span class="review-label">Loan Amount:</span><span id="rev-amount">-</span></div>
-                <div class="review-row"><span class="review-label">Loan Type:</span><span id="rev-type">-</span></div>
-                <div class="review-row"><span class="review-label">Purpose:</span><span id="rev-purpose">-</span></div>
-                <div class="review-row"><span class="review-label">Term:</span><span id="rev-term">-</span></div>
-            </div>
-        </div>
-
-        <!-- WIREFRAME SCREEN 6: Submission Successful Panel -->
-        <div class="success-panel" id="successScreen">
-            <div class="success-icon-shield">✓</div>
-            <h2 style="margin-bottom:10px;">Your Application Has Been Submitted!</h2>
-            <p style="color: #64748b; font-size: 14px; line-height: 1.6;">
-                Thank you for choosing RBEI. Your loan application has been successfully submitted. We will review your information and get back to you within 1-3 business days.
-            </p>
-            <div style="font-size:12px; color:#64748b; margin-top:25px;">Application Reference Number</div>
-            <div class="ref-box">RBEI-2026-001234</div>
-            <a href="RBEI Home.html" style="text-decoration: none; display: block; text-align: center;">
-                <button type="button" class="nav-action" style="background-color:var(--rbei-navy); color:white; padding:12px 30px; margin-top:10px; width:100%; cursor:pointer;">Go To Dashboard</button>
-            </a>
-        </div>
-
-        <!-- NAVIGATION ACTION BUTTON STRIP -->
-        <div class="button-group" id="btnGroup">
-            <button type="button" class="nav-action" id="prevBtn" style="display: none;">← Back</button>
-            <button type="button" class="nav-action" id="nextBtn">Start Application →</button>
-        </div>
-
-    </form>
-</div>
-
-    <!-- Embedded Form Navigation Engine Logic -->
-<script>
-    // 🟢 1. FIREBASE CONFIGURATION
+    <script>
+    // 🟢 FIREBASE DATABASE INITIALIZATION
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -470,167 +240,63 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+</script>
 
-    // 2. WIZARD UI LOGIC
-    const steps = Array.from(document.querySelectorAll('.form-step'));
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const btnGroup = document.getElementById('btnGroup');
-    const successScreen = document.getElementById('successScreen');
-    const stepperRibbon = document.getElementById('stepperRibbon');
+    <script>
+    document.getElementById('rbeiForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevents page refresh
 
-    let currentStep = 1;
+        const submitBtn = document.getElementById('submitBtn');
+        const alertBox = document.getElementById('submissionAlert');
 
-    function updateWizardProgress() {
-        steps.forEach(step => {
-            step.classList.toggle('active', parseInt(step.dataset.step) === currentStep);
+        // Disable button while processing network submission
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Transmitting Application...";
+        alertBox.style.display = "none";
+
+        // Generate Reference Code matching Admin Panel format
+        const refCode = "RBEI-" + new Date().getFullYear() + "-" + Math.floor(100000 + Math.random() * 900000);
+
+        // Gather all inputs from form fields
+        const applicationData = {
+            name: document.getElementById('fullNameInput').value.trim(),
+            dob: document.getElementById('dobInput').value.trim(),
+            phone: document.getElementById('phoneInput').value.trim(),
+            email: document.getElementById('emailInput').value.trim(),
+            addr: document.getElementById('addressInput').value.trim(),
+            type: document.getElementById('loanTypeInput').value,
+            amount: document.getElementById('amountInput').value.trim(),
+            purpose: document.getElementById('purposeInput').value.trim(),
+            term: document.getElementById('termInput').value,
+            status: "Under Review",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        // 🟢 SAVE DIRECTLY TO FIRESTORE COLLECTION "rbei_applications"
+        db.collection("rbei_applications").doc(refCode).set(applicationData)
+        .then(() => {
+            alertBox.style.display = "block";
+            alertBox.style.backgroundColor = "#d1fae5";
+            alertBox.style.color = "#16a34a";
+            alertBox.innerHTML = `✅ Application transmitted successfully!<br>Tracking Reference Code: <strong>${refCode}</strong>`;
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Submit Application to Cloud";
+            document.getElementById('rbeiForm').reset();
+        })
+        .catch((error) => {
+            console.error("Firestore Upload Error: ", error);
+            alertBox.style.display = "block";
+            alertBox.style.backgroundColor = "#fee2e2";
+            alertBox.style.color = "#dc2626";
+            alertBox.innerText = "❌ Submission failed: " + error.message;
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Submit Application to Cloud";
         });
-
-        if (currentStep === 1) {
-            prevBtn.style.display = 'none';
-            nextBtn.innerText = 'Start Application →';
-            stepperRibbon.style.display = 'none'; 
-        } else {
-            stepperRibbon.style.display = 'flex';
-            prevBtn.style.display = 'block';
-            prevBtn.innerText = '← Back';
-            
-            if (currentStep === 5) {
-                nextBtn.innerText = 'Submit Application';
-            } else {
-                nextBtn.innerText = 'Next →';
-            }
-        }
-
-        if (currentStep > 1) {
-            const visualStep = currentStep - 1;
-            for (let i = 1; i <= 4; i++) {
-                const node = document.getElementById(`node-${i}`);
-                if (i < visualStep) {
-                    node.className = 'step-node completed';
-                    node.querySelector('.circle-badge').innerText = '✓';
-                } else if (i === visualStep) {
-                    node.className = 'step-node active';
-                    node.querySelector('.circle-badge').innerText = i;
-                } else {
-                    node.className = 'step-node';
-                    node.querySelector('.circle-badge').innerText = i;
-                }
-            }
-        }
-    }
-
-    function updateUploadLabel(input) {
-        const errorDiv = document.getElementById(input.id + '-err');
-        if (input.files && input.files.length > 0) {
-            input.parentElement.querySelector('button').innerText = "✓ " + input.files[0].name.substring(0, 15) + "...";
-            input.parentElement.style.borderColor = "var(--success-green)";
-            if(errorDiv) errorDiv.style.display = 'none';
-        }
-    }
-
-    function generateSummaryReview() {
-        document.getElementById('rev-name').innerText = document.getElementById('fullName').value;
-        document.getElementById('rev-dob').innerText = document.getElementById('dob').value;
-        document.getElementById('rev-addr').innerText = document.getElementById('address').value;
-        document.getElementById('rev-phone').innerText = document.getElementById('contactNumber').value;
-        document.getElementById('rev-email').innerText = document.getElementById('email').value;
-        document.getElementById('rev-amount').innerText = "₱" + parseFloat(document.getElementById('loanAmount').value).toLocaleString();
-        document.getElementById('rev-type').innerText = document.getElementById('loanType').value;
-        document.getElementById('rev-purpose').innerText = document.getElementById('purpose').value;
-        document.getElementById('rev-term').innerText = document.getElementById('term').value;
-    }
-
-    function validateCurrentStep() {
-        if (currentStep === 1) return true; 
-        
-        const currentStepContainer = document.querySelector(`.form-step[data-step="${currentStep}"]`);
-        let stepValid = true;
-
-        const inputs = currentStepContainer.querySelectorAll('input[required], select[required]');
-        inputs.forEach(input => {
-            const errorDiv = input.parentElement.querySelector('.error-message');
-            input.classList.remove('invalid');
-            if (errorDiv) errorDiv.style.display = 'none';
-
-            let isValidField = true;
-            if (!input.value.trim()) {
-                isValidField = false;
-            } else if (input.type === 'email') {
-                isValidField = input.checkValidity();
-            }
-
-            if (!isValidField) {
-                stepValid = false;
-                input.classList.add('invalid');
-                if (errorDiv) errorDiv.style.display = 'block';
-            }
-        });
-
-        if (currentStep === 4) {
-            ['idFile', 'incomeFile', 'billingFile'].forEach(id => {
-                const fileEl = document.getElementById(id);
-                const errorDiv = document.getElementById(id + '-err');
-                if (!fileEl.files || fileEl.files.length === 0) {
-                    stepValid = false;
-                    errorDiv.style.display = 'block';
-                } else {
-                    errorDiv.style.display = 'none';
-                }
-            });
-        }
-
-        return stepValid;
-    }
-
-    // 🟢 3. CLOUD SUBMISSION LOGIC
-    nextBtn.addEventListener('click', () => {
-        if (validateCurrentStep()) {
-            if (currentStep < 5) {
-                currentStep++;
-                if (currentStep === 5) generateSummaryReview();
-                updateWizardProgress();
-            } else {
-                const trackingNumber = "RBEI-2026-" + Math.floor(100000 + Math.random() * 900000);
-                
-                const newApplication = {
-                    name: document.getElementById('fullName').value,
-                    dob: document.getElementById('dob').value,
-                    addr: document.getElementById('address').value,
-                    phone: document.getElementById('contactNumber').value,
-                    email: document.getElementById('email').value,
-                    amount: "₱" + parseFloat(document.getElementById('loanAmount').value).toLocaleString(),
-                    type: document.getElementById('loanType').value,
-                    purpose: document.getElementById('purpose').value,
-                    term: document.getElementById('term').value,
-                    status: "Under Review",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                };
-
-                // Save directly to Firebase Cloud Storage
-                db.collection("rbei_applications").doc(trackingNumber).set(newApplication)
-                .then(() => {
-                    document.querySelector('.ref-box').innerText = trackingNumber;
-
-                    steps.forEach(step => step.style.display = 'none');
-                    stepperRibbon.style.display = 'none';
-                    btnGroup.style.display = 'none';
-                    successScreen.style.display = 'block';
-                })
-                .catch((error) => {
-                    alert("Submission failed. Check your Firebase config or internet connection.");
-                    console.error("Firebase save error: ", error);
-                });
-            }
-        }
-    });
-
-    prevBtn.addEventListener('click', () => {
-        if (currentStep > 1) {
-            currentStep--;
-            updateWizardProgress();
-        }
     });
 </script>
+
 </body>
 </html>
+</nav>
