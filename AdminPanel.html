@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RBEI - Secure Administration Underwriting Portal</title>
+    
+    <!-- 🟢 FIREBASE SDKs (COMPAT VERSION) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <style>
         :root {
             --rbei-navy: #1e293b;
@@ -145,7 +150,7 @@
             margin-bottom: 15px;
         }
 
-        /* 🖥️ CENTRAL MAIN DASHBOARD SYSTEM VIEW 🖥️ */
+        /* CENTRAL MAIN DASHBOARD SYSTEM VIEW */
         .dashboard-view-wrapper {
             max-width: 1200px;
             width: 100%;
@@ -283,10 +288,9 @@
         .btn-reject { background-color: var(--danger-red); color: white; }
     </style>
 </head>
+<body>
 
-  <body>
-
-<!-- Operational Navigation Header navbar strip -->
+    <!-- Operational Navigation Header navbar strip -->
 <nav class="admin-navbar">
     <div class="navbar-brand">
         <span>RBEI Dashboard</span>
@@ -315,7 +319,7 @@
     </div>
 </div>
 
-    <!-- CENTRAL ACTIVE MASTER DATA QUEUE INTERFACE LAYOUT CONTAINER -->
+<!-- CENTRAL ACTIVE MASTER DATA QUEUE INTERFACE LAYOUT CONTAINER -->
 <div class="dashboard-view-wrapper" id="dashboardView">
     
     <!-- LEFT COLUMN CARD: Current Live Pipeline Queue List -->
@@ -330,7 +334,11 @@
                 </tr>
             </thead>
             <tbody id="queueTableBody">
-                <!-- Injected dynamically via database data mappings array loop -->
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--text-light); padding: 20px;">
+                        Connecting to Firebase...
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -365,10 +373,24 @@
             <button type="button" class="btn-action btn-approve" id="actionApproveBtn">Approve Loan</button>
         </div>
     </div>
-</div> <!-- Close of dashboard-view-wrapper -->
+</div>
 
-    <!-- Embedded Administrative Underwriting Pipeline Engine Logic -->
-<script>
+    <script>
+    // 🟢 INITIALIZE FIREBASE DATABASE CONNECTION
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+</script>
+
+    <script>
     const loginView = document.getElementById('loginView');
     const dashboardView = document.getElementById('dashboardView');
     const usernameInput = document.getElementById('usernameInput');
@@ -379,34 +401,48 @@
     const detailPanel = document.getElementById('detailPanel');
 
     let activeSelectedRef = null;
+    let centralizedDatabase = {};
 
-    // Simulated Centralized Master Application Database Repository Records System State
-       // 🟢 NEW LIVE CONNECTION PIPELINE: Read dynamic memory records or fallback to mock defaults
-    const defaultDatabase = {
-        "RBEI-2025-001234": {
-            name: "Juan Dela Cruz",
-            dob: "01/01/2000",
-            addr: "123 Rizal St., Talisay City, Negros Occidental",
-            phone: "0912 345 6789",
-            email: "juan@email.com",
-            amount: "₱50,000",
-            type: "Personal Loan",
-            purpose: "Education",
-            term: "12 months",
-            status: "Under Review"
-        }
-    };
+    // 🟢 1. LIVE FIREBASE REALTIME SYNC (Fetches applications submitted from any device)
+    function listenToApplications() {
+        db.collection("rbei_applications").onSnapshot((querySnapshot) => {
+            centralizedDatabase = {}; // Reset local cache
 
-    // Synchronize browser tracking slots with active database configurations
-    if (!localStorage.getItem('rbei_applications')) {
-        localStorage.setItem('rbei_applications', JSON.stringify(defaultDatabase));
+            if (querySnapshot.empty) {
+                queueTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: var(--text-light); padding: 20px;">
+                            No submitted applications found in database.
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            querySnapshot.forEach((doc) => {
+                centralizedDatabase[doc.id] = doc.data();
+            });
+
+            buildQueueTable();
+
+            // Re-render inspection sheet if a record is currently open
+            if (activeSelectedRef && centralizedDatabase[activeSelectedRef]) {
+                selectCaseRecord(activeSelectedRef);
+            }
+        }, (error) => {
+            console.error("Firestore Error: ", error);
+            queueTableBody.innerHTML = `
+                <tr>
+                    <td colspan="3" style="text-align: center; color: var(--danger-red); padding: 20px;">
+                        Error loading applications. Check Firestore Security Rules.
+                    </td>
+                </tr>`;
+        });
     }
-    
-    let centralizedDatabase = JSON.parse(localStorage.getItem('rbei_applications'));
 
-    // Populate the administrative database queue table
+    // 🟢 2. RENDER PIPELINE QUEUE
     function buildQueueTable() {
         queueTableBody.innerHTML = "";
+
         Object.keys(centralizedDatabase).forEach(ref => {
             const data = centralizedDatabase[ref];
             
@@ -418,8 +454,8 @@
             row.className = `queue-row ${activeSelectedRef === ref ? 'selected' : ''}`;
             row.innerHTML = `
                 <td style="font-family: monospace; font-weight: 700; color: var(--rbei-blue);">${ref}</td>
-                <td><strong>${data.name}</strong></td>
-                <td><span class="${badgeClass}">${data.status}</span></td>
+                <td><strong>${data.name || 'N/A'}</strong></td>
+                <td><span class="${badgeClass}">${data.status || 'Under Review'}</span></td>
             `;
 
             row.addEventListener('click', () => selectCaseRecord(ref));
@@ -427,47 +463,57 @@
         });
     }
 
-    // Load selected single file data profile into the inspection panel grid
+    // 🟢 3. INSPECT SELECTED APPLICATION
     function selectCaseRecord(ref) {
         activeSelectedRef = ref;
         buildQueueTable(); 
 
         const record = centralizedDatabase[ref];
+        if (!record) return;
+
         document.getElementById('det-ref-title').innerText = "Inspecting Case File: " + ref;
-        document.getElementById('det-name').innerText = record.name;
-        document.getElementById('det-dob').innerText = record.dob;
-        document.getElementById('det-addr').innerText = record.addr;
-        document.getElementById('det-phone').innerText = record.phone;
-        document.getElementById('det-email').innerText = record.email;
-        document.getElementById('det-amount').innerText = record.amount;
-        document.getElementById('det-type').innerText = record.type;
-        document.getElementById('det-purpose').innerText = record.purpose;
-        document.getElementById('det-term').innerText = record.term;
+        document.getElementById('det-name').innerText = record.name || 'N/A';
+        document.getElementById('det-dob').innerText = record.dob || 'N/A';
+        document.getElementById('det-addr').innerText = record.addr || 'N/A';
+        document.getElementById('det-phone').innerText = record.phone || 'N/A';
+        document.getElementById('det-email').innerText = record.email || 'N/A';
+        document.getElementById('det-amount').innerText = record.amount || 'N/A';
+        document.getElementById('det-type').innerText = record.type || 'N/A';
+        document.getElementById('det-purpose').innerText = record.purpose || 'N/A';
+        document.getElementById('det-term').innerText = record.term || 'N/A';
 
         detailPanel.style.visibility = 'visible';
     }
 
-    // Save decision changes back to storage memory card records slots
+    // 🟢 4. APPROVE LOAN ACTION (UPDATES FIRESTORE)
     document.getElementById('actionApproveBtn').addEventListener('click', () => {
-        if (activeSelectedRef && centralizedDatabase[activeSelectedRef]) {
-            centralizedDatabase[activeSelectedRef].status = "Approved";
-            localStorage.setItem('rbei_applications', JSON.stringify(centralizedDatabase)); // Update local storage
-            alert(`Case ${activeSelectedRef} successfully Approved.`);
-            selectCaseRecord(activeSelectedRef); 
-        }
+        if (!activeSelectedRef) return;
+
+        db.collection("rbei_applications").doc(activeSelectedRef).update({
+            status: "Approved"
+        }).then(() => {
+            alert(`Case ${activeSelectedRef} successfully Approved in Cloud Database.`);
+        }).catch((error) => {
+            console.error("Error updating status: ", error);
+            alert("Failed to update status in database.");
+        });
     });
 
+    // 🟢 5. REJECT LOAN ACTION (UPDATES FIRESTORE)
     document.getElementById('actionRejectBtn').addEventListener('click', () => {
-        if (activeSelectedRef && centralizedDatabase[activeSelectedRef]) {
-            centralizedDatabase[activeSelectedRef].status = "Rejected";
-            localStorage.setItem('rbei_applications', JSON.stringify(centralizedDatabase)); // Update local storage
-            alert(`Case ${activeSelectedRef} formally Rejected.`);
-            selectCaseRecord(activeSelectedRef);
-        }
+        if (!activeSelectedRef) return;
+
+        db.collection("rbei_applications").doc(activeSelectedRef).update({
+            status: "Rejected"
+        }).then(() => {
+            alert(`Case ${activeSelectedRef} formally Rejected in Cloud Database.`);
+        }).catch((error) => {
+            console.error("Error updating status: ", error);
+            alert("Failed to update status in database.");
+        });
     });
 
-
-    // Staff Guard Authentication Credential Check Rules
+    // 🟢 6. AUTHENTICATION HANDLER
     loginBtn.addEventListener('click', () => {
         const user = usernameInput.value.trim();
         const pass = passwordInput.value.trim();
@@ -477,73 +523,14 @@
             loginView.style.display = 'none';
             dashboardView.style.display = 'grid';
             document.getElementById('adminUserDisplay').innerText = "👤 Officer: " + user;
-            buildQueueTable();
+            
+            // Start listening to Firebase Firestore live changes
+            listenToApplications();
         } else {
             authError.innerText = "Invalid administrator user credentials or security protocol mismatch.";
             authError.style.display = 'block';
         }
     });
-
-    // Populate the administrative database queue table
-    function buildQueueTable() {
-        queueTableBody.innerHTML = "";
-        Object.keys(centralizedDatabase).forEach(ref => {
-            const data = centralizedDatabase[ref];
-            
-            let badgeClass = "badge-status status-review";
-            if (data.status === "Approved") badgeClass = "badge-status status-approved";
-            if (data.status === "Rejected") badgeClass = "badge-status status-rejected";
-
-            const row = document.createElement('tr');
-            row.className = `queue-row ${activeSelectedRef === ref ? 'selected' : ''}`;
-            row.innerHTML = `
-                <td style="font-family: monospace; font-weight: 700; color: var(--rbei-blue);">${ref}</td>
-                <td><strong>${data.name}</strong></td>
-                <td><span class="${badgeClass}">${data.status}</span></td>
-            `;
-
-            row.addEventListener('click', () => selectCaseRecord(ref));
-            queueTableBody.appendChild(row);
-        });
-    }
-
-    // Load selected single file data profile into the inspection panel grid
-    function selectCaseRecord(ref) {
-        activeSelectedRef = ref;
-        buildQueueTable(); // Re-sync highlighting variables state
-
-        const record = centralizedDatabase[ref];
-        document.getElementById('det-ref-title').innerText = "Inspecting Case File: " + ref;
-        document.getElementById('det-name').innerText = record.name;
-        document.getElementById('det-dob').innerText = record.dob;
-        document.getElementById('det-addr').innerText = record.addr;
-        document.getElementById('det-phone').innerText = record.phone;
-        document.getElementById('det-email').innerText = record.email;
-        document.getElementById('det-amount').innerText = record.amount;
-        document.getElementById('det-type').innerText = record.type;
-        document.getElementById('det-purpose').innerText = record.purpose;
-        document.getElementById('det-term').innerText = record.term;
-
-        detailPanel.style.visibility = 'visible';
-    }
-
-    // Handle interactive manual status updates change triggers
-    document.getElementById('actionApproveBtn').addEventListener('click', () => {
-        if (activeSelectedRef && centralizedDatabase[activeSelectedRef]) {
-            centralizedDatabase[activeSelectedRef].status = "Approved";
-            alert(`Case ${activeSelectedRef} successfully Approved. Underwriting signature appended.`);
-            selectCaseRecord(activeSelectedRef); // Re-sync data grids mapping
-        }
-    });
-
-    document.getElementById('actionRejectBtn').addEventListener('click', () => {
-        if (activeSelectedRef && centralizedDatabase[activeSelectedRef]) {
-            centralizedDatabase[activeSelectedRef].status = "Rejected";
-            alert(`Case ${activeSelectedRef} formally Rejected. Processing notifications sent.`);
-            selectCaseRecord(activeSelectedRef);
-        }
-    });
 </script>
 </body>
 </html>
-
