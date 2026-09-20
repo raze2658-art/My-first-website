@@ -381,7 +381,8 @@
     let activeSelectedRef = null;
 
     // Simulated Centralized Master Application Database Repository Records System State
-    const centralizedDatabase = {
+       // 🟢 NEW LIVE CONNECTION PIPELINE: Read dynamic memory records or fallback to mock defaults
+    const defaultDatabase = {
         "RBEI-2025-001234": {
             name: "Juan Dela Cruz",
             dob: "01/01/2000",
@@ -393,20 +394,78 @@
             purpose: "Education",
             term: "12 months",
             status: "Under Review"
-        },
-        "RBEI-2025-005678": {
-            name: "Maria Santos",
-            dob: "05/12/1992",
-            addr: "456 Mabini Ext., Bacolod City, Negros Occidental",
-            phone: "0988 765 4321",
-            email: "maria.santos@email.com",
-            amount: "₱120,000",
-            type: "Business Loan",
-            purpose: "Business Capital",
-            term: "24 months",
-            status: "Under Review"
         }
     };
+
+    // Synchronize browser tracking slots with active database configurations
+    if (!localStorage.getItem('rbei_applications')) {
+        localStorage.setItem('rbei_applications', JSON.stringify(defaultDatabase));
+    }
+    
+    let centralizedDatabase = JSON.parse(localStorage.getItem('rbei_applications'));
+
+    // Populate the administrative database queue table
+    function buildQueueTable() {
+        queueTableBody.innerHTML = "";
+        Object.keys(centralizedDatabase).forEach(ref => {
+            const data = centralizedDatabase[ref];
+            
+            let badgeClass = "badge-status status-review";
+            if (data.status === "Approved") badgeClass = "badge-status status-approved";
+            if (data.status === "Rejected") badgeClass = "badge-status status-rejected";
+
+            const row = document.createElement('tr');
+            row.className = `queue-row ${activeSelectedRef === ref ? 'selected' : ''}`;
+            row.innerHTML = `
+                <td style="font-family: monospace; font-weight: 700; color: var(--rbei-blue);">${ref}</td>
+                <td><strong>${data.name}</strong></td>
+                <td><span class="${badgeClass}">${data.status}</span></td>
+            `;
+
+            row.addEventListener('click', () => selectCaseRecord(ref));
+            queueTableBody.appendChild(row);
+        });
+    }
+
+    // Load selected single file data profile into the inspection panel grid
+    function selectCaseRecord(ref) {
+        activeSelectedRef = ref;
+        buildQueueTable(); 
+
+        const record = centralizedDatabase[ref];
+        document.getElementById('det-ref-title').innerText = "Inspecting Case File: " + ref;
+        document.getElementById('det-name').innerText = record.name;
+        document.getElementById('det-dob').innerText = record.dob;
+        document.getElementById('det-addr').innerText = record.addr;
+        document.getElementById('det-phone').innerText = record.phone;
+        document.getElementById('det-email').innerText = record.email;
+        document.getElementById('det-amount').innerText = record.amount;
+        document.getElementById('det-type').innerText = record.type;
+        document.getElementById('det-purpose').innerText = record.purpose;
+        document.getElementById('det-term').innerText = record.term;
+
+        detailPanel.style.visibility = 'visible';
+    }
+
+    // Save decision changes back to storage memory card records slots
+    document.getElementById('actionApproveBtn').addEventListener('click', () => {
+        if (activeSelectedRef && centralizedDatabase[activeSelectedRef]) {
+            centralizedDatabase[activeSelectedRef].status = "Approved";
+            localStorage.setItem('rbei_applications', JSON.stringify(centralizedDatabase)); // Update local storage
+            alert(`Case ${activeSelectedRef} successfully Approved.`);
+            selectCaseRecord(activeSelectedRef); 
+        }
+    });
+
+    document.getElementById('actionRejectBtn').addEventListener('click', () => {
+        if (activeSelectedRef && centralizedDatabase[activeSelectedRef]) {
+            centralizedDatabase[activeSelectedRef].status = "Rejected";
+            localStorage.setItem('rbei_applications', JSON.stringify(centralizedDatabase)); // Update local storage
+            alert(`Case ${activeSelectedRef} formally Rejected.`);
+            selectCaseRecord(activeSelectedRef);
+        }
+    });
+
 
     // Staff Guard Authentication Credential Check Rules
     loginBtn.addEventListener('click', () => {
