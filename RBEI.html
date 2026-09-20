@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RBEI - Digital Loan Application Form</title>
-    
-    <!-- 🟢 FIREBASE SDKs (REQUIRED FOR CROSS-DEVICE SYNCING) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <style>
         :root {
@@ -245,7 +241,7 @@
         .success-icon-shield {
             width: 60px;
             height: 60px;
-            background-color: #cbd5e1;
+            background-color: #16a34a;
             color: white;
             border-radius: 50%;
             display: flex;
@@ -266,10 +262,9 @@
             margin: 20px 0;
         }
     </style>
-</head>
-    <body>
-
-    <div class="bank-navbar">
+    </head>
+<body>
+<div class="bank-navbar">
     <div class="bank-logo">RBEI</div>
     <div class="nav-links">Home &nbsp;&nbsp; Loans &nbsp;&nbsp; Help</div>
 </div>
@@ -426,7 +421,7 @@
             <div class="success-icon-shield">✓</div>
             <h2 style="margin-bottom:10px;">Your Application Has Been Submitted!</h2>
             <p style="color: #64748b; font-size: 14px; line-height: 1.6;">
-                Thank you for choosing RBEI. Your loan application has been successfully submitted to our cloud database.
+                Thank you for choosing RBEI. Your loan application has been successfully submitted to our database.
             </p>
             <div style="font-size:12px; color:#64748b; margin-top:25px;">Application Reference Number</div>
             <div class="ref-box" id="referenceCode">RBEI-2026-XXXXXX</div>
@@ -441,22 +436,7 @@
     </form>
 </div>
 
-        <script>
-    // 🟢 CLOUD DATABASE CONNECTION SETUP
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-</script>
-
-        <script>
+    <script>
     const steps = Array.from(document.querySelectorAll('.form-step'));
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
@@ -568,6 +548,10 @@
         return stepValid;
     }
 
+
+        // 🟢 YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbw38lWdHQfpDztO1-kWB5aqOegdK9IikgExGJESpVOH2mUI77EZGqPz57aJrUO2VYTvfA/exec";
+
     nextBtn.addEventListener('click', () => {
         if (validateCurrentStep()) {
             if (currentStep < 5) {
@@ -575,13 +559,14 @@
                 if (currentStep === 5) generateSummaryReview();
                 updateWizardProgress();
             } else {
-                // 🟢 TRANSMIT APPLICATION DATA DIRECTLY TO CLOUD FIRESTORE
+                // Disable button during transmission
                 nextBtn.disabled = true;
                 nextBtn.innerText = "Transmitting to Cloud...";
 
                 const trackingNumber = "RBEI-2026-" + Math.floor(100000 + Math.random() * 900000);
                 
-                const newApplication = {
+                const applicationData = {
+                    ref: trackingNumber,
                     name: document.getElementById('fullName').value.trim(),
                     dob: document.getElementById('dob').value,
                     addr: document.getElementById('address').value.trim(),
@@ -591,15 +576,18 @@
                     type: document.getElementById('loanType').value,
                     purpose: document.getElementById('purpose').value,
                     term: document.getElementById('term').value,
-                    status: "Under Review",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    status: "Under Review"
                 };
 
-                // Upload to central "rbei_applications" collection
-                db.collection("rbei_applications").doc(trackingNumber).set(newApplication)
+                // Transmit payload to Google Sheets Backend
+                fetch(webAppUrl, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(applicationData)
+                })
                 .then(() => {
                     document.getElementById('referenceCode').innerText = trackingNumber;
-
                     steps.forEach(step => step.style.display = 'none');
                     stepperRibbon.style.display = 'none';
                     btnGroup.style.display = 'none';
