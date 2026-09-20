@@ -15,6 +15,7 @@
             --text-light: #64748b;
             --success-green: #16a34a;
             --warning-amber: #d97706;
+            --danger-red: #dc2626;
         }
 
         * {
@@ -189,7 +190,7 @@
             line-height: 1.5;
         }
 
-        /* 🔒 LOAN STATUS STATUS MODAL OVERLAY STYLES 🔒 */
+        /* LOAN STATUS MODAL OVERLAY STYLES */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -326,6 +327,7 @@
         }
         .pill-pending { background-color: #fef3c7; color: var(--warning-amber); }
         .pill-approved { background-color: #d1fae5; color: var(--success-green); }
+        .pill-rejected { background-color: #fee2e2; color: var(--danger-red); }
 
         .status-error-alert {
             color: #b91c1c;
@@ -338,13 +340,22 @@
             text-align: center;
             margin-bottom: 15px;
         }
+
+        .bank-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+            color: var(--text-light);
+            background-color: white;
+            border-top: 1px solid var(--rbei-border);
+            margin-top: auto;
+        }
     </style>
 </head>
 
     <body>
 
 <!-- RBEI Application Platform Navigation Bar Header -->
-<!-- AFTER -->
 <nav class="bank-navbar">
     <a href="RBEI Home.html" class="bank-logo">RBEI</a>
     <div class="nav-links">
@@ -354,7 +365,7 @@
     </div>
     <div style="display: flex; gap: 10px;">
         <button class="btn-login" id="loginBtn" type="button">Check Loan Status</button>
-        <a href="AdminPanel.html" class="btn-login" style="text-decoration: none; background-color: var(--rbei-navy); color: white; border-color: var(--rbei-navy);">Admin Login</a>
+        <a href="AdminPanel_2.html" class="btn-login" style="text-decoration: none; background-color: var(--rbei-navy); color: white; border-color: var(--rbei-navy);">Admin Login</a>
     </div>
 </nav>
 
@@ -373,7 +384,7 @@
     </div>
 </main>
 
-        <!-- Interactive Track Modal Container -->
+<!-- Interactive Track Modal Container -->
 <div class="modal-overlay" id="statusModal">
     <div class="status-modal-card">
         <div class="modal-header">
@@ -386,7 +397,7 @@
 
             <label for="refInput">Application Reference Number</label>
             <div class="status-input-row">
-                <input type="text" id="refInput" placeholder="e.g., RBEI-2025-001234">
+                <input type="text" id="refInput" placeholder="e.g., RBEI-2026-786873">
                 <button type="button" class="btn-query" id="checkStatusBtn">Track</button>
             </div>
 
@@ -405,12 +416,12 @@
                     <span id="res-type">-</span>
                 </div>
                 <div class="status-meta-row">
-                    <span class="status-meta-label">Current Stage:</span>
-                    <span class="status-pill pill-pending" id="res-pill">-</span>
+                    <span class="status-meta-label">Loan Amount:</span>
+                    <span id="res-amount">-</span>
                 </div>
                 <div class="status-meta-row">
-                    <span class="status-meta-label">Last Updated:</span>
-                    <span id="res-date">-</span>
+                    <span class="status-meta-label">Current Stage:</span>
+                    <span class="status-pill pill-pending" id="res-pill">-</span>
                 </div>
             </div>
         </div>
@@ -421,7 +432,10 @@
     &copy; 2026 RBEI Financial Services System Corporation. All Rights Reserved.
 </footer>
 
-    <script>
+        <script>
+    // Exact Web App Deployment Endpoint URL
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbw38lWdHQfpDztO1-kWB5aqOegdK9IikgExGJESpVOH2mUI77EZGqPz57aJrUO2VYTvfA/exec";
+
     const statusModal = document.getElementById('statusModal');
     const loginBtn = document.getElementById('loginBtn');
     const closeModalBtn = document.getElementById('closeModalBtn');
@@ -455,7 +469,7 @@
         }
     });
 
-    // Perform real localStorage application lookups
+    // Perform live query directly against Google Apps Script backend
     function searchApplication(query) {
         statusError.style.display = 'none';
         statusResult.style.display = 'none';
@@ -466,40 +480,56 @@
             return;
         }
 
-        // Retrieve dynamically submitted application records from localStorage
-        const storedApps = JSON.parse(localStorage.getItem('rbei_applications')) || {};
+        // Disable button temporarily while waiting for API
+        checkStatusBtn.innerText = "Searching...";
+        checkStatusBtn.disabled = true;
 
-        if (storedApps[query]) {
-            const data = storedApps[query];
-            document.getElementById('res-ref').innerText = query;
-            document.getElementById('res-name').innerText = data.name;
-            document.getElementById('res-type').innerText = data.type;
-            
-            const pill = document.getElementById('res-pill');
-            const statusText = data.status || "Under Review";
-            pill.innerText = statusText;
-            
-            // Set badge styles dynamically based on status
-            if (statusText === 'Approved') {
-                pill.className = 'status-pill pill-approved';
-            } else {
-                pill.className = 'status-pill pill-pending';
-            }
-            
-            // Format current date or fallback
-            document.getElementById('res-date').innerText = new Date().toLocaleDateString();
-            statusResult.style.display = 'block';
-        } else {
-            statusError.innerText = "No application matches found for this reference ID. Please check the code and try again.";
-            statusError.style.display = 'block';
-        }
+        fetch(`${webAppUrl}?ref=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                checkStatusBtn.innerText = "Track";
+                checkStatusBtn.disabled = false;
+
+                if (!data.found) {
+                    statusError.innerText = `No application matches found for reference ID: ${query}`;
+                    statusError.style.display = 'block';
+                    return;
+                }
+
+                document.getElementById('res-ref').innerText = data.ref;
+                document.getElementById('res-name').innerText = data.name || '-';
+                document.getElementById('res-type').innerText = data.type || '-';
+                document.getElementById('res-amount').innerText = data.amount || '-';
+                
+                const pill = document.getElementById('res-pill');
+                const statusText = data.status || "Under Review";
+                pill.innerText = statusText;
+                
+                // Set badge styles dynamically based on status
+                if (statusText === 'Approved') {
+                    pill.className = 'status-pill pill-approved';
+                } else if (statusText === 'Rejected') {
+                    pill.className = 'status-pill pill-rejected';
+                } else {
+                    pill.className = 'status-pill pill-pending';
+                }
+                
+                statusResult.style.display = 'block';
+            })
+            .catch(err => {
+                console.error("Fetch error:", err);
+                checkStatusBtn.innerText = "Track";
+                checkStatusBtn.disabled = false;
+                statusError.innerText = "Unable to connect to the backend server. Please try again later.";
+                statusError.style.display = 'block';
+            });
     }
 
     checkStatusBtn.addEventListener('click', () => {
         searchApplication(refInput.value.trim());
     });
 
-    // Automatically open modal and perform lookup if redirected with a URL parameter
+    // Automatically open modal and perform lookup if redirected with a URL parameter (?ref=...)
     window.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         const refFromUrl = urlParams.get('ref');
@@ -513,4 +543,3 @@
 </script>
 </body>
 </html>
-
