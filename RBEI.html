@@ -566,18 +566,18 @@
                 const trackingNumber = "RBEI-2026-" + Math.floor(100000 + Math.random() * 900000);
                 
                 const applicationData = {
-                    ref: trackingNumber,
-                    name: document.getElementById('fullName').value.trim(),
-                    dob: document.getElementById('dob').value,
-                    addr: document.getElementById('address').value.trim(),
-                    phone: document.getElementById('contactNumber').value.trim(),
-                    email: document.getElementById('email').value.trim(),
-                    amount: "₱" + parseFloat(document.getElementById('loanAmount').value).toLocaleString(),
-                    type: document.getElementById('loanType').value,
-                    purpose: document.getElementById('purpose').value,
-                    term: document.getElementById('term').value,
-                    status: "Under Review"
-                };
+    ref: trackingNumber,
+    name: document.getElementById('fullName').value.trim(),
+    dob: document.getElementById('dob').value,
+    address: document.getElementById('address').value.trim(),
+    phone: document.getElementById('contactNumber').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    amount: document.getElementById('loanAmount').value.trim(), // Raw number (e.g. 50000)
+    loanType: document.getElementById('loanType').value,
+    purpose: document.getElementById('purpose').value,
+    term: document.getElementById('term').value.replace(/months?/i, '').trim(), // Send number (e.g., "12")
+    status: "Under Review"
+};
 
                 // Transmit payload to Google Sheets Backend
                 fetch(webAppUrl, {
