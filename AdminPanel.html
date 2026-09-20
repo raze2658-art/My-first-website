@@ -4,11 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RBEI - Secure Administration Underwriting Portal</title>
-    
-    <!-- 🟢 FIREBASE SDKs (COMPAT VERSION) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
     <style>
         :root {
             --rbei-navy: #1e293b;
@@ -63,6 +58,30 @@
             padding: 3px 8px;
             border-radius: 4px;
             color: #94a3b8;
+        }
+
+        .navbar-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-logout {
+            background-color: #334155;
+            color: white;
+            border: 1px solid var(--rbei-border);
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+            display: none; /* Shown only after login */
+        }
+
+        .btn-logout:hover {
+            background-color: var(--danger-red);
+            border-color: var(--danger-red);
         }
 
         /* Administrative Auth Login View Window Box */
@@ -270,33 +289,39 @@
             border-top: 2px solid #f1f5f9;
             display: flex;
             justify-content: flex-end;
-            gap: 15px;
+            gap: 10px;
         }
 
         .btn-action {
-            padding: 10px 20px;
-            font-size: 14px;
+            padding: 10px 16px;
+            font-size: 13px;
             font-weight: 600;
             border-radius: 6px;
             border: none;
             cursor: pointer;
-            transition: transform 0.1s;
+            transition: transform 0.1s, background-color 0.15s;
         }
 
         .btn-action:active { transform: scale(0.98); }
         .btn-approve { background-color: var(--success-green); color: white; }
         .btn-reject { background-color: var(--danger-red); color: white; }
+        .btn-delete { background-color: #64748b; color: white; }
+        .btn-delete:hover { background-color: var(--danger-red); }
     </style>
 </head>
-<body>
 
-    <!-- Operational Navigation Header navbar strip -->
+    <body>
+
+<!-- Operational Navigation Header navbar strip -->
 <nav class="admin-navbar">
     <div class="navbar-brand">
         <span>RBEI Dashboard</span>
         <span class="badge-secure">🔒 Underwriting Mode</span>
     </div>
-    <div style="font-size:14px; font-weight:600;" id="adminUserDisplay"></div>
+    <div class="navbar-controls">
+        <div style="font-size:14px; font-weight:600;" id="adminUserDisplay"></div>
+        <button type="button" class="btn-logout" id="logoutBtn">Log Out</button>
+    </div>
 </nav>
 
 <!-- ADMINISTRATIVE LOGIN SHEET OVERLAY VIEW -->
@@ -334,11 +359,7 @@
                 </tr>
             </thead>
             <tbody id="queueTableBody">
-                <tr>
-                    <td colspan="3" style="text-align: center; color: var(--text-light); padding: 20px;">
-                        Connecting to Firebase...
-                    </td>
-                </tr>
+                <!-- Data populated dynamically from Google Sheets -->
             </tbody>
         </table>
     </div>
@@ -368,152 +389,33 @@
         <div class="document-link-row"><div>📄 Certified Proof of Gross Income Record</div><button class="btn-view-doc" onclick="alert('Opening secure document image viewer viewport...')">Inspect</button></div>
         <div class="document-link-row"><div>📄 Proof of Utility Billing Address Statement</div><button class="btn-view-doc" onclick="alert('Opening secure document image viewer viewport...')">Inspect</button></div>
 
+        <!-- DECISION ACTIONS WITH DELETE BUTTON -->
         <div class="decision-group">
+            <button type="button" class="btn-action btn-delete" id="actionDeleteBtn">Delete Record</button>
             <button type="button" class="btn-action btn-reject" id="actionRejectBtn">Reject Case</button>
             <button type="button" class="btn-action btn-approve" id="actionApproveBtn">Approve Loan</button>
         </div>
     </div>
 </div>
 
-    <script>
-    // 🟢 INITIALIZE FIREBASE DATABASE CONNECTION
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+        <script>
+    // DEPLOYED GOOGLE APPS SCRIPT WEB APP URL
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbw38lWdHQfpDztO1-kWB5aqOegdK9IikgExGJESpVOH2mUI77EZGqPz57aJrUO2VYTvfA/exec";
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-</script>
-
-    <script>
     const loginView = document.getElementById('loginView');
     const dashboardView = document.getElementById('dashboardView');
     const usernameInput = document.getElementById('usernameInput');
     const passwordInput = document.getElementById('passwordInput');
     const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
     const authError = document.getElementById('authError');
     const queueTableBody = document.getElementById('queueTableBody');
     const detailPanel = document.getElementById('detailPanel');
 
+    let applicationsData = [];
     let activeSelectedRef = null;
-    let centralizedDatabase = {};
 
-    // 🟢 1. LIVE FIREBASE REALTIME SYNC (Fetches applications submitted from any device)
-    function listenToApplications() {
-        db.collection("rbei_applications").onSnapshot((querySnapshot) => {
-            centralizedDatabase = {}; // Reset local cache
-
-            if (querySnapshot.empty) {
-                queueTableBody.innerHTML = `
-                    <tr>
-                        <td colspan="3" style="text-align: center; color: var(--text-light); padding: 20px;">
-                            No submitted applications found in database.
-                        </td>
-                    </tr>`;
-                return;
-            }
-
-            querySnapshot.forEach((doc) => {
-                centralizedDatabase[doc.id] = doc.data();
-            });
-
-            buildQueueTable();
-
-            // Re-render inspection sheet if a record is currently open
-            if (activeSelectedRef && centralizedDatabase[activeSelectedRef]) {
-                selectCaseRecord(activeSelectedRef);
-            }
-        }, (error) => {
-            console.error("Firestore Error: ", error);
-            queueTableBody.innerHTML = `
-                <tr>
-                    <td colspan="3" style="text-align: center; color: var(--danger-red); padding: 20px;">
-                        Error loading applications. Check Firestore Security Rules.
-                    </td>
-                </tr>`;
-        });
-    }
-
-    // 🟢 2. RENDER PIPELINE QUEUE
-    function buildQueueTable() {
-        queueTableBody.innerHTML = "";
-
-        Object.keys(centralizedDatabase).forEach(ref => {
-            const data = centralizedDatabase[ref];
-            
-            let badgeClass = "badge-status status-review";
-            if (data.status === "Approved") badgeClass = "badge-status status-approved";
-            if (data.status === "Rejected") badgeClass = "badge-status status-rejected";
-
-            const row = document.createElement('tr');
-            row.className = `queue-row ${activeSelectedRef === ref ? 'selected' : ''}`;
-            row.innerHTML = `
-                <td style="font-family: monospace; font-weight: 700; color: var(--rbei-blue);">${ref}</td>
-                <td><strong>${data.name || 'N/A'}</strong></td>
-                <td><span class="${badgeClass}">${data.status || 'Under Review'}</span></td>
-            `;
-
-            row.addEventListener('click', () => selectCaseRecord(ref));
-            queueTableBody.appendChild(row);
-        });
-    }
-
-    // 🟢 3. INSPECT SELECTED APPLICATION
-    function selectCaseRecord(ref) {
-        activeSelectedRef = ref;
-        buildQueueTable(); 
-
-        const record = centralizedDatabase[ref];
-        if (!record) return;
-
-        document.getElementById('det-ref-title').innerText = "Inspecting Case File: " + ref;
-        document.getElementById('det-name').innerText = record.name || 'N/A';
-        document.getElementById('det-dob').innerText = record.dob || 'N/A';
-        document.getElementById('det-addr').innerText = record.addr || 'N/A';
-        document.getElementById('det-phone').innerText = record.phone || 'N/A';
-        document.getElementById('det-email').innerText = record.email || 'N/A';
-        document.getElementById('det-amount').innerText = record.amount || 'N/A';
-        document.getElementById('det-type').innerText = record.type || 'N/A';
-        document.getElementById('det-purpose').innerText = record.purpose || 'N/A';
-        document.getElementById('det-term').innerText = record.term || 'N/A';
-
-        detailPanel.style.visibility = 'visible';
-    }
-
-    // 🟢 4. APPROVE LOAN ACTION (UPDATES FIRESTORE)
-    document.getElementById('actionApproveBtn').addEventListener('click', () => {
-        if (!activeSelectedRef) return;
-
-        db.collection("rbei_applications").doc(activeSelectedRef).update({
-            status: "Approved"
-        }).then(() => {
-            alert(`Case ${activeSelectedRef} successfully Approved in Cloud Database.`);
-        }).catch((error) => {
-            console.error("Error updating status: ", error);
-            alert("Failed to update status in database.");
-        });
-    });
-
-    // 🟢 5. REJECT LOAN ACTION (UPDATES FIRESTORE)
-    document.getElementById('actionRejectBtn').addEventListener('click', () => {
-        if (!activeSelectedRef) return;
-
-        db.collection("rbei_applications").doc(activeSelectedRef).update({
-            status: "Rejected"
-        }).then(() => {
-            alert(`Case ${activeSelectedRef} formally Rejected in Cloud Database.`);
-        }).catch((error) => {
-            console.error("Error updating status: ", error);
-            alert("Failed to update status in database.");
-        });
-    });
-
-    // 🟢 6. AUTHENTICATION HANDLER
+    // Staff Guard Authentication Credential Check
     loginBtn.addEventListener('click', () => {
         const user = usernameInput.value.trim();
         const pass = passwordInput.value.trim();
@@ -522,13 +424,137 @@
         if (user === 'Yohei Komori' && pass === 'Hades2006') {
             loginView.style.display = 'none';
             dashboardView.style.display = 'grid';
+            logoutBtn.style.display = 'inline-block'; // Show logout button
             document.getElementById('adminUserDisplay').innerText = "👤 Officer: " + user;
-            
-            // Start listening to Firebase Firestore live changes
-            listenToApplications();
+            fetchLiveApplications();
         } else {
             authError.innerText = "Invalid administrator user credentials or security protocol mismatch.";
             authError.style.display = 'block';
+        }
+    });
+
+    // 🟢 LOGOUT EVENT HANDLER - REDIRECTS TO RBEI HOME PAGE
+    logoutBtn.addEventListener('click', () => {
+        if (confirm("Are you sure you want to log out and return to the main page?")) {
+            window.location.href = "RBEI Home.html";
+        }
+    });
+
+    // Fetch live applications from Google Sheets API endpoint
+    function fetchLiveApplications() {
+        queueTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--text-light);">Loading applications from cloud...</td></tr>`;
+
+        fetch(webAppUrl)
+            .then(res => res.json())
+            .then(data => {
+                applicationsData = Array.isArray(data) ? data : [];
+                buildQueueTable();
+            })
+            .catch(err => {
+                console.error("Error fetching data:", err);
+                queueTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--danger-red); padding:15px;">Failed to connect to backend.</td></tr>`;
+            });
+    }
+
+    // Populate administrative database queue table
+    function buildQueueTable() {
+        queueTableBody.innerHTML = "";
+
+        if (applicationsData.length === 0) {
+            queueTableBody.innerHTML = `<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--text-light);">No loan applications found.</td></tr>`;
+            detailPanel.style.visibility = 'hidden';
+            return;
+        }
+
+        applicationsData.forEach(app => {
+            const ref = app.ref || app.referenceCode || "N/A";
+            const name = app.name || "Unknown";
+            const status = app.status || "Under Review";
+
+            let badgeClass = "badge-status status-review";
+            if (status === "Approved") badgeClass = "badge-status status-approved";
+            if (status === "Rejected") badgeClass = "badge-status status-rejected";
+
+            const row = document.createElement('tr');
+            row.className = `queue-row ${activeSelectedRef === ref ? 'selected' : ''}`;
+            row.innerHTML = `
+                <td style="font-family: monospace; font-weight: 700; color: var(--rbei-blue);">${ref}</td>
+                <td><strong>${name}</strong></td>
+                <td><span class="${badgeClass}">${status}</span></td>
+            `;
+
+            row.addEventListener('click', () => selectCaseRecord(ref));
+            queueTableBody.appendChild(row);
+        });
+    }
+
+    // Display selected single file record in inspection grid
+    function selectCaseRecord(ref) {
+        activeSelectedRef = ref;
+        buildQueueTable();
+
+        const record = applicationsData.find(app => (app.ref || app.referenceCode) === ref);
+        if (!record) return;
+
+        document.getElementById('det-ref-title').innerText = "Inspecting Case File: " + ref;
+        document.getElementById('det-name').innerText = record.name || '-';
+        document.getElementById('det-dob').innerText = record.dob || '-';
+        document.getElementById('det-addr').innerText = record.addr || record.address || '-';
+        document.getElementById('det-phone').innerText = record.phone || '-';
+        document.getElementById('det-email').innerText = record.email || '-';
+        document.getElementById('det-amount').innerText = record.amount || '-';
+        document.getElementById('det-type').innerText = record.type || '-';
+        document.getElementById('det-purpose').innerText = record.purpose || '-';
+        document.getElementById('det-term').innerText = record.term || '-';
+
+        detailPanel.style.visibility = 'visible';
+    }
+
+    // Helper method for sending updates (Status Update / Deletion)
+    function sendApiUpdate(payload, successMessage) {
+        fetch(webAppUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            alert(successMessage);
+            fetchLiveApplications();
+        })
+        .catch(err => {
+            console.error("API Error:", err);
+            alert("Action submitted. Refreshing application queue...");
+            fetchLiveApplications();
+        });
+    }
+
+    // Decision Handlers: Approve, Reject, Delete
+    document.getElementById('actionApproveBtn').addEventListener('click', () => {
+        if (!activeSelectedRef) return;
+        sendApiUpdate(
+            { action: "updateStatus", ref: activeSelectedRef, status: "Approved" },
+            `Case ${activeSelectedRef} successfully Approved.`
+        );
+    });
+
+    document.getElementById('actionRejectBtn').addEventListener('click', () => {
+        if (!activeSelectedRef) return;
+        sendApiUpdate(
+            { action: "updateStatus", ref: activeSelectedRef, status: "Rejected" },
+            `Case ${activeSelectedRef} formally Rejected.`
+        );
+    });
+
+    document.getElementById('actionDeleteBtn').addEventListener('click', () => {
+        if (!activeSelectedRef) return;
+        if (confirm(`Are you sure you want to delete case ${activeSelectedRef}? This action cannot be undone.`)) {
+            sendApiUpdate(
+                { action: "deleteApplication", ref: activeSelectedRef },
+                `Case ${activeSelectedRef} has been permanently deleted.`
+            );
+            detailPanel.style.visibility = 'hidden';
+            activeSelectedRef = null;
         }
     });
 </script>
