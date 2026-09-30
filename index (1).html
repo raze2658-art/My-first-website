@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Credit Investigator</title>
+<style>
+  :root{
+    --navy:#16324F; --navy-d:#0F2438; --blue:#1D6FD8; --blue-d:#1657AD;
+    --paper:#F4F7FB; --card:#FFFFFF; --line:#E1E7EF; --ink:#1B2733; --sub:#6B7A8C;
+    --amber-bg:#FDF0D9; --amber:#B4780B;
+    --green-bg:#E4F6EC; --green:#1E9E5C;
+    padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#10151B; --card:#171E27; --line:#2A333E; --ink:#E7ECF2; --sub:#93A1B1;
+      --navy:#0E2136; --navy-d:#0A1826;
+      --amber-bg:#3A2E12; --amber:#E3B45C; --green-bg:#12301F; --green:#5FCB8E;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#10151B; --card:#171E27; --line:#2A333E; --ink:#E7ECF2; --sub:#93A1B1;
+    --navy:#0E2136; --navy-d:#0A1826;
+    --amber-bg:#3A2E12; --amber:#E3B45C; --green-bg:#12301F; --green:#5FCB8E;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,Segoe UI,Roboto,sans-serif;min-height:100%;}
+  h1,h2,h3{margin:0;font-weight:700;}
+  button,input,textarea{font-family:inherit;}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* ---- Login ---- */
+  #view-login{min-height:100vh;grid-template-columns:1fr;}
+  #view-login.active{display:grid;}
+  @media(min-width:720px){ #view-login.active{grid-template-columns:1fr 1fr;} }
+  .login-panel{background:linear-gradient(180deg,#EAF2FC,#F4F7FB);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 24px;text-align:center;}
+  .login-panel .shield{width:88px;height:88px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+  .login-panel .shield svg{width:38px;height:38px;}
+  .login-panel h1{font-size:22px;color:var(--navy);}
+  .login-panel p{color:var(--sub);font-size:13px;margin-top:6px;letter-spacing:.02em;}
+  .login-form{display:flex;flex-direction:column;justify-content:center;padding:50px 30px;max-width:420px;margin:0 auto;width:100%;}
+  .login-form h2{font-size:26px;}
+  .login-form>p{color:var(--sub);margin:6px 0 26px;font-size:14px;}
+  .field{position:relative;margin-bottom:14px;}
+  .field svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--sub);}
+  .field input{width:100%;padding:13px 14px 13px 40px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font-size:14px;}
+  .field.pass input{padding-right:40px;}
+  .field .toggle{position:absolute;right:12px;left:auto;background:none;border:none;cursor:pointer;color:var(--sub);width:auto;height:auto;transform:translateY(-50%);top:50%;padding:0;}
+  .err{color:#C0392B;font-size:13px;min-height:16px;margin:-4px 0 4px;}
+  .btn{border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;}
+  .btn-primary{background:var(--blue);color:#fff;width:100%;padding:13px;margin-top:6px;}
+  .btn-primary:hover{background:var(--blue-d);}
+  .login-foot{text-align:center;color:var(--sub);font-size:12px;margin-top:22px;}
+
+  /* ---- App shell ---- */
+  #view-app{display:none;min-height:100vh;grid-template-rows:auto 1fr;}
+  #view-app.active{display:grid;}
+  .topbar{background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 22px;}
+  .topbar .brand{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:700;}
+  .topbar .brand svg{width:22px;height:22px;}
+  .topbar .user{display:flex;align-items:center;gap:8px;font-size:14px;opacity:.92;cursor:pointer;}
+  .shell{display:grid;grid-template-columns:220px 1fr;}
+  @media(max-width:720px){ .shell{grid-template-columns:64px 1fr;} .navlabel{display:none;} }
+  .sidebar{background:var(--card);border-right:1px solid var(--line);padding:18px 10px;}
+  .navitem{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:8px;color:var(--sub);font-size:14px;cursor:pointer;margin-bottom:4px;}
+  .navitem svg{width:17px;height:17px;flex:none;}
+  .navitem.active{background:#E9F1FD;color:var(--blue-d);font-weight:600;}
+  .navitem:hover:not(.active){background:var(--paper);}
+  .main{padding:26px 28px;}
+
+  /* ---- Queue ---- */
+  .q-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;}
+  .q-head p{color:var(--sub);font-size:13px;margin-top:4px;}
+  .q-date{color:var(--sub);font-size:13px;}
+  .table-card{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{text-align:left;color:var(--sub);font-weight:600;padding:12px 16px;border-bottom:1px solid var(--line);white-space:nowrap;}
+  tbody td{padding:14px 16px;border-bottom:1px solid var(--line);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  .app-name{font-weight:600;}
+  .badge{font-size:12px;padding:4px 10px;border-radius:999px;white-space:nowrap;display:inline-block;}
+  .badge.pending{background:var(--amber-bg);color:var(--amber);}
+  .badge.ready{background:var(--green-bg);color:var(--green);}
+  .btn-view{background:var(--blue);color:#fff;padding:7px 16px;font-size:13px;border-radius:6px;}
+  .btn-view:hover{background:var(--blue-d);}
+  .q-foot{padding:12px 16px;color:var(--sub);font-size:12.5px;}
+
+  /* ---- Checklist ---- */
+  .back{background:none;border:none;color:var(--blue);cursor:pointer;font-size:13.5px;margin-bottom:16px;padding:0;display:flex;align-items:center;gap:6px;}
+  .grid2{display:grid;grid-template-columns:1fr;gap:18px;}
+  @media(min-width:820px){ .grid2{grid-template-columns:280px 1fr;} }
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;}
+  .panel h3{font-size:14px;display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+  .info-row{margin-bottom:14px;}
+  .info-row .lbl{font-size:11.5px;color:var(--sub);}
+  .info-row .val{font-size:14px;margin-top:2px;}
+  .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .cl-label{font-size:12.5px;color:var(--sub);margin:16px 0 8px;font-weight:600;}
+  .doc-item{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 16px;border-radius:8px;margin-bottom:10px;background:var(--paper);}
+  .doc-item .doc-name{font-size:14px;font-weight:700;}
+  .doc-item .doc-file{font-size:12px;color:var(--sub);margin-top:3px;}
+  .doc-item .doc-none{font-size:12px;color:var(--sub);font-style:italic;}
+  .btn-doc{background:#E7ECF3;border:none;color:var(--ink);padding:9px 16px;font-size:13px;font-weight:600;border-radius:6px;white-space:nowrap;}
+  .btn-doc:hover{background:#D9E1EC;}
+  .doc-preview-box{border:1px dashed var(--line);border-radius:10px;padding:30px 20px 22px;text-align:center;background:var(--paper);}
+  .doc-preview-box .file-icon{font-size:36px;}
+  .doc-preview-box .file-title{font-weight:700;margin-top:10px;font-size:15px;}
+  .doc-preview-box .file-name{color:var(--sub);font-size:12.5px;margin-top:3px;}
+  .doc-preview-box .file-note{margin-top:16px;padding:13px 14px;border-radius:8px;background:var(--card);border:1px solid var(--line);text-align:left;font-size:12.5px;color:var(--sub);}
+  .cl-item{display:flex;align-items:center;gap:10px;padding:9px 0;}
+  .cl-item input{width:17px;height:17px;}
+  .cl-item span{font-size:14px;}
+  textarea{width:100%;min-height:90px;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--ink);font-size:14px;resize:vertical;}
+  .charcount{text-align:right;font-size:11.5px;color:var(--sub);margin-top:4px;}
+  .btn-submit{background:var(--blue);color:#fff;width:100%;padding:13px;margin-top:16px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14.5px;}
+  .btn-submit:hover{background:var(--blue-d);}
+
+  /* ---- Modal ---- */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(10,20,35,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:20;}
+  .modal-backdrop.show{display:flex;}
+  .modal{background:var(--card);border-radius:12px;max-width:360px;width:100%;padding:34px 28px 28px;text-align:center;position:relative;}
+  .modal .close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--sub);cursor:pointer;font-size:18px;}
+  .modal .tick{width:64px;height:64px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+  .modal h3{font-size:18px;margin-bottom:8px;}
+  .modal p{color:var(--sub);font-size:13.5px;margin-bottom:20px;}
+  .modal .btn-primary{width:auto;padding:10px 34px;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="view active" id="view-login">
+  <div class="login-panel">
+    <div class="shield">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5l8-3z"/><circle cx="11" cy="10.5" r="3.2"/><line x1="13.3" y1="12.8" x2="16" y2="15.5"/></svg>
+    </div>
+    <h1>Credit Investigator</h1>
+    <p>Validate &middot; Verify &middot; Support Better Decisions</p>
+  </div>
+  <div class="login-form">
+    <h2>Welcome Back</h2>
+    <p>Please log in to continue</p>
+    <div class="field">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg>
+      <input type="text" id="li-user" placeholder="Username">
+    </div>
+    <div class="field pass">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg>
+      <input type="password" id="li-pass" placeholder="Password">
+      <button type="button" class="toggle" onclick="togglePass()" aria-label="Show password">👁</button>
+    </div>
+    <div class="err" id="li-err"></div>
+    <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+    <div class="login-foot">Secure Access &nbsp;|&nbsp; Credit Investigator System</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="view" id="view-app">
+  <div class="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V5l8-3z"/><circle cx="11" cy="10.5" r="3.2"/><line x1="13.3" y1="12.8" x2="16" y2="15.5"/></svg>
+      Credit Investigator
+    </div>
+    <div class="user" onclick="logout()">👤 <span id="topbar-name"></span> ▾</div>
+  </div>
+  <div class="shell">
+    <div class="sidebar">
+      <div class="navitem active" onclick="showQueue()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+        <span class="navlabel">Inspection Queue</span>
+      </div>
+      <div class="navitem" onclick="toast('Profile settings are not part of this build yet.')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg>
+        <span class="navlabel">Profile</span>
+      </div>
+      <div class="navitem" onclick="logout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 4H7a2 2 0 00-2 2v12a2 2 0 002 2h8"/><line x1="10" y1="12" x2="20" y2="12"/><polyline points="16 8 20 12 16 16"/></svg>
+        <span class="navlabel">Logout</span>
+      </div>
+    </div>
+
+    <div class="main">
+      <!-- QUEUE -->
+      <div class="view active" id="view-queue">
+        <div class="q-head">
+          <div><h2>Assigned Inspection Queue</h2><p>Here are the applications assigned to you.</p></div>
+          <div class="q-date" id="q-date"></div>
+        </div>
+        <div class="table-card">
+          <table>
+            <thead><tr><th>#</th><th>Applicant Name</th><th>Application No.</th><th>Property Address</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="q-body"></tbody>
+          </table>
+          <div class="q-foot" id="q-foot"></div>
+        </div>
+      </div>
+
+      <!-- CHECKLIST -->
+      <div class="view" id="view-check">
+        <button type="button" class="back" onclick="showQueue()">&larr; Back to Queue</button>
+        <div class="grid2">
+          <div class="panel">
+            <h3>👤 Customer Information</h3>
+            <div class="info-row"><div class="lbl">Applicant Name</div><div class="val" id="c-name"></div></div>
+            <div class="info-row"><div class="lbl">Application No.</div><div class="val" id="c-appno"></div></div>
+            <div class="info-row"><div class="lbl">Property Address</div><div class="val" id="c-addr"></div></div>
+            <div class="info-row"><div class="lbl">Contact Number</div><div class="val" id="c-contact"></div></div>
+
+            <div class="cl-label">Loan Details</div>
+            <div class="info-row"><div class="lbl">Loan Type</div><div class="val" id="c-loan"></div></div>
+            <div class="info-row"><div class="lbl">Loan Amount</div><div class="val" id="c-amount"></div></div>
+            <div class="info-row"><div class="lbl">Purpose of Loan</div><div class="val" id="c-purpose"></div></div>
+            <div class="info-row"><div class="lbl">Term</div><div class="val" id="c-term"></div></div>
+
+            <div class="cl-label">Submitted Documents</div>
+            <div id="c-docs"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3 style="margin:0;">📋 Field Inspection &amp; Checklist</h3>
+              <span class="badge" id="c-badge"></span>
+            </div>
+            <div class="cl-label">Inspection Checklist</div>
+            <div id="c-checklist"></div>
+            <div class="cl-label">Investigator Notes / Comments</div>
+            <textarea id="c-notes" maxlength="500" placeholder="Enter your notes, observations, or comments here..." oninput="updateCount()"></textarea>
+            <div class="charcount"><span id="c-count">0</span>/500</div>
+            <button type="button" class="btn btn-submit" onclick="submitToManager()">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="#fff" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Submit to Manager
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <button type="button" class="close" onclick="closeModal()">✕</button>
+    <div class="tick">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h3>Review Successfully Submitted</h3>
+    <p>The field inspection review has been submitted to the manager.</p>
+    <button type="button" class="btn btn-primary" onclick="closeModal()">OK</button>
+  </div>
+</div>
+
+<!-- DOCUMENT PREVIEW MODAL -->
+<div class="modal-backdrop" id="doc-modal">
+  <div class="modal" style="max-width:440px;">
+    <button type="button" class="close" onclick="closeDocModal()">✕</button>
+    <div id="doc-preview" style="text-align:left;"></div>
+    <button type="button" class="btn btn-primary" onclick="closeDocModal()" style="margin-top:18px;">Close</button>
+  </div>
+</div>
+
+<div class="toast" id="toast-el" style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:12px 20px;border-radius:8px;font-size:13.5px;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:30;"></div>
+
+<script>
+const STORE_KEY = 'rbei_investigator_apps_v4';
+const CHECK_ITEMS = ['Land Title Verified','Property Visited','Income Confirmed'];
+
+function seed(){
+  const docSet = (id, po) => [
+    {name:'Valid ID', file: id},
+    {name:'Proof of Income', file: 'payslip_aug2026.pdf'},
+    {name:'Proof of Billing Address', file: 'billing_statement.pdf'},
+    {name:'Other Supporting Document', file: po}
+  ];
+  return [
+    {id:1, name:'Maria Santos', appNo:'APP-001234', addr:'Blk 12 Lot 8, Sunrise Homes, Bacolod', contact:'+63 912 345 6789', loanType:'Housing Loan', loanAmount:'₱850,000', purpose:'Home renovation', term:'60 months', dob:'03/22/1988', sex:'F', assignedBy:'Juan Dela Cruz', status:'Pending Inspection', checks:{'Land Title Verified':true,'Property Visited':true,'Income Confirmed':true}, notes:'', docs: docSet('maria_santos_id.jpg', null)},
+    {id:2, name:'Jun Reyes', appNo:'APP-001235', addr:'Lot 5 Phase 2, Greenfield, Silay', contact:'+63 917 222 4455', loanType:'Agricultural Loan', loanAmount:'₱180,000', purpose:'Purchase of farm equipment', term:'24 months', dob:'11/05/1979', sex:'M', assignedBy:'Ana Lopez', status:'Pending Inspection', checks:{}, notes:'', docs: docSet('jun_reyes_id.jpg', 'land_certificate.pdf')},
+    {id:3, name:'Lea Garcia', appNo:'APP-001236', addr:'Blk 7 Lot 3, Villa Esperanza, Bago', contact:'+63 920 118 3342', loanType:'Small Business Loan', loanAmount:'₱95,000', purpose:'Working capital for sari-sari store', term:'18 months', dob:'07/09/1995', sex:'F', assignedBy:'Juan Dela Cruz', status:'Pending Inspection', checks:{}, notes:'', docs: docSet('lea_garcia_id.jpg', null)},
+    {id:4, name:'Mark Villanueva', appNo:'APP-001237', addr:'Lot 10 Phase 1, Riverside, Talisay', contact:'+63 918 774 2201', loanType:'Home Improvement Loan', loanAmount:'₱120,000', purpose:'Roof and structural repairs', term:'36 months', dob:'01/30/1985', sex:'M', assignedBy:'Ana Lopez', status:'Pending Inspection', checks:{}, notes:'', docs: docSet('mark_villanueva_id.jpg', 'contractor_quotation.pdf')}
+  ];
+}
+function loadApps(){
+  const raw = localStorage.getItem(STORE_KEY);
+  if(!raw){ const s = seed(); localStorage.setItem(STORE_KEY, JSON.stringify(s)); return s; }
+  try{ return JSON.parse(raw); }catch(e){ const s = seed(); localStorage.setItem(STORE_KEY, JSON.stringify(s)); return s; }
+}
+function saveApps(apps){ localStorage.setItem(STORE_KEY, JSON.stringify(apps)); }
+
+let apps = loadApps();
+let currentAppId = null;
+
+function show(id, root){
+  (root||document).querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function togglePass(){
+  const p = document.getElementById('li-pass');
+  p.type = p.type === 'password' ? 'text' : 'password';
+}
+function login(){
+  const user = document.getElementById('li-user').value.trim();
+  const pass = document.getElementById('li-pass').value;
+  const err = document.getElementById('li-err');
+  if(!user || !pass){ err.textContent = 'Enter your username and password.'; return; }
+  err.textContent = '';
+  document.getElementById('topbar-name').textContent = user;
+  document.getElementById('view-login').classList.remove('active');
+  document.getElementById('view-app').classList.add('active');
+  document.getElementById('q-date').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+  renderQueue();
+}
+function logout(){
+  document.getElementById('li-user').value = '';
+  document.getElementById('li-pass').value = '';
+  document.getElementById('view-app').classList.remove('active');
+  document.getElementById('view-login').classList.add('active');
+}
+function showQueue(){ renderQueue(); show('view-queue', document.querySelector('.main')); }
+
+function badgeClass(status){ return status === 'Ready for Review' ? 'ready' : 'pending'; }
+
+function renderQueue(){
+  const body = document.getElementById('q-body');
+  body.innerHTML = '';
+  apps.forEach((a,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i+1}</td>
+      <td class="app-name">${a.name}</td>
+      <td>${a.appNo}</td>
+      <td>${a.addr}</td>
+      <td><span class="badge ${badgeClass(a.status)}">${a.status}</span></td>
+      <td><button type="button" class="btn btn-view" onclick="openApp(${a.id})">View</button></td>`;
+    body.appendChild(tr);
+  });
+  document.getElementById('q-foot').textContent = `Showing 1\u2013${apps.length} of ${apps.length} applications`;
+}
+
+function openApp(id){
+  currentAppId = id;
+  const a = apps.find(x=>x.id===id);
+  document.getElementById('c-name').textContent = a.name;
+  document.getElementById('c-appno').textContent = a.appNo;
+  document.getElementById('c-addr').textContent = a.addr;
+  document.getElementById('c-contact').textContent = a.contact;
+  document.getElementById('c-loan').textContent = a.loanType;
+  document.getElementById('c-amount').textContent = a.loanAmount;
+  document.getElementById('c-purpose').textContent = a.purpose;
+  document.getElementById('c-term').textContent = a.term;
+  document.getElementById('c-badge').className = 'badge ' + badgeClass(a.status);
+  document.getElementById('c-badge').textContent = a.status;
+  document.getElementById('c-notes').value = a.notes || '';
+  updateCount();
+
+  const docs = document.getElementById('c-docs');
+  docs.innerHTML = '';
+  (a.docs || []).forEach((d,i)=>{
+    const row = document.createElement('div');
+    row.className = 'doc-item';
+    if(d.file){
+      row.innerHTML = `<div><div class="doc-name">${d.name}</div><div class="doc-file">${d.file}</div></div><button type="button" class="btn-doc" onclick="openDoc(${i})">View</button>`;
+    } else {
+      row.innerHTML = `<div><div class="doc-name">${d.name}</div><div class="doc-none">Not submitted</div></div>`;
+    }
+    docs.appendChild(row);
+  });
+
+  const cl = document.getElementById('c-checklist');
+  cl.innerHTML = '';
+  CHECK_ITEMS.forEach(item=>{
+    const row = document.createElement('label');
+    row.className = 'cl-item';
+    row.innerHTML = `<input type="checkbox" ${a.checks[item] ? 'checked' : ''} onchange="toggleCheck('${item}', this.checked)"><span>${item}</span>`;
+    cl.appendChild(row);
+  });
+  show('view-check', document.querySelector('.main'));
+}
+function updateCount(){
+  document.getElementById('c-count').textContent = document.getElementById('c-notes').value.length;
+}
+function toggleCheck(item, val){
+  const a = apps.find(x=>x.id===currentAppId);
+  a.checks[item] = val;
+  saveApps(apps);
+}
+function submitToManager(){
+  try{
+    const a = apps.find(x=>x.id===currentAppId);
+    if(!a){ toast('No inspection is open. Go back to the queue and click View first.'); return; }
+    a.notes = document.getElementById('c-notes').value;
+    a.status = 'Ready for Review';
+    saveApps(apps);
+    const modal = document.getElementById('modal');
+    if(!modal){ toast('Submitted, but the confirmation dialog could not be found.'); return; }
+    modal.classList.add('show');
+  }catch(e){
+    toast('Something went wrong submitting: ' + e.message);
+  }
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('show');
+  showQueue();
+}
+function splitName(name){
+  const parts = name.trim().split(' ');
+  const last = parts.pop();
+  return { given: parts.join(' ') || last, last };
+}
+function buildIdCard(a){
+  const { given, last } = splitName(a.name);
+  const pcn = String(1000+a.id*37).padStart(4,'0') + '-' + String(2000000+a.id*1371).padStart(7,'0') + '-' + (a.id % 10);
+  return `
+  <div style="position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#fff;box-shadow:0 2px 12px rgba(0,0,0,.1);">
+    <div style="background:linear-gradient(135deg,#0B3D91,#132A66);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;">
+      <div style="width:28px;height:28px;border-radius:50%;background:#FCD116;flex:none;"></div>
+      <div style="line-height:1.3;">
+        <div style="font-size:10px;letter-spacing:.02em;opacity:.85;">REPUBLIKA NG PILIPINAS &middot; REPUBLIC OF THE PHILIPPINES</div>
+        <div style="font-size:12.5px;font-weight:700;">Pambansang Pagkakakilanlan &middot; Philippine Identification Card</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:14px;padding:16px;">
+      <div style="width:72px;height:88px;border-radius:6px;background:#E7ECF3;display:flex;align-items:center;justify-content:center;flex:none;">
+        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#8b98a8" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-5 5-7 8-7s6.5 2 8 7"/></svg>
+      </div>
+      <div style="flex:1;font-size:12px;color:#33404d;line-height:1.5;text-align:left;">
+        <div style="font-size:10px;color:#8b98a8;">Apelyido / Last Name</div>
+        <div style="font-weight:700;font-size:14px;">${last.toUpperCase()}</div>
+        <div style="font-size:10px;color:#8b98a8;margin-top:6px;">Mga Pangalan / Given Names</div>
+        <div style="font-weight:700;font-size:14px;">${given.toUpperCase()}</div>
+        <div style="display:flex;gap:22px;margin-top:6px;">
+          <div><div style="font-size:10px;color:#8b98a8;">Kapanganakan / Birth Date</div><div style="font-weight:600;">${a.dob}</div></div>
+          <div><div style="font-size:10px;color:#8b98a8;">Kasarian / Sex</div><div style="font-weight:600;">${a.sex}</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-top:1px dashed var(--line);font-size:10px;color:#8b98a8;">
+      <span>PCN ${pcn}</span>
+      <div style="width:34px;height:34px;background:repeating-linear-gradient(45deg,#33404d 0 2px,#fff 2px 4px);border-radius:4px;"></div>
+    </div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+      <div style="transform:rotate(-16deg);font-size:30px;font-weight:800;color:rgba(200,30,30,.3);letter-spacing:.08em;border:3px solid rgba(200,30,30,.3);padding:2px 16px;border-radius:8px;">SAMPLE</div>
+    </div>
+  </div>
+  <div class="file-note" style="margin-top:14px;">Fictional sample ID generated for this demo &mdash; not a real PhilSys card and not tied to any real person.</div>`;
+}
+function closeDocModal(){
+  document.getElementById('doc-modal').classList.remove('show');
+}
+function openDoc(idx){
+  const a = apps.find(x=>x.id===currentAppId);
+  if(!a){ return; }
+  const d = a.docs[idx];
+  if(!d || !d.file){ return; }
+  let html;
+  if(d.name === 'Valid ID'){
+    html = buildIdCard(a);
+  } else {
+    const ext = d.file.split('.').pop().toUpperCase();
+    html = `
+    <div class="doc-preview-box">
+      <div class="file-icon">📄</div>
+      <div class="file-title">${d.name}</div>
+      <div class="file-name">${d.file} &middot; ${ext}</div>
+      <div class="file-note">This is a sample file submitted by ${a.name} for ${a.appNo}. No real document is stored in this demo &mdash; this preview stands in for the actual upload.</div>
+    </div>`;
+  }
+  document.getElementById('doc-preview').innerHTML = html;
+  document.getElementById('doc-modal').classList.add('show');
+}
+function toast(msg){
+  const t = document.getElementById('toast-el');
+  t.textContent = msg;
+  t.style.opacity = 1;
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  setTimeout(()=>{ t.style.opacity = 0; t.style.transform='translateX(-50%) translateY(20px)'; }, 2400);
+}
+</script>
+</body>
+</html>

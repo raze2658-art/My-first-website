@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RBEI Manager Portal</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f4f7fb;--card:#fff;--ink:#16233b;--mut:#6b7790;--line:#e1e7f0;--navy:#1c3f75;--blue:#2563eb;--pale:#e8eefb;--gbg:#dff5e6;--gtx:#1c7a3d;--ybg:#fdeeb8;--ytx:#8a6510;--rbg:#fde0e0;--rtx:#b02a2a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1727;--card:#182238;--ink:#e6ecf8;--mut:#93a0ba;--line:#2a3654;--pale:#22305200;--gbg:#173a26;--gtx:#6fdc95;--ybg:#4a3a10;--ytx:#f2cf6b;--rbg:#4a1d1d;--rtx:#f19a9a}}
+:root[data-theme="dark"]{--bg:#0f1727;--card:#182238;--ink:#e6ecf8;--mut:#93a0ba;--line:#2a3654;--pale:#223052;--gbg:#173a26;--gtx:#6fdc95;--ybg:#4a3a10;--ytx:#f2cf6b;--rbg:#4a1d1d;--rtx:#f19a9a}
+*{box-sizing:border-box}html,body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+button{font:inherit;cursor:pointer}
+.top{background:var(--navy);color:#fff;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.brand{display:flex;gap:10px;align-items:center;font-weight:700;font-size:16px}
+.logo{width:26px;height:26px;border:2px solid #fff;border-radius:6px;display:grid;place-items:center;font-size:14px}
+.layout{display:flex;min-height:calc(100vh - 52px)}
+.side{width:190px;background:var(--card);border-right:1px solid var(--line);padding:14px 10px;flex-shrink:0}
+.side a{display:block;padding:10px 12px;border-radius:8px;color:var(--ink);cursor:pointer;margin-bottom:4px}
+.side a.on{background:var(--pale);color:var(--blue);font-weight:600}
+.main{flex:1;padding:24px;min-width:0}
+h1{font-size:20px;margin:0 0 4px}.sub{color:var(--mut);margin:0 0 16px}
+.head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:640px}
+th{text-align:left;font-size:12px;color:var(--mut);padding:10px;border-bottom:1px solid var(--line)}
+td{padding:12px 10px;border-bottom:1px solid var(--line)}
+.badge{display:inline-block;padding:4px 12px;border-radius:14px;font-size:12px;font-weight:600}
+.y{background:var(--ybg);color:var(--ytx)}.g{background:var(--gbg);color:var(--gtx)}.r{background:var(--rbg);color:var(--rtx)}
+.btn{background:var(--blue);color:#fff;border:0;border-radius:7px;padding:8px 14px;font-weight:600}
+.btn.w{width:100%;padding:12px}.btn.o{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.foot{color:var(--mut);font-size:12px;margin-top:12px}
+.banner{padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:13px}
+.login{display:flex;min-height:100vh}
+.lp{flex:1;background:#e3eaf8;display:grid;place-items:center;text-align:center;padding:20px;color:#1c3f75}
+.lp .c{width:84px;height:84px;border-radius:50%;background:#16233b;color:#fff;font-size:38px;font-weight:700;display:grid;place-items:center;margin:0 auto 10px}
+.rp{flex:1.2;display:grid;place-items:center;padding:20px;background:var(--card)}
+.rp form{width:100%;max-width:340px}
+label{display:block;font-size:12px;font-weight:600;margin:14px 0 6px}
+input[type=text],input[type=password],textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:7px;font:inherit;background:var(--bg);color:var(--ink)}
+.err{color:var(--rtx);font-size:12px;margin-top:6px;min-height:14px}
+.two{display:grid;grid-template-columns:260px 1fr;gap:16px}
+.kv{margin:0 0 12px}.kv small{display:block;color:var(--mut);font-size:11px}.kv b{font-size:13px}
+.chk{display:flex;gap:8px;align-items:center;margin:8px 0}.chk i{width:16px;height:16px;background:var(--blue);color:#fff;border-radius:3px;font-style:normal;font-size:11px;display:grid;place-items:center}
+.notes{border:1px solid var(--line);border-radius:7px;padding:12px;min-height:90px;margin:6px 0 16px;background:var(--bg)}
+.ov{position:fixed;inset:0;background:rgba(15,23,39,.55);display:grid;place-items:center;z-index:9;padding:16px}
+.modal{background:var(--card);border-radius:10px;padding:20px;width:100%;max-width:400px;position:relative}
+.modal h3{margin:0 0 14px;font-size:16px}
+.x{position:absolute;right:12px;top:10px;background:none;border:0;font-size:18px;color:var(--mut)}
+.opts{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:6px}.opts label{display:flex;gap:5px;align-items:center;margin:0;font-weight:500;font-size:13px}
+.ok{text-align:center}.ok .tick{width:46px;height:46px;border-radius:50%;background:#2fa858;color:#fff;font-size:26px;display:grid;place-items:center;margin:0 auto 10px}
+.tl{list-style:none;margin:16px 0;padding:0}.tl li{display:flex;justify-content:space-between;gap:10px;padding:0 0 18px 26px;position:relative;border-left:2px solid #2fa858;margin-left:8px}
+.tl li:before{content:"✓";position:absolute;left:-10px;top:0;width:18px;height:18px;border-radius:50%;background:#2fa858;color:#fff;font-size:11px;display:grid;place-items:center}
+.tl li.rj{border-color:#d64545}.tl li.rj:before{background:#d64545;content:"✕"}.tl li.rt{border-color:#e0a91a}.tl li.rt:before{background:#e0a91a}
+.tl small{color:var(--mut);display:block}
+.dr{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line)}
+.dr:last-child{border-bottom:0}
+.btn.sm{padding:6px 14px;font-size:12px}
+.docprev{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:26px 16px;text-align:center;color:var(--mut);margin-top:10px}
+.docprev .ic{font-size:34px;display:block;margin-bottom:8px}
+.link{background:none;border:0;color:var(--blue);padding:0;margin-bottom:12px}
+@media(max-width:720px){.side{display:none}.two{grid-template-columns:1fr}.lp{display:none}}
+</style></head>
+<body><div id="app"></div>
+<script>
+const MGR="Rizza Mae C. Atien",TODAY="Sep 28, 2026";
+const NOTE="Property value confirmed via independent appraisal. Credit score is solid. DTI ratio is well within limits. Recommending approval.";
+const DOCS=["Loan Application Form.pdf","Valid Government ID.jpg","Certificate of Employment.pdf","Land Title.pdf","Property Appraisal Report.pdf"];
+const mk=(n,no,a,inv,addr,ph,term)=>({name:n,no,amt:a,inv,addr,ph,term,type:"Housing Loan",notes:NOTE,status:"Awaiting Decision",docs:DOCS});
+const S={view:"login",user:"",queue:[
+ mk("Maria Santos","APP-001234",350000,"Mark V.","BK 12 Lot 8, Sunrise Homes, Bacolod","+63 912 345 6789","20 years"),
+ mk("Jun Reyes","APP-001235",350000,"Mark V.","Lot 4 Phase 2, Vista Verde, Bacolod","+63 917 222 1010","15 years"),
+ mk("Lea Garcia","APP-001236",350000,"Mark V.","Blk 7 Lot 3, Pineview, Bacolod","+63 918 555 0142","10 years"),
+ mk("Mark Vilanueva","APP-001237",350000,"Mark V.","Lot 5 Phase 1, Greenfield, Bacolod","+63 920 777 3321","24 months")],
+ hist:[["Ana Lopez","APP-001198",280000,"Sep 19, 2026"],["Juan Dela Cruz","APP-001187",420000,"Sep 18, 2026"],["Carla Mendoza","APP-001175",195000,"Sep 16, 2026"]].map(h=>({name:h[0],no:h[1],amt:h[2],date:h[3],status:"Approved",comment:NOTE,seed:1})),
+ sel:null,banner:null};
+const $=s=>document.querySelector(s),esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const usd=n=>"₱"+n.toLocaleString();
+const go=v=>{S.view=v;render()};
+const shell=(on,body)=>`<div class="top"><div class="brand"><span class="logo">R</span>RBEI Manager Portal</div><div>● Manager ${MGR} ▾</div></div>
+<div class="layout"><nav class="side">${[["queue","Application Queue"],["history","Approval History"],["profile","My Profile"],["login","Logout"]].map(([k,l])=>`<a class="${k==on?"on":""}" onclick="${k=="login"?"logout()":"S.banner=null;go('"+k+"')"}">${l}</a>`).join("")}</nav><main class="main">${body}</main></div>`;
+const banner=()=>{const b=S.banner;S.banner=null;return b?`<div class="banner ${b.c}">${b.t}</div>`:""};
+function logout(){S.user="";S.banner=null;go("login")}
+function login(e){e.preventDefault();const u=$("#u").value.trim(),p=$("#p").value;if(!u||!p){$("#err").textContent="Please enter your email/username and password.";return}S.user=u;go("queue")}
+function render(){const a=$("#app"),v=S.view;
+if(v=="login")a.innerHTML=`<div class="login"><div class="lp"><div><div class="c">R</div><b style="font-size:20px">RBEI</b><br><b>Manager Portal</b><p style="margin-top:8px;font-size:13px">Validate, Decide, Authorize<br>Loan Decisions</p></div></div>
+<div class="rp"><form onsubmit="login(event)" novalidate><h1 style="font-size:24px">Welcome Back</h1><p class="sub" style="margin:0">Please log in to continue</p>
+<label for="u">Email Address / Username</label><input type="text" id="u" placeholder="Email Address / Username" autocomplete="username">
+<label for="p">Password</label><input type="password" id="p" placeholder="Password" autocomplete="current-password"><div class="err" id="err"></div>
+<button class="btn w" style="margin-top:8px">Login</button><p class="foot" style="text-align:center">Secure Access | Manager Approval System</p></form></div></div>`;
+else if(v=="queue"){const q=S.queue;a.innerHTML=shell("queue",`${banner()}<div class="head"><div><h1>Applications Awaiting Final Decision</h1><p class="sub">Here are the applications assigned to you.</p></div><div class="sub">📅 ${TODAY}</div></div>
+<div class="card scroll"><table><tr><th>#</th><th>Applicant Name</th><th>Application No.</th><th>Loan Amount</th><th>Assigned Investigator</th><th>Status</th><th>Action</th></tr>
+${q.length?q.map((r,i)=>`<tr><td>${i+1}</td><td>${r.name}</td><td>${r.no}</td><td>${usd(r.amt)}</td><td>Investigator ${r.inv}</td><td><span class="badge y">${r.status}</span></td><td><button class="btn" onclick="open_('${r.no}')">Review Application</button></td></tr>`).join(""):`<tr><td colspan="7" style="text-align:center;color:var(--mut)">No applications awaiting a decision.</td></tr>`}</table>
+<div class="foot">Showing ${q.length?"1–"+q.length:"0"} of ${q.length} applications</div></div>`)}
+else if(v=="detail"){const r=S.sel;a.innerHTML=shell("queue",`<button class="link" onclick="go('queue')">← Back to Queue</button><div class="two">
+<div class="card"><h3 style="margin-top:0">👤 Customer Information</h3>${[["Applicant Name",r.name],["Application No.",r.no],["Property Address",r.addr],["Loan Amount",usd(r.amt)],["Loan Term",r.term],["Contact Number",r.ph],["Loan Type",r.type]].map(([k,x])=>`<div class="kv"><small>${k}</small><b>${x}</b></div>`).join("")}</div>
+<div class="card"><div class="head"><h3 style="margin-top:0">◷ Field Inspection &amp; Checklist</h3><span class="badge y">Credit Review Complete</span></div>
+<b>Inspection Checklist</b>${["Land Title Verified","Property Visited","Income Confirmed"].map(t=>`<div class="chk"><i>✓</i>${t}</div>`).join("")}
+<div style="margin-top:14px"><b>Investigator Notes / Comments</b></div><div class="notes">${r.notes}</div>
+<button class="btn w" onclick="modal()">➤ Proceed to Decision</button></div></div>
+<div class="card" style="margin-top:16px"><h3 style="margin-top:0">📄 Uploaded Documents</h3>${r.docs.map(d=>`<div class="dr"><span>${d}</span><button class="btn o sm" onclick="viewDoc('${esc(d)}')">View</button></div>`).join("")}</div>`)}
+else if(v=="history"){const h=S.hist;a.innerHTML=shell("history",`<h1>Approval History</h1><p class="sub">Applications with a final decision recorded.</p>${banner()}
+<div class="card scroll"><table><tr><th>#</th><th>Applicant Name</th><th>Application No.</th><th>Loan Amount</th><th>Decision Date</th><th>Status</th><th>Action</th></tr>
+${h.map((r,i)=>`<tr><td>${i+1}</td><td>${r.name}</td><td>${r.no}</td><td>${usd(r.amt)}</td><td>${r.date}</td><td><span class="badge ${r.status=="Approved"?"g":"r"}">${r.status}</span></td><td><button class="btn" onclick="track('${r.no}')">View</button></td></tr>`).join("")}</table>
+<div class="foot">Showing 1–${h.length} of ${h.length} decisions</div></div>`)}
+else if(v=="tracker"){const r=S.sel,ap=r.status=="Approved",c=ap?"g":"r";
+const ev=[["Application Submitted","Submitted by applicant","Sep 15, 2026"],["Field Inspection Completed","Investigator Mark V. · Checklist verified","Sep 18, 2026"],["Awaiting Manager Decision","Investigator review forwarded to manager","Sep 20, 2026"]];
+a.innerHTML=shell("history",`<button class="link" onclick="go('history')">← Back to History</button><div class="card"><div class="head"><div><h1>Application Status</h1><p class="sub">${r.name} · ${r.no} · Housing Loan · ${usd(r.amt)}</p></div><span class="badge ${c}" style="font-size:14px">${ap?"✓":"✕"} ${r.status}</span></div>
+<ul class="tl">${ev.map(e=>`<li><div><b>${e[0]}</b><small>${e[1]}</small></div><small>${e[2]}</small></li>`).join("")}<li class="${ap?"":"rj"}"><div><b>Application ${r.status}</b><small>Manager ${MGR} · Final decision recorded</small></div><small>${r.date}</small></li></ul>
+<div class="notes" style="min-height:0"><b>Manager Comment:</b> ${esc(r.comment)}</div></div>`)}
+else if(v=="profile")a.innerHTML=shell("profile",`<h1>My Profile</h1><p class="sub">Signed-in manager account.</p><div class="card" style="max-width:420px"><div class="kv"><small>Name</small><b>${MGR}</b></div><div class="kv"><small>Username</small><b>${esc(S.user)}</b></div><div class="kv"><small>Role</small><b>Manager</b></div></div>`)}
+function open_(no){S.sel=S.queue.find(x=>x.no==no);go("detail")}
+function track(no){S.sel=S.hist.find(x=>x.no==no);go("tracker")}
+function modal(){const m=document.createElement("div");m.className="ov";m.id="ov";m.innerHTML=`<div class="modal"><button class="x" onclick="closeM()" aria-label="Close">×</button><h3>Make Final Decision</h3>
+<label style="margin-top:0">Decision Outcome</label><div class="opts"><label><input type="radio" name="d" value="Approved" checked>✓ Approve</label><label><input type="radio" name="d" value="Rejected">✕ Reject</label><label><input type="radio" name="d" value="Pending Re-evaluation">↩ Return for Review</label></div>
+<label>Comment <span style="color:var(--rtx)">*</span></label><textarea id="cm" rows="4" maxlength="500" placeholder="Enter your rationale for this decision..."></textarea><div class="err" id="ce"></div>
+<div style="display:flex;gap:10px;margin-top:8px"><button class="btn" onclick="confirmD()">Confirm Decision</button><button class="btn o" onclick="closeM()">Cancel</button></div></div>`;document.body.appendChild(m)}
+function closeM(){const m=$("#ov");if(m)m.remove()}
+function viewDoc(name){const m=document.createElement("div");m.className="ov";m.id="ov";
+m.innerHTML=`<div class="modal"><button class="x" onclick="closeM()" aria-label="Close">×</button><h3>${esc(name)}</h3>
+<div class="docprev"><span class="ic">📄</span>Document preview for<br><b>${esc(name)}</b></div>
+<div style="display:flex;gap:10px;margin-top:14px"><button class="btn" onclick="closeM()">Close</button></div></div>`;document.body.appendChild(m)}
+function confirmD(){const c=$("#cm").value.trim();if(!c){$("#ce").textContent="Review comments are required to submit a decision.";return}
+const d=document.querySelector("input[name=d]:checked").value,r=S.sel;r.decision=d;r.comment=c;
+$("#ov").innerHTML=`<div class="modal ok"><div class="tick">✓</div><h3>Decision Successfully Recorded</h3><p>The final decision for loan application <b>#${r.no}</b> has been recorded and finalized in the system.</p><button class="btn" style="padding:8px 34px" onclick="done()">OK</button></div>`}
+function done(){closeM();const r=S.sel,d=r.decision;S.queue=S.queue.filter(x=>x!==r);
+if(d=="Pending Re-evaluation"){S.banner={c:"y",t:`Status of application <b>#${r.no}</b> (${r.name}) updated to <b>Pending Re-evaluation</b>. Record sent back to the investigator.`};go("queue");return}
+S.hist.unshift({name:r.name,no:r.no,amt:r.amt,date:TODAY,status:d,comment:r.comment});
+S.banner=d=="Approved"?{c:"g",t:`✓ Status of application <b>#${r.no}</b> (${r.name}) updated to <b>Approved</b>. Record routed to the Loan Release Queue.`}:{c:"r",t:`✕ Status of application <b>#${r.no}</b> (${r.name}) updated to <b>Rejected</b>. Application closed.`};go("history")}
+render();
+</script></body></html>
